@@ -4,6 +4,8 @@ import com.gabia.gyebalja.domain.Board;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @ToString
@@ -19,6 +21,7 @@ public class BoardDto {
     private LocalDate modifiedDate;
     private Long userId;
     private Long eduId;
+    private List<CommentDto> commentList;
 
     @Builder
     public BoardDto(String title, String content){
@@ -30,6 +33,7 @@ public class BoardDto {
         this.modifiedDate = LocalDate.now();
         this.userId = 0L;
         this.eduId = 0L;
+        this.commentList = new ArrayList<CommentDto>();
     }
 
     public BoardDto(Board board){
@@ -40,8 +44,13 @@ public class BoardDto {
         this.like = board.getLikes();
         this.createdDate = LocalDate.now();
         this.modifiedDate = LocalDate.now();
-        this.userId = board.getUser_id();
-        this.eduId = board.getEdu_id();
+        this.userId = board.getUserId();
+        this.eduId = board.getEduId();
+        this.commentList = new ArrayList<CommentDto>();
+    }
+
+    public void changeCommentList(List<CommentDto> commentDtoList){
+        this.commentList = commentDtoList;
     }
 
     public Board toEntity(){
