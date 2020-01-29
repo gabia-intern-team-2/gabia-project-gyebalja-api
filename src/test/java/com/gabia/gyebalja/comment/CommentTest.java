@@ -12,6 +12,9 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.*;
 import org.springframework.test.annotation.Rollback;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Rollback(true)
@@ -64,7 +67,7 @@ public class CommentTest {
     }
 
     /** 수정 - comment 한 건
-     *  새 데이터 삽입 후 내용 변경하여 진행
+     *  새 데이터 삽입 후 내용 변경하여 수정 잘 되었는지 테스트 진행
      * */
     @Test
     public void putOneComment(){
@@ -88,7 +91,7 @@ public class CommentTest {
     }
 
     /** 삭제 - comment 한 건
-     *  데이터 개수로 테스트 진행 (삽입 전 개수 - 삽입 후, 삭제 후 개수 동일 체크)
+     *  데이터 개수로 테스트 진행 (삽입 전 개수와 삽입, 삭제 후 개수 동일 체크)
      * */
     @Test
     public void deleteOneComment(){
@@ -108,5 +111,23 @@ public class CommentTest {
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody()).isGreaterThan(0L);
         assertThat(commentRepository.count()).isEqualTo(totalCount);
+    }
+
+    /** 쿼리메소드 테스트 findByBoardId() */
+    @Test
+    public void findByBoardIdTest(){
+        // given
+        Long targetId = 1L;
+        List<Comment> commentList = new ArrayList<Comment>();
+
+        // when
+        try {
+            commentList = commentRepository.findByBoardId(targetId);
+        }catch (Exception e) {
+            System.out.println(e);
+        }
+
+        // then
+        System.out.println(commentList.toString());
     }
 }
