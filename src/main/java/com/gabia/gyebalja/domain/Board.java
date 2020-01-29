@@ -3,43 +3,48 @@ package com.gabia.gyebalja.domain;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
-@ToString
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString(of = {id, title, content})
 @Getter
 @Entity
-public class Board {
+public class Board{
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String title;
-    private String content;
-    private Long views;
-    private Long likes;
-    private LocalDate created_date;
-    private LocalDate modified_date;
-    private Long user_id;
-    private Long edu_id;
 
-    public Board(){
-        this.title = "";
-        this.content = "";
-        this.created_date = LocalDate.now();
-        this.modified_date = LocalDate.now();
-        this.user_id = 0L;
-        this.edu_id = 0L;
-    }
+    @Column(length = 255, nullable = false)
+    private String title;
+
+    @Column(columnDefinition = "TEXT", nullable = true)
+    private String content;
+
+    private Long views;
+
+    @OneToMany(mappedBy = "board")
+    private List<Likes> likes = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "edu_id")
+    private Education education;
+
+    @OneToMany(mappedBy = "board")
+    private List<BoardImg> boardImgs = new ArrayList<>();
+
+    @OneToMany(mappedBy = "board")
+    private List<Comment> comments = new ArrayList<>();
 
     @Builder
     public Board(String title, String content){
         this.title = title;
         this.content = content;
-        this.views = 0L;
-        this.likes = 0L;
-        this.created_date = LocalDate.now();
-        this.modified_date = LocalDate.now();
-        this.user_id = 0L;
-        this.edu_id = 0L;
     }
 
     public void changeTitle(String title) {
@@ -49,4 +54,6 @@ public class Board {
     public void changeContent(String content){
         this.content = content;
     }
+
+    public void changeEducation(Education education){ this.education = education; }
 }
