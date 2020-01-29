@@ -16,18 +16,22 @@ public class Board {
     private String content;
     private Long views;
     private Long likes;
-    private LocalDate created_date;
-    private LocalDate modified_date;
-    private Long user_id;
-    private Long edu_id;
+    @Column(name = "user_id")
+    private Long userId;
+    @Column(name = "edu_id")
+    private Long eduId;
+    @Column(name = "created_date")
+    private LocalDate createdDate;
+    @Column(name = "modified_date")
+    private LocalDate modifiedDate;
 
     public Board(){
         this.title = "";
         this.content = "";
-        this.created_date = LocalDate.now();
-        this.modified_date = LocalDate.now();
-        this.user_id = 0L;
-        this.edu_id = 0L;
+        this.userId = 0L;
+        this.eduId = 0L;
+        this.createdDate = LocalDate.now();
+        this.modifiedDate = LocalDate.now();
     }
 
     @Builder
@@ -36,10 +40,10 @@ public class Board {
         this.content = content;
         this.views = 0L;
         this.likes = 0L;
-        this.created_date = LocalDate.now();
-        this.modified_date = LocalDate.now();
-        this.user_id = 0L;
-        this.edu_id = 0L;
+        this.userId = 0L;
+        this.eduId = 0L;
+        this.createdDate = LocalDate.now();
+        this.modifiedDate = LocalDate.now();
     }
 
     public void changeTitle(String title) {

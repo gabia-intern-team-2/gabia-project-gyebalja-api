@@ -29,10 +29,10 @@ public class CommentDto {
     public CommentDto(Comment comment){
         this.id = comment.getId();
         this.content = comment.getContent();
-        this.boardId = comment.getBoard_id();
-        this.userId = comment.getUser_id();
-        this.createdDate = comment.getCreated_date();
-        this.modifiedDate = comment.getModified_date();
+        this.boardId = comment.getBoardId();
+        this.userId = comment.getUserId();
+        this.createdDate = comment.getCreatedDate();
+        this.modifiedDate = comment.getModifiedDate();
     }
 
     public Comment toEntity(){
