@@ -3,9 +3,8 @@ package com.gabia.gyebalja.domain;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.*;
-import javax.swing.text.html.HTML;
+
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

@@ -3,7 +3,7 @@ package com.gabia.gyebalja.domain;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,10 +27,10 @@ public class Education {
 
     //교육 시작날짜
     @Column(name = "start_date")
-    private LocalDateTime startDate;
+    private LocalDate startDate;
     //교육 종료날짜
     @Column(name = "end_date")
-    private LocalDateTime endDate;
+    private LocalDate endDate;
     //교육 시간
     @Column(name = "total_hours")
     private int totalHours;
@@ -50,7 +50,7 @@ public class Education {
     //User와 연관관계
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private Education education;
+    private User user;
 
     //Board와 연관관계
     @OneToMany(mappedBy = "education")
