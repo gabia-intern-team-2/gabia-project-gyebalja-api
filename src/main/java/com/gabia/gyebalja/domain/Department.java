@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString(of = {id, name, depth})
 @Getter
 @Entity
 public class Department {

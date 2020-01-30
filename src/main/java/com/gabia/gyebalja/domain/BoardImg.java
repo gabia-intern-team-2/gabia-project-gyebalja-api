@@ -5,7 +5,6 @@ import lombok.*;
 import javax.persistence.*;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString(of = {id, imgPath})
 @Getter
 @Entity
 public class BoardImg {
