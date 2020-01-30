@@ -7,10 +7,10 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-@ToString
+
 @Getter
-@Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED) //프록시가 이생성자를 사용함 다른생성자를 사용하려면 기본생성자가 필요한데 Protected로 기본생성자를 만들어줌.
+@Entity
 public class Education {
 
     //교육 테이블 id (PK)
@@ -66,23 +66,18 @@ public class Education {
     private List<EduTag> eduTags = new ArrayList<>();
 
 
-//    @Builder
-//    public Education(String title, String content, LocalDateTime startDate, LocalDateTime endDate, int totalHours, EducationType type, String place ) {
-//        this.title = title;
-//        this.content = content;
-//        this.startDate = startDate;
-//        this.endDate = endDate;
-//        this.totalHours = totalHours;
-//        this.type = type;
-//        this.place = place;
-//        this.createdDate = LocalDateTime.now();
-//        this.modifiedDate = LocalDateTime.now();
-//        //아직 다른 관계가 없기 때문에 임의로 값을 세팅
-//        this.userId = 0L;
-//        this.categoryId =0L;
-//
-//
-//    }
+    @Builder
+    public Education(String title, String content, LocalDate startDate, LocalDate endDate, int totalHours, EducationType type, String place, User user, Category category ) {
+        this.title = title;
+        this.content = content;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.totalHours = totalHours;
+        this.type = type;
+        this.place = place;
+        this.user = user;
+        this.category = category;
+    }
 //
 //    //교육내용 변경 메서드
 //    public void changeEducation(String title, String content, LocalDateTime startDate, LocalDateTime endDate, int totalHours, EducationType type, String place ) {

@@ -2,6 +2,7 @@ package com.gabia.gyebalja.domain;
 
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
@@ -9,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Getter
-@Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Entity
 public class User {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -53,6 +54,19 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<Board> boards = new ArrayList<>();
 
+    @Builder
+    public User(String email, String password, String name, UserGender gender, String phone, String tel, Long positionId, String positionName, String profileImg, Department department) {
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.gender = gender;
+        this.phone = phone;
+        this.tel = tel;
+        this.positionId = positionId;
+        this.positionName = positionName;
+        this.profileImg = profileImg;
+        this.department = department;
+    }
 
     /**
      * 연관관계 메서드 세팅

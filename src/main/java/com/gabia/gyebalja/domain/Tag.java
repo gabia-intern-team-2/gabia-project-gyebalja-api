@@ -1,6 +1,7 @@
 package com.gabia.gyebalja.domain;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
@@ -21,6 +22,12 @@ public class Tag {
     //EduTag와의 연관관계
     @OneToMany(mappedBy = "tag")
     List<EduTag> eduTags = new ArrayList<>();
+
+    @Builder
+    public Tag(String name) {
+        this.name = name;
+    }
+
 
 
 }
