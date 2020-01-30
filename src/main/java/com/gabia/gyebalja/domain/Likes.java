@@ -4,7 +4,6 @@ import lombok.*;
 
 import javax.persistence.*;
 
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(of = {id})
 @Getter
