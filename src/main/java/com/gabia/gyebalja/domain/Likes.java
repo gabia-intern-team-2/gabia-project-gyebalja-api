@@ -3,18 +3,14 @@ package com.gabia.gyebalja.domain;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString(of = {id, content})
+@ToString(of = {id})
 @Getter
 @Entity
-public class Comment{
+public class Likes {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    @Column(columnDefinition = "TEXT")
-    private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "board_id")
@@ -23,13 +19,4 @@ public class Comment{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
-
-    @Builder
-    public Comment(String content){
-        this.content = content;
-    }
-
-    public void changeContent(String content){
-        this.content = content;
-    }
 }
