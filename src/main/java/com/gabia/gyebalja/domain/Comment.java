@@ -6,7 +6,6 @@ import javax.persistence.*;
 import java.time.LocalDate;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString(of = {id, content})
 @Getter
 @Entity
 public class Comment{
