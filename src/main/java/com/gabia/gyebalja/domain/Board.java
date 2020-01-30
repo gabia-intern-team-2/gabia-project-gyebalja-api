@@ -22,7 +22,7 @@ public class Board{
     private String content;
 
     private Long views;
-
+  
     @OneToMany(mappedBy = "board")
     private List<Likes> likes = new ArrayList<>();
 

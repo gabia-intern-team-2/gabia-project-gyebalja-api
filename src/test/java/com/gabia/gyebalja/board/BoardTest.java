@@ -2,7 +2,9 @@ package com.gabia.gyebalja.board;
 
 import com.gabia.gyebalja.domain.Board;
 import com.gabia.gyebalja.dto.BoardDto;
+import com.gabia.gyebalja.dto.CommentDto;
 import com.gabia.gyebalja.repository.BoardRepository;
+import com.gabia.gyebalja.repository.CommentRepository;
 import com.gabia.gyebalja.service.BoardService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,8 @@ import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.*;
 import org.springframework.test.annotation.Rollback;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Rollback(true)
@@ -19,6 +23,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class BoardTest {
     @Autowired
     BoardRepository boardRepository;
+    @Autowired
+    CommentRepository commentRepository;
     @Autowired
     BoardService boardService;
     @Autowired
@@ -64,6 +70,7 @@ public class BoardTest {
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody().getTitle()).isEqualTo(boardDto.getTitle());
         assertThat(responseEntity.getBody().getContent()).isEqualTo(boardDto.getContent());
+        assertThat(responseEntity.getBody().getCommentList().size()).isEqualTo(commentRepository.findByBoardId(targetId).size());    // 게시글의 댓글 테스트 (개수로 테스트)
     }
 
     /** 수정 - board 한 건 (상세페이지에서) */
