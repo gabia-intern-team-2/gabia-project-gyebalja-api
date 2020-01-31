@@ -37,4 +37,12 @@ public class Department {
         this.depth = depth;
         this.parentDepartment = parentDepartment;
     }
+
+    public void changeName(String name){
+        this.name = name;
+    }
+
+    public void changeDepth(int depth){
+        this.depth = depth;
+    }
 }
