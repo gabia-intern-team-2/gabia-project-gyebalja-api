@@ -10,39 +10,39 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 public class BoardApiController {
 
-    private final BoardService boardService;
-
-    /** 등록 - board 한 건 (게시글 등록) */
-    @PostMapping("/api/v1/boards")
-    public Long postOneBoard(@RequestBody BoardDto boardDto){
-        Long boardId = boardService.save(boardDto);
-
-        return boardId;
-    }
-
-    /** 조회 - board 한 건 (상세페이지) */
-    @GetMapping("/api/v1/boards/{id}")
-    public BoardDto getOneBoard(@PathVariable("id") Long id) {
-        BoardDto boardDto = boardService.findById(id);
-
-        return boardDto;
-    }
-
-    /** 수정 - board 한 건 (상세페이지에서) */
-    @PutMapping("/api/v1/boards/{id}")
-    public Long putOneBoard(@PathVariable("id") Long id, @RequestBody BoardDto boardDto){
-        Long boradId = boardService.update(id, boardDto);
-
-        return boradId;
-    }
-
-    /** 삭제 - board 한 건 (상세페이지에서) */
-    @DeleteMapping("/api/v1/boards/{id}")
-    public Long deleteOneBoard(@PathVariable("id") Long id){
-        boardService.delete(id);
-
-        return 200L; // 검토.
-    }
+//    private final BoardService boardService;
+//
+//    /** 등록 - board 한 건 (게시글 등록) */
+//    @PostMapping("/api/v1/boards")
+//    public Long postOneBoard(@RequestBody BoardDto boardDto){
+//        Long boardId = boardService.save(boardDto);
+//
+//        return boardId;
+//    }
+//
+//    /** 조회 - board 한 건 (상세페이지) */
+//    @GetMapping("/api/v1/boards/{id}")
+//    public BoardDto getOneBoard(@PathVariable("id") Long id) {
+//        BoardDto boardDto = boardService.findById(id);
+//
+//        return boardDto;
+//    }
+//
+//    /** 수정 - board 한 건 (상세페이지에서) */
+//    @PutMapping("/api/v1/boards/{id}")
+//    public Long putOneBoard(@PathVariable("id") Long id, @RequestBody BoardDto boardDto){
+//        Long boradId = boardService.update(id, boardDto);
+//
+//        return boradId;
+//    }
+//
+//    /** 삭제 - board 한 건 (상세페이지에서) */
+//    @DeleteMapping("/api/v1/boards/{id}")
+//    public Long deleteOneBoard(@PathVariable("id") Long id){
+//        boardService.delete(id);
+//
+//        return 200L; // 검토.
+//    }
 }
 
 /**
