@@ -20,7 +20,7 @@ public class Board{
     @Column(columnDefinition = "TEXT")
     private String content;
 
-    private Long views;
+    private int views;
   
     @OneToMany(mappedBy = "board")
     private List<Likes> likes = new ArrayList<>();
@@ -40,7 +40,7 @@ public class Board{
     private List<Comment> comments = new ArrayList<>();
 
     @Builder
-    public Board(String title, String content, Long views, User user, Education education){
+    public Board(String title, String content, int views, User user, Education education){
         this.title = title;
         this.content = content;
         this.views = views;
