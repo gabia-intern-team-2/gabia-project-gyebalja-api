@@ -7,8 +7,8 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Board{
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,9 +40,12 @@ public class Board{
     private List<Comment> comments = new ArrayList<>();
 
     @Builder
-    public Board(String title, String content){
+    public Board(String title, String content, Long views, User user, Education education){
         this.title = title;
         this.content = content;
+        this.views = views;
+        this.user = user;
+        this.education = education;
     }
 
     public void changeTitle(String title) {

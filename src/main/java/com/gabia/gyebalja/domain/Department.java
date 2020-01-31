@@ -1,14 +1,13 @@
 package com.gabia.gyebalja.domain;
 
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Department {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,4 +30,11 @@ public class Department {
 
     @OneToMany(mappedBy = "parentDepartment")
     private List<Department> childDepartments;
+
+    @Builder
+    public Department(String name, int depth, Department parentDepartment){
+        this.name = name;
+        this.depth = depth;
+        this.parentDepartment = parentDepartment;
+    }
 }

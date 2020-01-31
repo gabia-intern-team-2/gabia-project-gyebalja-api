@@ -3,10 +3,9 @@ package com.gabia.gyebalja.domain;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.LocalDate;
 
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Comment{
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,8 +23,10 @@ public class Comment{
     private User user;
 
     @Builder
-    public Comment(String content){
+    public Comment(String content, Board board, User user){
         this.content = content;
+        this.board = board;
+        this.user = user;
     }
 
     public void changeContent(String content){
