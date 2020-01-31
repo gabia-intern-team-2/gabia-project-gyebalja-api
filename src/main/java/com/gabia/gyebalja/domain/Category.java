@@ -1,6 +1,7 @@
 package com.gabia.gyebalja.domain;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -22,4 +23,10 @@ public class Category {
     //Education과 연관관계
     @OneToMany(mappedBy = "category")
     List<Education> educations = new ArrayList<>();
+
+    @Builder
+    public Category(String name) {
+        this.name = name;
+    }
+
 }

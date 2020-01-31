@@ -1,6 +1,7 @@
 package com.gabia.gyebalja.domain;
 
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import javax.persistence.*;
@@ -24,4 +25,9 @@ public class EduTag {
     @JoinColumn(name = "tag_id")
     private Tag tag;
 
+    @Builder
+    public EduTag(Education education, Tag tag) {
+        this.education = education;
+        this.tag = tag;
+    }
 }
