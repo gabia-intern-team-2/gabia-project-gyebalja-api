@@ -5,7 +5,6 @@ import com.gabia.gyebalja.repository.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -48,7 +47,6 @@ public class BoardRepositoryTest {
                 .depth(0)
                 .parentDepartment(null)
                 .build();
-        departmentRepository.save(this.department);
 
         // User
         this.user = User.builder()
@@ -63,13 +61,11 @@ public class BoardRepositoryTest {
                 .department(this.department)
                 .profileImg(null)
                 .build();
-        userRepository.save(this.user);
 
         // Category
         this.category = Category.builder()
                 .name("개발")
                 .build();
-        categoryRepository.save(this.category);
 
         // Education
         this.education = Education.builder()
@@ -83,7 +79,6 @@ public class BoardRepositoryTest {
                 .user(this.user)
                 .category(this.category)
                 .build();
-        educationRepository.save(this.education);
 
         // Board
         this.board = Board.builder().title("테스트 - 게시글 제목").content("테스트 - 게시글 본문").views(0).user(this.user).education(this.education).build();
@@ -93,6 +88,11 @@ public class BoardRepositoryTest {
     @Test
     public void saveTest() {
         // given
+        departmentRepository.save(this.department);
+        userRepository.save(this.user);
+        categoryRepository.save(this.category);
+        educationRepository.save(this.education);
+
         Long totalNumberOfData = boardRepository.count();
         Board board = this.board;
 
@@ -113,6 +113,11 @@ public class BoardRepositoryTest {
     @Test
     public void findTest() {
         // given
+        departmentRepository.save(this.department);
+        userRepository.save(this.user);
+        categoryRepository.save(this.category);
+        educationRepository.save(this.education);
+
         Board board = this.board;
         Board saveBoard = boardRepository.save(board);
         em.flush();
@@ -133,6 +138,11 @@ public class BoardRepositoryTest {
     @Test
     public void updateTest() {
         // given
+        departmentRepository.save(this.department);
+        userRepository.save(this.user);
+        categoryRepository.save(this.category);
+        educationRepository.save(this.education);
+
         String updateTitle = "테스트 - 게시글 제목 업데이트";
         String updateContent = "테스트 - 게시글 본문 업데이트";
         Board board = this.board;
@@ -155,6 +165,11 @@ public class BoardRepositoryTest {
     @Test
     public void deleteTest() {
         // given
+        departmentRepository.save(this.department);
+        userRepository.save(this.user);
+        categoryRepository.save(this.category);
+        educationRepository.save(this.education);
+
         Long totalNumberOfData = boardRepository.count();
         Board board = this.board;
         Board saveBoard = boardRepository.save(board);
