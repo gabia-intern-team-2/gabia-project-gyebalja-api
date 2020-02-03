@@ -52,7 +52,6 @@ class LikesRepositoryTest {
                 .depth(0)
                 .parentDepartment(null)
                 .build();
-        departmentRepository.save(this.department);
 
         // User
         this.user = User.builder()
@@ -67,13 +66,11 @@ class LikesRepositoryTest {
                 .department(this.department)
                 .profileImg(null)
                 .build();
-        userRepository.save(this.user);
 
         // Category
         this.category = Category.builder()
                 .name("개발")
                 .build();
-        categoryRepository.save(this.category);
 
         // Education
         this.education = Education.builder()
@@ -87,11 +84,9 @@ class LikesRepositoryTest {
                 .user(this.user)
                 .category(this.category)
                 .build();
-        educationRepository.save(this.education);
 
         // Board
         this.board = Board.builder().title("테스트 - 게시글 제목").content("테스트 - 게시글 본문").views(0).user(this.user).education(this.education).build();
-        boardRepository.save(this.board);
 
         // Likes
         this.likes = Likes.builder().board(board).user(user).build();
@@ -101,6 +96,12 @@ class LikesRepositoryTest {
     @Test
     public void saveTest(){
         // given
+        departmentRepository.save(this.department);
+        userRepository.save(this.user);
+        categoryRepository.save(this.category);
+        educationRepository.save(this.education);
+        boardRepository.save(this.board);
+
         Long totalNumberOfData = likesRepository.count();
         Likes likes = this.likes;
 
@@ -121,6 +122,12 @@ class LikesRepositoryTest {
     @Test
     public void findTest(){
         // given
+        departmentRepository.save(this.department);
+        userRepository.save(this.user);
+        categoryRepository.save(this.category);
+        educationRepository.save(this.education);
+        boardRepository.save(this.board);
+
         Likes likes = this.likes;
         Likes saveLikes = likesRepository.save(likes);
         em.flush();
@@ -155,6 +162,12 @@ class LikesRepositoryTest {
     @Test
     public void deleteTest(){
         // given
+        departmentRepository.save(this.department);
+        userRepository.save(this.user);
+        categoryRepository.save(this.category);
+        educationRepository.save(this.education);
+        boardRepository.save(this.board);
+
         Long totalNumberOfData = likesRepository.count();
         Likes likes = this.likes;
         Likes saveLikes = likesRepository.save(likes);
