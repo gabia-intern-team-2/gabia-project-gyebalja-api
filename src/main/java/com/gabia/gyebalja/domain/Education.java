@@ -78,6 +78,28 @@ public class Education {
         this.user = user;
         this.category = category;
     }
+
+
+    public void changeTitle(String title) {
+        this.title = title;
+    }
+
+    public void changeContent(String content) {
+        this.content = content;
+    }
+
+
+//    @Builder
+//    public Education(String title, String content, LocalDate startDate, LocalDate endDate, int totalHours, EducationType type, String place) {
+//        this.title = title;
+//        this.content = content;
+//        this.startDate = startDate;
+//        this.endDate = endDate;
+//        this.totalHours = totalHours;
+//        this.type = type;
+//        this.place = place;
+//    }
+
 //
 //    //교육내용 변경 메서드
 //    public void changeEducation(String title, String content, LocalDateTime startDate, LocalDateTime endDate, int totalHours, EducationType type, String place ) {
