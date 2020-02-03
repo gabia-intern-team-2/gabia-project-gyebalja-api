@@ -68,6 +68,7 @@ public class User {
         this.department = department;
     }
 
+
     /**
      * 연관관계 메서드 세팅
      * 유저의 부서가 변경된 경우
@@ -78,7 +79,9 @@ public class User {
 //        department.getUsers().add(this);
 //    }
 
-
+    public void changePassword(String password) {
+        this.password = password;
+    }
 
 
 

@@ -89,16 +89,12 @@ class EducationRepositoryTest {
                 .user(user)
                 .build();
 
-        Education saveEducation = educationRepository.save(education);
-        //영속성 컨텍스트 초기화
-        em.flush();
-        em.clear();
-
-
         //when
+        Education saveEducation = educationRepository.save(education);
         Education findEducation = educationRepository.findById(saveEducation.getId()).get();
         
         //then
+        assertThat(findEducation).isEqualTo(education); //jpa 엔티티 동일성 보장 검증
         assertThat(findEducation.getId()).isEqualTo(saveEducation.getId());
         assertThat(findEducation.getTitle()).isEqualTo("제목테스트");
         assertThat(findEducation.getContent()).isEqualTo("내용테스트");
@@ -149,6 +145,9 @@ class EducationRepositoryTest {
                 .build();
 
         educationRepository.save(education);
+
+        em.flush();  //영속성 컨텍스트 초기화
+        em.clear();
         //when
         Education findEducation = educationRepository.findById(education.getId()).get();
 
@@ -203,6 +202,9 @@ class EducationRepositoryTest {
                 educationRepository.save(education);
 
             }
+
+            em.flush();
+            em.clear();
         //when
             List<Education> allEducation = educationRepository.findAll();
         //then
@@ -310,7 +312,7 @@ class EducationRepositoryTest {
 
         Long beforeDeleteNumOfData = educationRepository.count();
         //when
-        educationRepository.deleteById(education.getId());
+        educationRepository.delete(education);
 
         //then
         assertThat(educationRepository.count()).isEqualTo(beforeDeleteNumOfData-1);
@@ -377,8 +379,8 @@ class EducationRepositoryTest {
         //then
 
         assertThat(findUpdateEducation.get().getId()).isEqualTo(saveEducation.getId());
-        assertThat(findUpdateEducation.get().getTitle()).isEqualTo("제목 업데이트");
-        assertThat(findUpdateEducation.get().getContent()).isEqualTo("본문 업데이트");
+        assertThat(findUpdateEducation.get().getTitle()).isEqualTo(updateTitle);
+        assertThat(findUpdateEducation.get().getContent()).isEqualTo(updateContent);
 
     }
 
