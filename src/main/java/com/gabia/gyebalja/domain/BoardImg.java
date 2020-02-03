@@ -22,4 +22,8 @@ public class BoardImg {
         this.board = board;
         this.imgPath = imgPath;
     }
+
+    public void changeImgPath(String imgPath){
+        this.imgPath = imgPath;
+    }
 }
