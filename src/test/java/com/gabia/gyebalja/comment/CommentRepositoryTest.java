@@ -50,7 +50,6 @@ public class CommentRepositoryTest {
                 .depth(0)
                 .parentDepartment(null)
                 .build();
-        departmentRepository.save(this.department);
 
         // User
         this.user = User.builder()
@@ -65,13 +64,11 @@ public class CommentRepositoryTest {
                 .department(this.department)
                 .profileImg(null)
                 .build();
-        userRepository.save(this.user);
 
         // Category
         this.category = Category.builder()
                 .name("개발")
                 .build();
-        categoryRepository.save(this.category);
 
         // Education
         this.education = Education.builder()
@@ -85,11 +82,10 @@ public class CommentRepositoryTest {
                 .user(this.user)
                 .category(this.category)
                 .build();
-        educationRepository.save(this.education);
 
         // Board
         this.board = Board.builder().title("테스트 - 게시글 제목").content("테스트 - 게시글 본문").views(0).user(this.user).education(this.education).build();
-        boardRepository.save(this.board);
+
         // Comment
         this.comment = comment.builder().content("테스트 - 댓글 본문").board(this.board).user(this.user).build();
     }
@@ -99,6 +95,12 @@ public class CommentRepositoryTest {
     @Test
     public void saveTest(){
         // given
+        departmentRepository.save(this.department);
+        userRepository.save(this.user);
+        categoryRepository.save(this.category);
+        educationRepository.save(this.education);
+        boardRepository.save(this.board);
+
         Long totalNumberOfData = commentRepository.count();
         Comment comment = this.comment;
         em.flush();
@@ -119,6 +121,12 @@ public class CommentRepositoryTest {
     @Test
     public void findComment(){
         // given
+        departmentRepository.save(this.department);
+        userRepository.save(this.user);
+        categoryRepository.save(this.category);
+        educationRepository.save(this.education);
+        boardRepository.save(this.board);
+
         Comment comment = this.comment;
         Comment saveComment = commentRepository.save(comment);
         em.flush();
@@ -138,6 +146,12 @@ public class CommentRepositoryTest {
     @Test
     public void updateComment(){
         // given
+        departmentRepository.save(this.department);
+        userRepository.save(this.user);
+        categoryRepository.save(this.category);
+        educationRepository.save(this.education);
+        boardRepository.save(this.board);
+
         String updateContent = "테스트 - 댓글 본문 업데이트";
         Comment comment = this.comment;
         Comment saveComment = commentRepository.save(comment);
@@ -157,7 +171,13 @@ public class CommentRepositoryTest {
     @Test
     public void deleteComment(){
         // given
-        Long totlaNumberOfData = commentRepository.count();
+        departmentRepository.save(this.department);
+        userRepository.save(this.user);
+        categoryRepository.save(this.category);
+        educationRepository.save(this.education);
+        boardRepository.save(this.board);
+
+        Long totalNumberOfData = commentRepository.count();
         Comment comment = this.comment;
         Comment saveComment = commentRepository.save(comment);
         em.flush();
@@ -167,7 +187,7 @@ public class CommentRepositoryTest {
         commentRepository.deleteById(saveComment.getId());
 
         // then
-        assertThat(commentRepository.count()).isEqualTo(totlaNumberOfData);
+        assertThat(commentRepository.count()).isEqualTo(totalNumberOfData);
         assertThat(commentRepository.findById(saveComment.getId())).isEqualTo(Optional.empty());
     }
 }
