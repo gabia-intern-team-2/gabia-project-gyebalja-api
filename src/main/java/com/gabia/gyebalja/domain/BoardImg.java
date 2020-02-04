@@ -4,9 +4,11 @@ import lombok.*;
 
 import javax.persistence.*;
 
+@ToString(of = {"id", "imgPath"})
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@Table(name = "board_img")
 public class BoardImg {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -15,6 +17,7 @@ public class BoardImg {
     @JoinColumn(name = "board_id")
     private Board board;
 
+    @Column(name = "img_path")
     private String imgPath;
 
     @Builder
