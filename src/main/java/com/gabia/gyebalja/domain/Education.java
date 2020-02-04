@@ -11,7 +11,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED) //프록시가 이생성자를 사용함 다른생성자를 사용하려면 기본생성자가 필요한데 Protected로 기본생성자를 만들어줌.
 @Entity
-public class Education {
+public class Education extends BaseTime {
 
     //교육 테이블 id (PK)
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) //기본키 생성을 DB에 위임
