@@ -4,10 +4,11 @@ import lombok.*;
 
 import javax.persistence.*;
 
+@ToString(of = {"id", "content"})
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Comment{
+public class Comment extends BaseTime {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 

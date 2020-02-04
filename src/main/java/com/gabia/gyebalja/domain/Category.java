@@ -12,17 +12,13 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Category {
+public class Category extends BaseTime {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
     private String name;
-
-    //Education과 연관관계
-    @OneToMany(mappedBy = "category")
-    List<Education> educations = new ArrayList<>();
 
     @Builder
     public Category(String name) {
