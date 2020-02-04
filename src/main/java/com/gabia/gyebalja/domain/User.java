@@ -46,14 +46,6 @@ public class User {
     @JoinColumn(name = "dept_id")
     private Department department;
 
-    //Education과 연관관계
-    @OneToMany(mappedBy = "user")
-    private List<Education> educations = new ArrayList<>();
-
-    //Board과 연관관계
-    @OneToMany(mappedBy = "user")
-    private List<Board> boards = new ArrayList<>();
-
     @Builder
     public User(String email, String password, String name, UserGender gender, String phone, String tel, Long positionId, String positionName, String profileImg, Department department) {
         this.email = email;

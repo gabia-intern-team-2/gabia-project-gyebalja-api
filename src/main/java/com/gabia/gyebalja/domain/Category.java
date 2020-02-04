@@ -20,10 +20,6 @@ public class Category {
     @Column(nullable = false)
     private String name;
 
-    //Education과 연관관계
-    @OneToMany(mappedBy = "category")
-    List<Education> educations = new ArrayList<>();
-
     @Builder
     public Category(String name) {
         this.name = name;

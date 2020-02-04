@@ -19,10 +19,6 @@ public class Tag {
     @Column(nullable = false)
     private String name;
 
-    //EduTag와의 연관관계
-    @OneToMany(mappedBy = "tag")
-    List<EduTag> eduTags = new ArrayList<>();
-
     @Builder
     public Tag(String name) {
         this.name = name;

@@ -52,19 +52,10 @@ public class Education {
     @JoinColumn(name = "user_id")
     private User user;
 
-    //Board와 연관관계
-    @OneToMany(mappedBy = "education")
-    private List<Board> boards = new ArrayList<>();
-
     //Category와 연관관계
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
-
-    //EduTag와 연관관계
-    @OneToMany(mappedBy = "education")
-    private List<EduTag> eduTags = new ArrayList<>();
-
 
     @Builder
     public Education(String title, String content, LocalDate startDate, LocalDate endDate, int totalHours, EducationType type, String place, User user, Category category ) {
