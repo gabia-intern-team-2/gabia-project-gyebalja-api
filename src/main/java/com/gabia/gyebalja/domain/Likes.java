@@ -4,10 +4,11 @@ import lombok.*;
 
 import javax.persistence.*;
 
+@ToString(of = {"id"})
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Likes {
+public class Likes extends BaseTime {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 

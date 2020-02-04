@@ -7,23 +7,21 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@ToString(of = {"id", "title", "content", "views"})
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Board{
+public class Board extends BaseTime {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 255, nullable = false)
+    @Column(nullable = false)
     private String title;
 
     @Column(columnDefinition = "TEXT")
     private String content;
 
     private int views;
-  
-    @OneToMany(mappedBy = "board")
-    private List<Likes> likes = new ArrayList<>();
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -32,12 +30,6 @@ public class Board{
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "edu_id")
     private Education education;
-
-    @OneToMany(mappedBy = "board")
-    private List<BoardImg> boardImgs = new ArrayList<>();
-
-    @OneToMany(mappedBy = "board")
-    private List<Comment> comments = new ArrayList<>();
 
     @Builder
     public Board(String title, String content, int views, User user, Education education){
