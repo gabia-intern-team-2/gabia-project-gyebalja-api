@@ -36,8 +36,21 @@ public class Board{
     @OneToMany(mappedBy = "board")
     private List<BoardImg> boardImgs = new ArrayList<>();
 
-    @OneToMany(mappedBy = "board")
+    /**
+     * [방법1]
+     * 방법1의 경우 Board 객체에서는 특별하게 추가되는 필드는 없습니다!
+     * */
+
+    /**
+     * [방법2]
+     * 설명은 Comment 객체 쪽에 작성하였습니다!
+     *
+     * */
+    @OneToMany(fetch = FetchType.LAZY, orphanRemoval = true, cascade = CascadeType.ALL)
+    @JoinColumn(name="board_id")
     private List<Comment> comments = new ArrayList<>();
+    /** 방법2 끝*/
+
 
     @Builder
     public Board(String title, String content, int views, User user, Education education){
