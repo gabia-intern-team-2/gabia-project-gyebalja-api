@@ -36,13 +36,13 @@ public class BoardApiController {
         return boradId;
     }
 
-//    /** 삭제 - board 한 건 (상세페이지에서) */
-//    @DeleteMapping("/api/v1/boards/{id}")
-//    public Long deleteOneBoard(@PathVariable("id") Long id){
-//        boardService.delete(id);
-//
-//        return 200L; // 검토.
-//    }
+    /** 삭제 - board 한 건 (상세페이지에서) */
+    @DeleteMapping("/api/v1/boards/{id}")
+    public Long deleteOneBoard(@PathVariable("id") Long id){
+        boardService.delete(id);
+
+        return 200L; // 검토.
+    }
 }
 
 /**
