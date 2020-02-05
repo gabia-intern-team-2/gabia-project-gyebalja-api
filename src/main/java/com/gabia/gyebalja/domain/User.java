@@ -27,7 +27,7 @@ public class User extends BaseTime {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private UserGender gender;
+    private GenderType gender;
 
     @Column(length = 15)
     private String phone;
@@ -47,7 +47,7 @@ public class User extends BaseTime {
     private Department department;
 
     @Builder
-    public User(String email, String password, String name, UserGender gender, String phone, String tel, Long positionId, String positionName, String profileImg, Department department) {
+    public User(String email, String password, String name, GenderType gender, String phone, String tel, Long positionId, String positionName, String profileImg, Department department) {
         this.email = email;
         this.password = password;
         this.name = name;

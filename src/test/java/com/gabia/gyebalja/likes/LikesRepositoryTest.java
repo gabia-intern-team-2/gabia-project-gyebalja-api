@@ -58,7 +58,7 @@ class LikesRepositoryTest {
                 .email("gabiaUser@gabia.com")
                 .password("1234")
                 .name("가비아")
-                .gender(UserGender.MALE)
+                .gender(GenderType.MALE)
                 .phone("010-2345-5678")
                 .tel("02-2345-5678")
                 .positionId(5L)

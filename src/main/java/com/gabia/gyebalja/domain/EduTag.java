@@ -10,6 +10,7 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@Table(name = "edu_tag")
 public class EduTag extends BaseTime {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,5 +1,5 @@
 package com.gabia.gyebalja.domain;
 
-public enum UserGender {
+public enum GenderType {
     MALE, FEMALE
 }
