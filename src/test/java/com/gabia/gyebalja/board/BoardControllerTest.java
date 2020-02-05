@@ -1,7 +1,7 @@
 package com.gabia.gyebalja.board;
 
 import com.gabia.gyebalja.domain.Board;
-import com.gabia.gyebalja.dto.BoardDto;
+//import com.gabia.gyebalja.dto.BoardDto;
 import com.gabia.gyebalja.dto.CommentDto;
 import com.gabia.gyebalja.repository.BoardRepository;
 import com.gabia.gyebalja.repository.CommentRepository;
