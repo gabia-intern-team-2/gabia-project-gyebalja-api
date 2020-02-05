@@ -111,12 +111,8 @@ public class BoardServiceTest {
         em.flush();
 
         // then
-        Board responseBoard = boardRepository.findById(saveId).orElseThrow(() -> new IllegalArgumentException("해당 데이터가 없습니다."));
-        assertThat(responseBoard.getId()).isEqualTo(saveId);
-        assertThat(responseBoard.getTitle()).isEqualTo(title);
-        assertThat(responseBoard.getContent()).isEqualTo(content);
-//        BoardResponseDto boardResponseDto = boardService.findById(saveId);
-//        assertThat(boardResponseDto.getId()).isEqualTo(saveId);
+        BoardResponseDto boardResponseDto = boardService.findById(saveId);
+        assertThat(boardResponseDto.getId()).isEqualTo(saveId);
     }
 
     @Test
@@ -140,13 +136,9 @@ public class BoardServiceTest {
         BoardResponseDto boardResponseDto = boardService.findById(saveId);
 
         // then
-        Board responseBoard = boardRepository.findById(saveId).orElseThrow(() -> new IllegalArgumentException("해당 데이터가 없습니다."));
-        assertThat(responseBoard.getId()).isEqualTo(saveId);
-        assertThat(responseBoard.getTitle()).isEqualTo(title);
-        assertThat(responseBoard.getContent()).isEqualTo(content);
-//        assertThat(boardResponseDto.getId()).isEqualTo(saveId);
-//        assertThat(boardResponseDto.getTitle()).isEqualTo(title);
-//        assertThat(boardResponseDto.getContent()).isEqualTo(content);
+        assertThat(boardResponseDto.getId()).isEqualTo(saveId);
+        assertThat(boardResponseDto.getTitle()).isEqualTo(title);
+        assertThat(boardResponseDto.getContent()).isEqualTo(content);
     }
 
     @Test
@@ -173,15 +165,10 @@ public class BoardServiceTest {
         Long updateId = boardService.update(saveId, updateBoardRequestDto);
 
         // then
+        BoardResponseDto boardResponseDto = boardService.findById(updateId);
         assertThat(updateId).isEqualTo(saveId);
-        Board responseBoard = boardRepository.findById(updateId).orElseThrow(() -> new IllegalArgumentException("해당 데이터가 없습니다."));
-        assertThat(responseBoard.getId()).isEqualTo(updateId);
-        assertThat(responseBoard.getTitle()).isEqualTo(updateTitle);
-        assertThat(responseBoard.getContent()).isEqualTo(updateContent);
-//        BoardResponseDto boardResponseDto = boardService.findById(updateId);
-//        assertThat(updateId).isEqualTo(saveId);
-//        assertThat(boardResponseDto.getTitle()).isEqualTo(updateTitle);
-//        assertThat(boardResponseDto.getContent()).isEqualTo(updateContent);
+        assertThat(boardResponseDto.getTitle()).isEqualTo(updateTitle);
+        assertThat(boardResponseDto.getContent()).isEqualTo(updateContent);
     }
 
     @Test
