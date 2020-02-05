@@ -1,8 +1,9 @@
 package com.gabia.gyebalja.user;
 
 import com.gabia.gyebalja.domain.Department;
+import com.gabia.gyebalja.domain.GenderType;
 import com.gabia.gyebalja.domain.User;
-import com.gabia.gyebalja.domain.UserGender;
+
 import com.gabia.gyebalja.repository.DepartmentRepository;
 import com.gabia.gyebalja.repository.UserRepository;
 import org.assertj.core.api.Assertions;
@@ -48,7 +49,7 @@ public class UserRepositoryTest {
                     .email("test@gabia.com")
                     .password("12345")
                     .name("User1")
-                    .gender(UserGender.MALE)
+                    .gender(GenderType.MALE)
                     .phone("000-0000-0000")
                     .tel("111-1111-1111")
                     .positionId(23L)
@@ -85,7 +86,7 @@ public class UserRepositoryTest {
                 .email("test@gabia.com")
                 .password("12345")
                 .name("User1")
-                .gender(UserGender.MALE)
+                .gender(GenderType.MALE)
                 .phone("000-0000-0000")
                 .tel("111-1111-1111")
                 .positionId(23L)
@@ -131,7 +132,7 @@ public class UserRepositoryTest {
                     .email("test@gabia.com")
                     .password("12345")
                     .name("User"+i)
-                    .gender(UserGender.MALE)
+                    .gender(GenderType.MALE)
                     .phone("000-0000-0000")
                     .tel("111-1111-1111")
                     .positionId(23L)
@@ -170,7 +171,7 @@ public class UserRepositoryTest {
                     .email("test@gabia.com")
                     .password("12345")
                     .name("User"+i)
-                    .gender(UserGender.MALE)
+                    .gender(GenderType.MALE)
                     .phone("000-0000-0000")
                     .tel("111-1111-1111")
                     .positionId(23L)
@@ -208,7 +209,7 @@ public class UserRepositoryTest {
                 .email("test@gabia.com")
                 .password("12345")
                 .name("User1")
-                .gender(UserGender.MALE)
+                .gender(GenderType.MALE)
                 .phone("000-0000-0000")
                 .tel("111-1111-1111")
                 .positionId(23L)
@@ -248,7 +249,7 @@ public class UserRepositoryTest {
                 .email("test@gabia.com")
                 .password("12345")
                 .name("User1")
-                .gender(UserGender.MALE)
+                .gender(GenderType.MALE)
                 .phone("000-0000-0000")
                 .tel("111-1111-1111")
                 .positionId(23L)
