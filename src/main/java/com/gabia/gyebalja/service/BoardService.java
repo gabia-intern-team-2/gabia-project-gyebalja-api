@@ -6,6 +6,8 @@ import com.gabia.gyebalja.dto.board.BoardResponseDto;
 import com.gabia.gyebalja.repository.BoardRepository;
 import com.gabia.gyebalja.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -67,5 +69,14 @@ public class BoardService {
         em.clear();
 
         return id;
+    }
+
+    /** 조회 - board 전체 (페이징) */
+    @Transactional
+    public Page<BoardResponseDto> findAll(Pageable pageable){
+        Page<Board> boardPage = boardRepository.findAll(pageable);
+        Page<BoardResponseDto> boardDtoPage = boardPage.map(board -> new BoardResponseDto(board));  // 검토. stream?
+
+        return boardDtoPage;
     }
 }

@@ -9,6 +9,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -125,7 +129,7 @@ public class BoardServiceTest {
         educationRepository.save(this.education);
 
         String title = "테스트 - BoardRequestDto title";
-        String content = "테스트 - BoardRequestDto contetn";
+        String content = "테스트 - BoardRequestDto content";
         BoardRequestDto boardRequestDto = BoardRequestDto.builder().title(title).content(content).user(user).education(education).build();
 
         Long saveId = boardService.save(boardRequestDto);
@@ -147,7 +151,7 @@ public class BoardServiceTest {
 
     @Test
     @DisplayName("BoardService.update() 테스트 (단건 업데이트)")
-    public void updateTest(){
+    public void updateTest() {
         // given
         departmentRepository.save(this.department);
         userRepository.save(this.user);
@@ -182,7 +186,7 @@ public class BoardServiceTest {
 
     @Test
     @DisplayName("BoardService.delete() 테스트 (단건 삭제)")
-    public void deleteTest(){
+    public void deleteTest() {
         // given
         departmentRepository.save(this.department);
         userRepository.save(this.user);
@@ -201,5 +205,37 @@ public class BoardServiceTest {
         // then
         assertThat(deleteId).isEqualTo(saveId);
         assertThat(boardRepository.findById(deleteId)).isEqualTo(Optional.empty());
+    }
+
+    @Test
+    @DisplayName("BoardService.findAll() 테스트 (전체 조회, 페이징)")
+    public void findAllTest() {
+        // given
+        departmentRepository.save(this.department);
+        userRepository.save(this.user);
+        categoryRepository.save(this.category);
+        educationRepository.save(this.education);
+
+        int page = 0;
+        int size = 10;
+        String properties = "id";
+        Pageable pageable = PageRequest.of(page, size, Sort.Direction.DESC, properties);
+
+        int totalNumberOfData = 29;
+        String title = "테스트 - BoardRequestDto title";
+        String content = "테스트 - BoardRequestDto content";
+        for (int i = 0; i < totalNumberOfData; i++) {
+            boardService.save(BoardRequestDto.builder().title(title).content(content).user(user).education(education).build());
+        }
+        em.clear();
+        em.flush();
+
+        // when
+        Page<BoardResponseDto> boardResponseDtos = boardService.findAll(pageable);
+
+        // then
+        assertThat(boardResponseDtos.getTotalElements()).isEqualTo(totalNumberOfData);
+        assertThat(boardResponseDtos.getContent().get(0).getTitle()).isEqualTo(title);
+        assertThat(boardResponseDtos.getContent().get(0).getContent()).isEqualTo(content);
     }
 }
