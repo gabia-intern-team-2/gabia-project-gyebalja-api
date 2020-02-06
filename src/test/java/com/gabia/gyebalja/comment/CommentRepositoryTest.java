@@ -152,18 +152,18 @@ public class CommentRepositoryTest {
         educationRepository.save(this.education);
         boardRepository.save(this.board);
 
-        String updateContent = "테스트 - 댓글 본문 업데이트";
         Comment comment = this.comment;
         Comment saveComment = commentRepository.save(comment);
         Comment findComment = commentRepository.findById(saveComment.getId()).orElseThrow(() -> new IllegalArgumentException("해당 데이터가 없습니다."));
+        String updateContent = "테스트 - 댓글 본문 업데이트";
         findComment.changeContent(updateContent);
+
+        // when
         em.flush();
         em.clear();
 
-        // when
-        Comment updateComment = commentRepository.save(findComment);
-
         // then
+        Comment updateComment = commentRepository.findById(findComment.getId()).orElseThrow(() -> new IllegalArgumentException("해당 데이터가 없습니다."));
         assertThat(updateComment.getContent()).isEqualTo(findComment.getContent());
     }
 
