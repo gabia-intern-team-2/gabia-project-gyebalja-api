@@ -1,19 +1,9 @@
 package com.gabia.gyebalja.board;
 
-import com.gabia.gyebalja.domain.Board;
-import com.gabia.gyebalja.domain.Category;
-import com.gabia.gyebalja.domain.Department;
-import com.gabia.gyebalja.domain.Education;
-import com.gabia.gyebalja.domain.EducationType;
-import com.gabia.gyebalja.domain.GenderType;
-import com.gabia.gyebalja.domain.User;
+import com.gabia.gyebalja.domain.*;
 import com.gabia.gyebalja.dto.board.BoardRequestDto;
 import com.gabia.gyebalja.dto.board.BoardResponseDto;
-import com.gabia.gyebalja.repository.BoardRepository;
-import com.gabia.gyebalja.repository.CategoryRepository;
-import com.gabia.gyebalja.repository.DepartmentRepository;
-import com.gabia.gyebalja.repository.EducationRepository;
-import com.gabia.gyebalja.repository.UserRepository;
+import com.gabia.gyebalja.repository.*;
 import com.gabia.gyebalja.service.BoardService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,11 +35,12 @@ public class BoardControllerTest {
     @PersistenceContext
     EntityManager em;
 
-    private BoardRepository boardRepository;
-    private DepartmentRepository departmentRepository;
-    private UserRepository userRepository;
-    private CategoryRepository categoryRepository;
-    private EducationRepository educationRepository;
+    private final BoardRepository boardRepository;
+    private final DepartmentRepository departmentRepository;
+    private final UserRepository userRepository;
+    private final CategoryRepository categoryRepository;
+    private final EducationRepository educationRepository;
+    private final CommentRepository commentRepository;
 
     private Department department;
     private User user;
@@ -73,10 +64,11 @@ public class BoardControllerTest {
         this.userRepository.deleteAll();
         this.categoryRepository.deleteAll();
         this.educationRepository.deleteAll();
+        this.commentRepository.deleteAll();
     }
 
     @Autowired
-    public BoardControllerTest(BoardRepository boardRepository, DepartmentRepository departmentRepository, UserRepository userRepository, CategoryRepository categoryRepository, EducationRepository educationRepository) {
+    public BoardControllerTest(BoardRepository boardRepository, DepartmentRepository departmentRepository, UserRepository userRepository, CategoryRepository categoryRepository, EducationRepository educationRepository, CommentRepository commentRepository) {
         System.out.println(">>>>>>>>>>>>>>>>>>>> BoardControllerTest() method");
 
         // Repository
@@ -85,6 +77,7 @@ public class BoardControllerTest {
         this.userRepository = userRepository;
         this.categoryRepository = categoryRepository;
         this.educationRepository = educationRepository;
+        this.commentRepository = commentRepository;
 
         // Department
         this.department = Department.builder()
@@ -172,9 +165,33 @@ public class BoardControllerTest {
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody().getTitle()).isEqualTo(title);
         assertThat(responseEntity.getBody().getContent()).isEqualTo(content);
+    }
 
-//        // 테스트 - 댓글 개수 (추가 예정)
-//        assertThat(responseEntity.getBody().getCommentList().size()).isEqualTo(commentRepository.findByBoardId(targetId).size());
+    @Test
+    @DisplayName("BoardController.getOneBoard() 테스트 (단건 조회) - 댓글 테스트")
+    public void getOneBoardWithComments() {
+        // given
+        String title = "테스트 - BoardRequestDto title";
+        String content = "테스트 - BoardRequestDto content";
+        BoardRequestDto boardRequestDto = BoardRequestDto.builder().title(title).content(content).user(user).education(education).build();
+
+        Long saveId = boardService.save(boardRequestDto);
+        String url = "http://localhost:" + port + "/api/v1/boards/" + saveId;
+
+        int totalNumberOfData = 29;
+        Board board = boardRepository.findById(saveId).orElseThrow(() -> new IllegalArgumentException("해당 데이터가 없습니다."));
+        for(int i =0; i < totalNumberOfData; i++) {
+            commentRepository.save(Comment.builder().content("테스트 - 댓글").user(user).board(board).build());
+        }
+
+        // when
+        ResponseEntity<BoardResponseDto> responseEntity = restTemplate.getForEntity(url, BoardResponseDto.class);
+
+        // then
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody().getTitle()).isEqualTo(title);
+        assertThat(responseEntity.getBody().getContent()).isEqualTo(content);
+        assertThat(responseEntity.getBody().getCommentList().size()).isEqualTo(totalNumberOfData);
     }
 
     /**

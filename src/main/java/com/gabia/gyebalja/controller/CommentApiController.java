@@ -1,9 +1,7 @@
 package com.gabia.gyebalja.controller;
 
-import com.gabia.gyebalja.dto.CommentDto;
-import com.gabia.gyebalja.service.CommentService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
@@ -13,24 +11,24 @@ public class CommentApiController {
 //
 //    /** 등록 - comment 한 건 */
 //    @PostMapping("/api/v1/comments")
-//    public Long postOneComment(@RequestBody CommentDto commentDto){
-//        Long commentId = commentService.save(commentDto);
+//    public Long postOneComment(@RequestBody GenderType GenderType){
+//        Long commentId = commentService.save(GenderType);
 //
 //        return commentId;
 //    }
 //
 //    /** 조회 - comment 한 건 */
 //    @GetMapping("/api/v1/comments/{id}")
-//    public CommentDto getOneComment(@PathVariable("id") Long id){
-//        CommentDto commentDto = commentService.findById(id);
+//    public GenderType getOneComment(@PathVariable("id") Long id){
+//        GenderType GenderType = commentService.findById(id);
 //
-//        return commentDto;
+//        return GenderType;
 //    }
 //
 //    /** 수정 - comment 한 건 */
 //    @PutMapping("/api/v1/comments/{id}")
-//    public Long putOneComment(@PathVariable("id") Long id, @RequestBody CommentDto commentDto){
-//        Long commentId = commentService.update(id, commentDto);
+//    public Long putOneComment(@PathVariable("id") Long id, @RequestBody GenderType GenderType){
+//        Long commentId = commentService.update(id, GenderType);
 //
 //        return commentId;
 //    }

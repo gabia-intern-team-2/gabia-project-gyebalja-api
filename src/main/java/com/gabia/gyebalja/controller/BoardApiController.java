@@ -56,4 +56,22 @@ public class BoardApiController {
 
         return boardDtoPage;
     }
+
+//    /** 조회 - board 전체 (페이징) */
+//    @GetMapping("/api/v1/boards")
+//    public Result getAllBoard(@PageableDefault(size=10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
+//        Page<BoardResponseDto> boardResponseDtosPage = boardService.findAll(pageable);
+//        List<BoardResponseDto> boardRequestDtos = boardResponseDtosPage.getContent();
+//        Pageable pageInfo = boardResponseDtosPage.getPageable();
+//
+//        return new Result(code, message, result);
+//    }
+//
+//    @Data
+//    @AllArgsConstructor
+//    static class Result<T> {
+//        private T code;
+//        private T message;
+//        private T result;
+//    }
 }

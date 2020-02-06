@@ -1,19 +1,7 @@
 package com.gabia.gyebalja.comment;
 
-import com.gabia.gyebalja.domain.Comment;
-import com.gabia.gyebalja.dto.CommentDto;
-import com.gabia.gyebalja.repository.CommentRepository;
-import com.gabia.gyebalja.service.CommentService;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.*;
 import org.springframework.test.annotation.Rollback;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -36,10 +24,10 @@ public class CommentTest {
 //        String content = "댓글 작성";
 //        String url = "http://localhost:" + port + "/api/v1/comments";
 //
-//        CommentDto commentDto = CommentDto.builder().content(content).build();
+//        GenderType GenderType = GenderType.builder().content(content).build();
 //
 //        //when
-//        ResponseEntity<Long> responseEntity = restTemplate.postForEntity(url, commentDto, Long.class);
+//        ResponseEntity<Long> responseEntity = restTemplate.postForEntity(url, GenderType, Long.class);
 //
 //        //then
 //        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
@@ -56,14 +44,14 @@ public class CommentTest {
 //        String url = "http://localhost:" + port + "/api/v1/comments/" + targetId;
 //
 //        Comment comment = commentRepository.findById(targetId).orElseThrow(()->new IllegalArgumentException("해당 댓글이 없습니다."));
-//        CommentDto commentDto = new CommentDto(comment);
+//        GenderType GenderType = new GenderType(comment);
 //
 //        //when
-//        ResponseEntity<CommentDto> responseEntity = restTemplate.getForEntity(url, CommentDto.class);
+//        ResponseEntity<GenderType> responseEntity = restTemplate.getForEntity(url, GenderType.class);
 //
 //        //then
 //        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-//        assertThat(responseEntity.getBody().getContent()).isEqualTo(commentDto.getContent());
+//        assertThat(responseEntity.getBody().getContent()).isEqualTo(GenderType.getContent());
 //    }
 //
 //    /** 수정 - comment 한 건
@@ -77,8 +65,8 @@ public class CommentTest {
 //        String updateContent = "updated content";
 //        String url = "http://localhost:" + port + "/api/v1/comments/" + updateId;
 //
-//        CommentDto commentDto = CommentDto.builder().content(updateContent).build();
-//        HttpEntity<CommentDto> requestEntity = new HttpEntity<>(commentDto);
+//        GenderType GenderType = GenderType.builder().content(updateContent).build();
+//        HttpEntity<GenderType> requestEntity = new HttpEntity<>(GenderType);
 //
 //        //when
 //        ResponseEntity<Long> responseEntity = restTemplate.exchange(url, HttpMethod.PUT, requestEntity, Long.class);

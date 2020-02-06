@@ -1,9 +1,11 @@
 package com.gabia.gyebalja.dto.board;
 
 import com.gabia.gyebalja.domain.Board;
-import com.gabia.gyebalja.domain.Education;
-import com.gabia.gyebalja.dto.CommentDto;
-import lombok.*;
+import com.gabia.gyebalja.dto.comment.CommentResponseDto;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -14,6 +16,7 @@ import java.util.List;
 @Getter
 @Data
 public class BoardResponseDto {
+
     private Long id;
     private String title;
     private String content;
@@ -24,7 +27,7 @@ public class BoardResponseDto {
     private String userName;
     private Long educationId;
     private String educationTitle;
-    private List<CommentDto> commentList;
+    private List<CommentResponseDto> commentList;
 
     public BoardResponseDto(Board board){
         this.id = board.getId();
@@ -37,10 +40,10 @@ public class BoardResponseDto {
         this.userName = board.getUser().getName();
         this.educationId = board.getEducation().getId();
         this.educationTitle = board.getEducation().getTitle();
-        this.commentList = new ArrayList<CommentDto>();
+        this.commentList = new ArrayList<CommentResponseDto>();
     }
 
-    public void changeCommentList(List<CommentDto> commentDtoList){
-        this.commentList = commentDtoList;
+    public void changeCommentList(List<CommentResponseDto> commentResponseDtos){
+        this.commentList = commentResponseDtos;
     }
 }
