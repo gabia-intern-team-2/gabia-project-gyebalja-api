@@ -143,20 +143,20 @@ public class BoardRepositoryTest {
         categoryRepository.save(this.category);
         educationRepository.save(this.education);
 
-        String updateTitle = "테스트 - 게시글 제목 업데이트";
-        String updateContent = "테스트 - 게시글 본문 업데이트";
         Board board = this.board;
         Board savedBoard = boardRepository.save(board);
         Board findBoard = boardRepository.findById(savedBoard.getId()).orElseThrow(() -> new IllegalArgumentException("해당 데이터가 없습니다."));
+        String updateTitle = "테스트 - 게시글 제목 업데이트";
+        String updateContent = "테스트 - 게시글 본문 업데이트";
         findBoard.changeTitle(updateTitle);
         findBoard.changeContent(updateContent);
+
+        // when
         em.flush();
         em.clear();
 
-        // when
-        Board updateBoard = boardRepository.save(findBoard);
-
         // then
+        Board updateBoard = boardRepository.findById(findBoard.getId()).orElseThrow(() -> new IllegalArgumentException("해당 데이터가 없습니다."));
         assertThat(updateBoard.getTitle()).isEqualTo(findBoard.getTitle());
         assertThat(updateBoard.getContent()).isEqualTo(findBoard.getContent());
     }
