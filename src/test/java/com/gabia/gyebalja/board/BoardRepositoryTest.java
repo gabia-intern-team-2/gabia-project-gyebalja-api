@@ -1,7 +1,18 @@
 package com.gabia.gyebalja.board;
 
-import com.gabia.gyebalja.domain.*;
-import com.gabia.gyebalja.repository.*;
+import com.gabia.gyebalja.domain.Board;
+import com.gabia.gyebalja.domain.Category;
+import com.gabia.gyebalja.domain.Department;
+import com.gabia.gyebalja.domain.Education;
+import com.gabia.gyebalja.domain.EducationType;
+import com.gabia.gyebalja.domain.GenderType;
+import com.gabia.gyebalja.domain.User;
+import com.gabia.gyebalja.repository.BoardRepository;
+import com.gabia.gyebalja.repository.CategoryRepository;
+import com.gabia.gyebalja.repository.DepartmentRepository;
+import com.gabia.gyebalja.repository.EducationRepository;
+import com.gabia.gyebalja.repository.UserRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -31,6 +42,14 @@ public class BoardRepositoryTest {
     private User user;
     private Education education;
     private Category category;
+
+    @BeforeEach
+    public void setUp(){
+        departmentRepository.save(this.department);
+        userRepository.save(this.user);
+        categoryRepository.save(this.category);
+        educationRepository.save(this.education);
+    }
 
     @Autowired
     public BoardRepositoryTest(BoardRepository boardRepository, DepartmentRepository departmentRepository, UserRepository userRepository, CategoryRepository categoryRepository, EducationRepository educationRepository) {
@@ -88,11 +107,6 @@ public class BoardRepositoryTest {
     @Test
     public void saveTest() {
         // given
-        departmentRepository.save(this.department);
-        userRepository.save(this.user);
-        categoryRepository.save(this.category);
-        educationRepository.save(this.education);
-
         Long totalNumberOfData = boardRepository.count();
         Board board = this.board;
 
@@ -113,11 +127,6 @@ public class BoardRepositoryTest {
     @Test
     public void findTest() {
         // given
-        departmentRepository.save(this.department);
-        userRepository.save(this.user);
-        categoryRepository.save(this.category);
-        educationRepository.save(this.education);
-
         Board board = this.board;
         Board saveBoard = boardRepository.save(board);
         em.flush();
@@ -138,11 +147,6 @@ public class BoardRepositoryTest {
     @Test
     public void updateTest() {
         // given
-        departmentRepository.save(this.department);
-        userRepository.save(this.user);
-        categoryRepository.save(this.category);
-        educationRepository.save(this.education);
-
         String updateTitle = "테스트 - 게시글 제목 업데이트";
         String updateContent = "테스트 - 게시글 본문 업데이트";
         Board board = this.board;
@@ -165,11 +169,6 @@ public class BoardRepositoryTest {
     @Test
     public void deleteTest() {
         // given
-        departmentRepository.save(this.department);
-        userRepository.save(this.user);
-        categoryRepository.save(this.category);
-        educationRepository.save(this.education);
-
         Long totalNumberOfData = boardRepository.count();
         Board board = this.board;
         Board saveBoard = boardRepository.save(board);

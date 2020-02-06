@@ -1,10 +1,20 @@
 package com.gabia.gyebalja.board;
 
-import com.gabia.gyebalja.domain.*;
+import com.gabia.gyebalja.domain.Category;
+import com.gabia.gyebalja.domain.Department;
+import com.gabia.gyebalja.domain.Education;
+import com.gabia.gyebalja.domain.EducationType;
+import com.gabia.gyebalja.domain.GenderType;
+import com.gabia.gyebalja.domain.User;
 import com.gabia.gyebalja.dto.board.BoardRequestDto;
 import com.gabia.gyebalja.dto.board.BoardResponseDto;
-import com.gabia.gyebalja.repository.*;
+import com.gabia.gyebalja.repository.BoardRepository;
+import com.gabia.gyebalja.repository.CategoryRepository;
+import com.gabia.gyebalja.repository.DepartmentRepository;
+import com.gabia.gyebalja.repository.EducationRepository;
+import com.gabia.gyebalja.repository.UserRepository;
 import com.gabia.gyebalja.service.BoardService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +52,14 @@ public class BoardServiceTest {
     private User user;
     private Education education;
     private Category category;
+
+    @BeforeEach
+    public void setUp(){
+        departmentRepository.save(this.department);
+        userRepository.save(this.user);
+        categoryRepository.save(this.category);
+        educationRepository.save(this.education);
+    }
 
     @Autowired
     public BoardServiceTest(BoardRepository boardRepository, DepartmentRepository departmentRepository, UserRepository userRepository, CategoryRepository categoryRepository, EducationRepository educationRepository) {
@@ -96,11 +114,6 @@ public class BoardServiceTest {
     @DisplayName("BoardService.save() 테스트 (단건 저장)")
     public void saveTest(){
         // given
-        departmentRepository.save(this.department);
-        userRepository.save(this.user);
-        categoryRepository.save(this.category);
-        educationRepository.save(this.education);
-
         String title = "테스트 - BoardRequestDto title";
         String content = "테스트 - BoardRequestDto content";
         BoardRequestDto boardRequestDto = BoardRequestDto.builder().title(title).content(content).user(user).education(education).build();
@@ -119,11 +132,6 @@ public class BoardServiceTest {
     @DisplayName("BoardService.findById() 테스트 (단건 조회)")
     public void findTest(){
         // given
-        departmentRepository.save(this.department);
-        userRepository.save(this.user);
-        categoryRepository.save(this.category);
-        educationRepository.save(this.education);
-
         String title = "테스트 - BoardRequestDto title";
         String content = "테스트 - BoardRequestDto content";
         BoardRequestDto boardRequestDto = BoardRequestDto.builder().title(title).content(content).user(user).education(education).build();
@@ -145,11 +153,6 @@ public class BoardServiceTest {
     @DisplayName("BoardService.update() 테스트 (단건 업데이트)")
     public void updateTest() {
         // given
-        departmentRepository.save(this.department);
-        userRepository.save(this.user);
-        categoryRepository.save(this.category);
-        educationRepository.save(this.education);
-
         String title = "테스트 - BoardRequestDto title";
         String content = "테스트 - BoardRequestDto content";
         BoardRequestDto boardRequestDto = BoardRequestDto.builder().title(title).content(content).user(user).education(education).build();
@@ -175,11 +178,6 @@ public class BoardServiceTest {
     @DisplayName("BoardService.delete() 테스트 (단건 삭제)")
     public void deleteTest() {
         // given
-        departmentRepository.save(this.department);
-        userRepository.save(this.user);
-        categoryRepository.save(this.category);
-        educationRepository.save(this.education);
-
         String title = "테스트 - BoardRequestDto title";
         String content = "테스트 - BoardRequestDto content";
         BoardRequestDto boardRequestDto = BoardRequestDto.builder().title(title).content(content).user(user).education(education).build();
@@ -198,11 +196,6 @@ public class BoardServiceTest {
     @DisplayName("BoardService.findAll() 테스트 (전체 조회, 페이징)")
     public void findAllTest() {
         // given
-        departmentRepository.save(this.department);
-        userRepository.save(this.user);
-        categoryRepository.save(this.category);
-        educationRepository.save(this.education);
-
         int page = 0;
         int size = 10;
         String properties = "id";

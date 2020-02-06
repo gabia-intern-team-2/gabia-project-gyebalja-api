@@ -16,6 +16,8 @@ import com.gabia.gyebalja.repository.EducationRepository;
 import com.gabia.gyebalja.repository.UserRepository;
 import com.gabia.gyebalja.service.BoardService;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -54,10 +56,18 @@ public class BoardControllerTest {
     private Education education;
     private Category category;
 
+    @BeforeEach
+    public void setUp(){
+        departmentRepository.save(this.department);
+        userRepository.save(this.user);
+        categoryRepository.save(this.category);
+        educationRepository.save(this.education);
+    }
+
     @AfterEach
     public void cleanUp() {
-        System.out.println("-------------------------------");
-        System.out.println("cleanUp()");
+        System.out.println(">>>>>>>>>>>>>>>>>>>> cleanUp() method");
+
         this.boardRepository.deleteAll();
         this.departmentRepository.deleteAll();
         this.userRepository.deleteAll();
@@ -67,8 +77,8 @@ public class BoardControllerTest {
 
     @Autowired
     public BoardControllerTest(BoardRepository boardRepository, DepartmentRepository departmentRepository, UserRepository userRepository, CategoryRepository categoryRepository, EducationRepository educationRepository) {
-        System.out.println("-------------------------------");
-        System.out.println("BoardContollerTest()");
+        System.out.println(">>>>>>>>>>>>>>>>>>>> BoardControllerTest() method");
+
         // Repository
         this.boardRepository = boardRepository;
         this.departmentRepository = departmentRepository;
@@ -120,13 +130,9 @@ public class BoardControllerTest {
      * 등록 - board 한 건 (게시글 등록)
      */
     @Test
+    @DisplayName("BoardController.postOneBoard() 테스트 (단건 저장)")
     public void postOneBoard() {
         // given
-        departmentRepository.save(this.department);
-        userRepository.save(this.user);
-        categoryRepository.save(this.category);
-        educationRepository.save(this.education);
-
         String title = "테스트 - BoardRequestDto title";
         String content = "테스트 - BoardRequestDto content";
         String url = "http://localhost:" + port + "/api/v1/boards";
@@ -148,20 +154,14 @@ public class BoardControllerTest {
      * 조회 - board 한 건 (상세페이지)
      */
     @Test
+    @DisplayName("BoardController.getOneBoard() 테스트 (단건 조회)")
     public void getOneBoard() {
         // given
-        departmentRepository.save(this.department);
-        userRepository.save(this.user);
-        categoryRepository.save(this.category);
-        educationRepository.save(this.education);
-
         String title = "테스트 - BoardRequestDto title";
         String content = "테스트 - BoardRequestDto content";
         BoardRequestDto boardRequestDto = BoardRequestDto.builder().title(title).content(content).user(user).education(education).build();
 
         Long saveId = boardService.save(boardRequestDto);
-        System.out.println(saveId);
-
         String url = "http://localhost:" + port + "/api/v1/boards/" + saveId;
 
         // when
@@ -172,6 +172,7 @@ public class BoardControllerTest {
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody().getTitle()).isEqualTo(title);
         assertThat(responseEntity.getBody().getContent()).isEqualTo(content);
+
 //        // 테스트 - 댓글 개수 (추가 예정)
 //        assertThat(responseEntity.getBody().getCommentList().size()).isEqualTo(commentRepository.findByBoardId(targetId).size());
     }
@@ -180,13 +181,9 @@ public class BoardControllerTest {
      * 수정 - board 한 건 (상세페이지에서)
      */
     @Test
+    @DisplayName("BoardController.putOneBoard() 테스트 (단건 업데이트)")
     public void putOneBoard() {
         // given
-        departmentRepository.save(this.department);
-        userRepository.save(this.user);
-        categoryRepository.save(this.category);
-        educationRepository.save(this.education);
-
         String title = "테스트 - BoardRequestDto title";
         String content = "테스트 - BoardRequestDto content";
         BoardRequestDto saveBoardRequestDto = BoardRequestDto.builder().title(title).content(content).user(user).education(education).build();
@@ -204,9 +201,9 @@ public class BoardControllerTest {
         ResponseEntity<Long> responseEntity = restTemplate.exchange(url, HttpMethod.PUT, requestEntity, Long.class); // restTemplate.put(url, boardDto)
 
         // then
+        Board board = boardRepository.findById(updateId).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다."));
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody()).isGreaterThan(0L);
-        Board board = boardRepository.findById(updateId).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다."));
         assertThat(board.getTitle()).isEqualTo(updateTitle);
         assertThat(board.getContent()).isEqualTo(updateContent);
     }
@@ -215,13 +212,9 @@ public class BoardControllerTest {
      * 삭제 - board 한 건 (상세페이지에서)
      */
     @Test
+    @DisplayName("BoardController.deleteOneBoard() 테스트 (단건 삭제)")
     public void deleteOneBoard() {
         //given
-        departmentRepository.save(this.department);
-        userRepository.save(this.user);
-        categoryRepository.save(this.category);
-        educationRepository.save(this.education);
-
         long totalNumberOfData = boardRepository.count();
         String title = "테스트 - BoardRequestDto title";
         String content = "테스트 - BoardRequestDto content";
@@ -247,13 +240,9 @@ public class BoardControllerTest {
      * 조회 - board 전체 (페이징)
      */
     @Test
+    @DisplayName("BoardController.getAllBoard() 테스트 (전체 조회, 페이징)")
     public void getAllBoard() {
         //given
-        departmentRepository.save(this.department);
-        userRepository.save(this.user);
-        categoryRepository.save(this.category);
-        educationRepository.save(this.education);
-
         int totalNumberOfData = 29;
         String title = "테스트 - BoardRequestDto title";
         String content = "테스트 - BoardRequestDto content";
@@ -272,7 +261,7 @@ public class BoardControllerTest {
         // then
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody().getTotalElements()).isEqualTo(totalNumberOfData);
-        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+
 //        // 테스트 - 값 비교 (추가 예정)
 //        ObjectMapper mapper = new ObjectMapper();
 //        BoardResponseDto boardResponseDto = mapper.convertValue(responseEntity.getBody().getContent().get(0), BoardResponseDto.class);
