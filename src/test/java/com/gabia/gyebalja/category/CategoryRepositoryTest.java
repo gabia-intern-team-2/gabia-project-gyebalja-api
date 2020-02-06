@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.*;
 
 @Transactional
 @SpringBootTest
-public class CatecoryRepositoryTest {
+public class CategoryRepositoryTest {
 
     @PersistenceContext
     EntityManager em;
