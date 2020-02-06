@@ -78,20 +78,20 @@ public class DepartmentRepositoryTest {
     @Test
     public void updateTest(){
         // given
-        String updateName = "테스트팀업데이트";
-        int updateDepth = 100;
         Department department = this.department;
         Department saveDepartment = departmentRepository.save(department);
         Department findDepartment = departmentRepository.findById(saveDepartment.getId()).orElseThrow(() -> new IllegalArgumentException(("해당 데이터가 없습니다.")));
+        String updateName = "테스트팀업데이트";
+        int updateDepth = 100;
         findDepartment.changeName(updateName);
         findDepartment.changeDepth(updateDepth);
+
+        // when
         em.flush();
         em.clear();
 
-        // when
-        Department updateDepartment = departmentRepository.save(findDepartment);
-
         // then
+        Department updateDepartment = departmentRepository.findById(findDepartment.getId()).orElseThrow(() -> new IllegalArgumentException(("해당 데이터가 없습니다.")));
         assertThat(updateDepartment.getName()).isEqualTo(updateName);
         assertThat(updateDepartment.getDepth()).isEqualTo(updateDepth);
     }

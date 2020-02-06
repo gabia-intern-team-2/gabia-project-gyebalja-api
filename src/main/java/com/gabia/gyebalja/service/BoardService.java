@@ -1,8 +1,10 @@
 package com.gabia.gyebalja.service;
 
 import com.gabia.gyebalja.domain.Board;
+import com.gabia.gyebalja.domain.Comment;
 import com.gabia.gyebalja.dto.board.BoardRequestDto;
 import com.gabia.gyebalja.dto.board.BoardResponseDto;
+import com.gabia.gyebalja.dto.comment.CommentResponseDto;
 import com.gabia.gyebalja.repository.BoardRepository;
 import com.gabia.gyebalja.repository.CommentRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +15,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -39,10 +43,10 @@ public class BoardService {
         Board board = boardRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다."));    // 검토. 404 Error?
         BoardResponseDto boardResponseDto = new BoardResponseDto(board);
 
-//        // 게시글에 속한 댓글 조회, boardDto 에 삽입
-//        List<Comment> commentList = commentRepository.findByBoardId(id);
-//        List<CommentDto> commentDtoList = commentList.stream().map(comment -> new CommentDto(comment)).collect(Collectors.toList());
-//        boardDto.changeCommentList(commentDtoList);
+        // 게시글에 속한 댓글 조회, boardDto 에 삽입
+        List<Comment> comments = commentRepository.findByBoardId(id);
+        List<CommentResponseDto> commentResponseDtos = comments.stream().map(comment -> new CommentResponseDto(comment)).collect(Collectors.toList());
+        boardResponseDto.changeCommentList(commentResponseDtos);
 
         return boardResponseDto;
     }

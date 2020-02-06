@@ -1,6 +1,8 @@
 package com.gabia.gyebalja.board;
 
+import com.gabia.gyebalja.domain.Board;
 import com.gabia.gyebalja.domain.Category;
+import com.gabia.gyebalja.domain.Comment;
 import com.gabia.gyebalja.domain.Department;
 import com.gabia.gyebalja.domain.Education;
 import com.gabia.gyebalja.domain.EducationType;
@@ -10,6 +12,7 @@ import com.gabia.gyebalja.dto.board.BoardRequestDto;
 import com.gabia.gyebalja.dto.board.BoardResponseDto;
 import com.gabia.gyebalja.repository.BoardRepository;
 import com.gabia.gyebalja.repository.CategoryRepository;
+import com.gabia.gyebalja.repository.CommentRepository;
 import com.gabia.gyebalja.repository.DepartmentRepository;
 import com.gabia.gyebalja.repository.EducationRepository;
 import com.gabia.gyebalja.repository.UserRepository;
@@ -47,11 +50,13 @@ public class BoardServiceTest {
     private final UserRepository userRepository;
     private final CategoryRepository categoryRepository;
     private final EducationRepository educationRepository;
+    private final CommentRepository commentRepository;
 
     private Department department;
     private User user;
     private Education education;
     private Category category;
+    private Comment comment;
 
     @BeforeEach
     public void setUp(){
@@ -62,13 +67,14 @@ public class BoardServiceTest {
     }
 
     @Autowired
-    public BoardServiceTest(BoardRepository boardRepository, DepartmentRepository departmentRepository, UserRepository userRepository, CategoryRepository categoryRepository, EducationRepository educationRepository) {
+    public BoardServiceTest(BoardRepository boardRepository, DepartmentRepository departmentRepository, UserRepository userRepository, CategoryRepository categoryRepository, EducationRepository educationRepository, CommentRepository commentRepository) {
         // Repository
         this.boardRepository = boardRepository;
         this.departmentRepository = departmentRepository;
         this.userRepository = userRepository;
         this.categoryRepository = categoryRepository;
         this.educationRepository = educationRepository;
+        this.commentRepository = commentRepository;
 
         // Department
         this.department = Department.builder()
@@ -147,6 +153,34 @@ public class BoardServiceTest {
         assertThat(boardResponseDto.getId()).isEqualTo(saveId);
         assertThat(boardResponseDto.getTitle()).isEqualTo(title);
         assertThat(boardResponseDto.getContent()).isEqualTo(content);
+    }
+
+    @Test
+    @DisplayName("BoardService.findById() 테스트 (단건 조회) - 댓글 테스트")
+    public void findTestWithComments(){
+        // given
+        String title = "테스트 - BoardRequestDto title";
+        String content = "테스트 - BoardRequestDto content";
+        BoardRequestDto boardRequestDto = BoardRequestDto.builder().title(title).content(content).user(user).education(education).build();
+
+        Long saveId = boardService.save(boardRequestDto);
+        em.clear();
+        em.flush();
+
+        int totalNumberOfData = 29;
+        Board board = boardRepository.findById(saveId).orElseThrow(() -> new IllegalArgumentException("해당 데이터가 없습니다."));
+        for(int i =0; i < totalNumberOfData; i++) {
+            commentRepository.save(Comment.builder().content("테스트 - 댓글").user(user).board(board).build());
+        }
+
+        // when
+        BoardResponseDto boardResponseDto = boardService.findById(saveId);
+
+        // then
+        assertThat(boardResponseDto.getId()).isEqualTo(saveId);
+        assertThat(boardResponseDto.getTitle()).isEqualTo(title);
+        assertThat(boardResponseDto.getContent()).isEqualTo(content);
+        assertThat(boardResponseDto.getCommentList().size()).isEqualTo(totalNumberOfData);
     }
 
     @Test

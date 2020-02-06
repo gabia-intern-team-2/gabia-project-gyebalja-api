@@ -1,7 +1,13 @@
 package com.gabia.gyebalja.dto.board;
 
-import com.gabia.gyebalja.domain.*;
-import lombok.*;
+import com.gabia.gyebalja.domain.Board;
+import com.gabia.gyebalja.domain.Education;
+import com.gabia.gyebalja.domain.User;
+import lombok.Builder;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @NoArgsConstructor
 @ToString
