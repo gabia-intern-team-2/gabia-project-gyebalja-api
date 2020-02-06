@@ -2,7 +2,6 @@ package com.gabia.gyebalja.dto.board;
 
 import com.gabia.gyebalja.domain.Board;
 import com.gabia.gyebalja.domain.Education;
-import com.gabia.gyebalja.domain.User;
 import com.gabia.gyebalja.dto.CommentDto;
 import lombok.*;
 
@@ -21,8 +20,10 @@ public class BoardResponseDto {
     private int views;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
-    private User user;
-    private Education education;
+    private Long userId;
+    private String userName;
+    private Long educationId;
+    private String educationTitle;
     private List<CommentDto> commentList;
 
     public BoardResponseDto(Board board){
@@ -32,8 +33,10 @@ public class BoardResponseDto {
         this.views = board.getViews();
         this.createdDate = board.getCreatedDate();
         this.modifiedDate = board.getModifiedDate();
-        this.user = board.getUser();
-        this.education = board.getEducation();
+        this.userId = board.getUser().getId();
+        this.userName = board.getUser().getName();
+        this.educationId = board.getEducation().getId();
+        this.educationTitle = board.getEducation().getTitle();
         this.commentList = new ArrayList<CommentDto>();
     }
 
