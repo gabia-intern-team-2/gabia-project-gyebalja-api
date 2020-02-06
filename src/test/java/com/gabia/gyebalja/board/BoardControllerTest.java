@@ -1,19 +1,27 @@
 package com.gabia.gyebalja.board;
 
-import com.gabia.gyebalja.domain.*;
+import com.gabia.gyebalja.domain.Board;
+import com.gabia.gyebalja.domain.Category;
+import com.gabia.gyebalja.domain.Department;
+import com.gabia.gyebalja.domain.Education;
+import com.gabia.gyebalja.domain.EducationType;
+import com.gabia.gyebalja.domain.GenderType;
+import com.gabia.gyebalja.domain.User;
 import com.gabia.gyebalja.dto.board.BoardRequestDto;
 import com.gabia.gyebalja.dto.board.BoardResponseDto;
-import com.gabia.gyebalja.repository.*;
+import com.gabia.gyebalja.repository.BoardRepository;
+import com.gabia.gyebalja.repository.CategoryRepository;
+import com.gabia.gyebalja.repository.DepartmentRepository;
+import com.gabia.gyebalja.repository.EducationRepository;
+import com.gabia.gyebalja.repository.UserRepository;
 import com.gabia.gyebalja.service.BoardService;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.*;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -47,7 +55,7 @@ public class BoardControllerTest {
     private Category category;
 
     @AfterEach
-    public void cleanUp(){
+    public void cleanUp() {
         System.out.println("-------------------------------");
         System.out.println("cleanUp()");
         this.boardRepository.deleteAll();
@@ -108,9 +116,11 @@ public class BoardControllerTest {
                 .build();
     }
 
-    /** 등록 - board 한 건 (게시글 등록) */
+    /**
+     * 등록 - board 한 건 (게시글 등록)
+     */
     @Test
-    public void postOneBoard(){
+    public void postOneBoard() {
         // given
         departmentRepository.save(this.department);
         userRepository.save(this.user);
@@ -134,9 +144,11 @@ public class BoardControllerTest {
         assertThat(boardResponseDto.getContent()).isEqualTo(content);
     }
 
-    /** 조회 - board 한 건 (상세페이지) */
+    /**
+     * 조회 - board 한 건 (상세페이지)
+     */
     @Test
-    public void getOneBoard(){
+    public void getOneBoard() {
         // given
         departmentRepository.save(this.department);
         userRepository.save(this.user);
@@ -160,12 +172,15 @@ public class BoardControllerTest {
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody().getTitle()).isEqualTo(title);
         assertThat(responseEntity.getBody().getContent()).isEqualTo(content);
-//        assertThat(responseEntity.getBody().getCommentList().size()).isEqualTo(commentRepository.findByBoardId(targetId).size());    // 게시글의 댓글 테스트 (개수로 테스트)
+//        // 테스트 - 댓글 개수 (추가 예정)
+//        assertThat(responseEntity.getBody().getCommentList().size()).isEqualTo(commentRepository.findByBoardId(targetId).size());
     }
 
-    /** 수정 - board 한 건 (상세페이지에서) */
+    /**
+     * 수정 - board 한 건 (상세페이지에서)
+     */
     @Test
-    public void putOneBoard(){
+    public void putOneBoard() {
         // given
         departmentRepository.save(this.department);
         userRepository.save(this.user);
@@ -191,14 +206,16 @@ public class BoardControllerTest {
         // then
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody()).isGreaterThan(0L);
-        Board board = boardRepository.findById(updateId).orElseThrow(()->new IllegalArgumentException("해당 게시글이 없습니다."));
+        Board board = boardRepository.findById(updateId).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다."));
         assertThat(board.getTitle()).isEqualTo(updateTitle);
         assertThat(board.getContent()).isEqualTo(updateContent);
     }
 
-    /** 삭제 - board 한 건 (상세페이지에서) */
+    /**
+     * 삭제 - board 한 건 (상세페이지에서)
+     */
     @Test
-    public void deleteOneBoard(){
+    public void deleteOneBoard() {
         //given
         departmentRepository.save(this.department);
         userRepository.save(this.user);
@@ -224,5 +241,41 @@ public class BoardControllerTest {
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody()).isGreaterThan(0L);
         assertThat(boardRepository.count()).isEqualTo(totalNumberOfData);
+    }
+
+    /**
+     * 조회 - board 전체 (페이징)
+     */
+    @Test
+    public void getAllBoard() {
+        //given
+        departmentRepository.save(this.department);
+        userRepository.save(this.user);
+        categoryRepository.save(this.category);
+        educationRepository.save(this.education);
+
+        int totalNumberOfData = 29;
+        String title = "테스트 - BoardRequestDto title";
+        String content = "테스트 - BoardRequestDto content";
+        for (int i = 0; i < totalNumberOfData; i++) {
+            boardService.save(BoardRequestDto.builder().title(title).content(content).user(user).education(education).build());
+        }
+
+        String url = "http://localhost:" + port + "/api/v1/boards";
+
+        HttpHeaders headers = new HttpHeaders();
+        HttpEntity requestEntity = new HttpEntity(headers);
+
+        // when
+        ResponseEntity<RestPageImpl> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, RestPageImpl.class);
+
+        // then
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody().getTotalElements()).isEqualTo(totalNumberOfData);
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+//        // 테스트 - 값 비교 (추가 예정)
+//        ObjectMapper mapper = new ObjectMapper();
+//        BoardResponseDto boardResponseDto = mapper.convertValue(responseEntity.getBody().getContent().get(0), BoardResponseDto.class);
+//        assertThat(boardResponseDto.getTitle()).isEqualTo(title);
     }
 }
