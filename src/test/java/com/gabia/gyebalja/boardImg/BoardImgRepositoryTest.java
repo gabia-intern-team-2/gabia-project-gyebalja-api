@@ -150,18 +150,18 @@ public class BoardImgRepositoryTest {
         educationRepository.save(this.education);
         boardRepository.save(this.board);
 
-        String updateImgPath = "테스트 - 이미지 경로 업데이트";
         BoardImg boardImg = this.boardImg;
         BoardImg saveBoardImg = boardImgRepository.save(boardImg);
         BoardImg findBoardImg = boardImgRepository.findById(saveBoardImg.getId()).orElseThrow(() -> new IllegalArgumentException("해당 데이터가 없습니다."));
+        String updateImgPath = "테스트 - 이미지 경로 업데이트";
         findBoardImg.changeImgPath(updateImgPath);
+
+        // when
         em.flush();
         em.clear();
 
-        // when
-        BoardImg updateBoardImg = boardImgRepository.save(findBoardImg);
-
         // then
+        BoardImg updateBoardImg = boardImgRepository.findById(findBoardImg.getId()).orElseThrow(() -> new IllegalArgumentException("해당 데이터가 없습니다."));
         assertThat(updateBoardImg.getId()).isEqualTo(findBoardImg.getId());
         assertThat(updateBoardImg.getBoard().getId()).isEqualTo(findBoardImg.getBoard().getId());
         assertThat(updateBoardImg.getImgPath()).isEqualTo(updateImgPath);
