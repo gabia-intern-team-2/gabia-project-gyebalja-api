@@ -14,7 +14,6 @@ import java.time.LocalDate;
 @Data
 public class EducationRequestDto {
 
-    private Long id;
     private  String title;
     private  String content;
     private LocalDate startDate;

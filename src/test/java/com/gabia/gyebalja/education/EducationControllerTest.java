@@ -1,5 +1,6 @@
 package com.gabia.gyebalja.education;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.gabia.gyebalja.common.CommonJsonFormat;
 import com.gabia.gyebalja.domain.*;
 import com.gabia.gyebalja.dto.education.EducationRequestDto;
@@ -52,7 +53,7 @@ public class EducationControllerTest {
     @AfterEach
     public void cleanUp() {
         System.out.println("============================ cleanUp()");
-        //TestRestTemplate은 Transaction을 못 걸어주므로 수동 롤백
+        //TestRestTemplate은 Transaction을 못 걸어주므로 테스트 종료 후 수동으로 디비 초기화
         this.educationRepository.deleteAll();
         this.userRepository.deleteAll();
         this.categoryRepository.deleteAll();
@@ -121,7 +122,8 @@ public class EducationControllerTest {
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody().getCode()).isEqualTo(200);
         assertThat(responseEntity.getBody().getMessage()).isEqualTo("success");
-//        assertThat(responseEntity.getBody().getResponse())
+        assertThat(responseEntity.getBody().getResponse().toString()).isEqualTo(findEducation.getId().toString());
+
     }
 
     /**
@@ -131,6 +133,8 @@ public class EducationControllerTest {
      @DisplayName("EducationApiController.getOneEducation() 테스트 (단건 조회)")
      public void getOneEducation() throws Exception {
          //given
+         ObjectMapper mapper = new ObjectMapper();
+
          Category category = Category.builder()
                  .name("개발자")
                  .build();
@@ -178,12 +182,16 @@ public class EducationControllerTest {
                  .build();
 
          Long saveId = educationService.save(educationRequestDto);
-         System.out.println("saveId = " + saveId);
+         //System.out.println("saveId = " + saveId);
          String url = "http://localhost:" + port + "/api/v1/educations/"+ saveId;
          //when
-         //ResponseEntity<EducationResponseDto> responseEntity = restTemplate.getForEntity(url, EducationResponseDto.class);
-         System.out.println("==============="+restTemplate.getForEntity(url, EducationResponseDto.class));
+         ResponseEntity<CommonJsonFormat> responseEntity = restTemplate.getForEntity(url, CommonJsonFormat.class);
          //then
+         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+         assertThat(responseEntity.getBody().getCode()).isEqualTo(200);
+         assertThat(responseEntity.getBody().getMessage()).isEqualTo("success");
+         System.out.println("responseEntity = " +  responseEntity.getBody().getResponse().toString());
+         System.out.println("educationRequestDto = " + educationRequestDto);
 
      }
 
