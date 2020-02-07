@@ -31,6 +31,7 @@ class LikesRepositoryTest {
     private final EducationRepository educationRepository;
 
     private Likes likes;
+    private Likes likess;
     private Board board;
     private Department department;
     private User user;
