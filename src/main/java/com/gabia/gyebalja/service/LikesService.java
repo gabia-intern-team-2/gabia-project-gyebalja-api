@@ -44,6 +44,6 @@ public class LikesService {
         em.clear();
 
         // 검토 - (임시) return userId
-        return userId;
+        return 200L;
     }
 }
