@@ -2,11 +2,17 @@ package com.gabia.gyebalja.domain;
 
 import lombok.*;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED) //프록시가 이생성자를 사용함 다른생성자를 사용하려면 기본생성자가 필요한데 Protected로 기본생성자를 만들어줌.
@@ -42,11 +48,6 @@ public class Education extends BaseTime {
     //교육 장소
     private String place;
 
-
-    //생성일, 수정일
-//    private LocalDateTime createdDate;
-//    private LocalDateTime modifiedDate;
-
     //User와 연관관계
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
@@ -79,29 +80,15 @@ public class Education extends BaseTime {
         this.content = content;
     }
 
-
-//    @Builder
-//    public Education(String title, String content, LocalDate startDate, LocalDate endDate, int totalHours, EducationType type, String place) {
-//        this.title = title;
-//        this.content = content;
-//        this.startDate = startDate;
-//        this.endDate = endDate;
-//        this.totalHours = totalHours;
-//        this.type = type;
-//        this.place = place;
-//    }
-
-//
-//    //교육내용 변경 메서드
-//    public void changeEducation(String title, String content, LocalDateTime startDate, LocalDateTime endDate, int totalHours, EducationType type, String place ) {
-//        this.title = title;
-//        this.content = content;
-//        this.startDate = startDate;
-//        this.endDate = endDate;
-//        this.totalHours = totalHours;
-//        this.type = type;
-//        this.place = place;
-//    }
-
+    //교육내용 변경 메서드
+    public void changeEducation(String title, String content, LocalDate startDate, LocalDate endDate, int totalHours, EducationType type, String place ) {
+        this.title = title;
+        this.content = content;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.totalHours = totalHours;
+        this.type = type;
+        this.place = place;
+    }
 
 }
