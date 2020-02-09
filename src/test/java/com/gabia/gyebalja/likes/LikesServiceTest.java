@@ -1,9 +1,21 @@
 package com.gabia.gyebalja.likes;
 
-import com.gabia.gyebalja.domain.*;
+import com.gabia.gyebalja.domain.Board;
+import com.gabia.gyebalja.domain.Category;
+import com.gabia.gyebalja.domain.Department;
+import com.gabia.gyebalja.domain.Education;
+import com.gabia.gyebalja.domain.EducationType;
+import com.gabia.gyebalja.domain.GenderType;
+import com.gabia.gyebalja.domain.Likes;
+import com.gabia.gyebalja.domain.User;
 import com.gabia.gyebalja.dto.likes.LikesRequestDto;
 import com.gabia.gyebalja.dto.likes.LikesResponseDto;
-import com.gabia.gyebalja.repository.*;
+import com.gabia.gyebalja.repository.BoardRepository;
+import com.gabia.gyebalja.repository.CategoryRepository;
+import com.gabia.gyebalja.repository.DepartmentRepository;
+import com.gabia.gyebalja.repository.EducationRepository;
+import com.gabia.gyebalja.repository.LikesRepository;
+import com.gabia.gyebalja.repository.UserRepository;
 import com.gabia.gyebalja.service.LikesService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -14,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.validation.Valid;
 import java.time.LocalDate;
 import java.util.Optional;
 
@@ -24,18 +35,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 public class LikesServiceTest {
 
+    @Autowired private BoardRepository boardRepository;
+    @Autowired private DepartmentRepository departmentRepository;
+    @Autowired private UserRepository userRepository;
+    @Autowired private CategoryRepository categoryRepository;
+    @Autowired private EducationRepository educationRepository;
+    @Autowired private LikesRepository likesRepository;
+
     @Autowired
     private LikesService likesService;
 
     @PersistenceContext
-    EntityManager em;
-
-    private final BoardRepository boardRepository;
-    private final DepartmentRepository departmentRepository;
-    private final UserRepository userRepository;
-    private final CategoryRepository categoryRepository;
-    private final EducationRepository educationRepository;
-    private final LikesRepository likesRepository;
+    private EntityManager em;
 
     private Department department;
     private User user;
@@ -43,18 +54,20 @@ public class LikesServiceTest {
     private Category category;
     private Board board;
 
-    @Autowired
-    public LikesServiceTest(BoardRepository boardRepository, DepartmentRepository departmentRepository, UserRepository userRepository, CategoryRepository categoryRepository, EducationRepository educationRepository, LikesRepository likesRepository){
-        this.boardRepository = boardRepository;
-        this.departmentRepository = departmentRepository;
-        this.userRepository = userRepository;
-        this.categoryRepository = categoryRepository;
-        this.educationRepository = educationRepository;
-        this.likesRepository = likesRepository;
+    @BeforeEach
+    public void setUp(){
+        departmentRepository.save(this.department);
+        userRepository.save(this.user);
+        categoryRepository.save(this.category);
+        educationRepository.save(this.education);
+        boardRepository.save(this.board);
+    }
 
+    @Autowired
+    public LikesServiceTest(){
         // Department
         this.department = Department.builder()
-                .name("테스트팀")
+                .name("테스트 - 부서")
                 .depth(0)
                 .parentDepartment(null)
                 .build();
@@ -101,15 +114,6 @@ public class LikesServiceTest {
                 .build();
     }
 
-    @BeforeEach
-    public void setUp(){
-        departmentRepository.save(this.department);
-        userRepository.save(this.user);
-        categoryRepository.save(this.category);
-        educationRepository.save(this.education);
-        boardRepository.save(this.board);
-    }
-
     @Test
     @DisplayName("LikesService.save() 테스트 (한 개)")
     public void saveTest(){
@@ -117,12 +121,14 @@ public class LikesServiceTest {
         LikesRequestDto likesRequestDto = LikesRequestDto.builder().userId(user.getId()).boardId(board.getId()).build();
 
         // when
-        Long saveId = likesService.save(likesRequestDto);
+        LikesResponseDto likesResponseDto = likesService.save(likesRequestDto);
         em.flush();
         em.clear();
 
         // then
-        Likes likes = likesRepository.findById(saveId).orElseThrow(() -> new IllegalArgumentException("해당 데이터가 없습니다."));
+        Likes likes = likesRepository.findById(likesResponseDto.getId()).orElseThrow(() -> new IllegalArgumentException("해당 데이터가 없습니다."));
+        assertThat(likesResponseDto.getUserId()).isEqualTo(likesRequestDto.getUserId());
+        assertThat(likesResponseDto.getBoardId()).isEqualTo(likesRequestDto.getBoardId());
         System.out.println(likes.getUser().toString());
         System.out.println(likes.getBoard().toString());
     }
@@ -132,13 +138,13 @@ public class LikesServiceTest {
     public void deleteTest(){
         // given
         LikesRequestDto likesRequestDto = LikesRequestDto.builder().userId(user.getId()).boardId(board.getId()).build();
-        Long saveId = likesService.save(likesRequestDto);
+        LikesResponseDto likesResponseDto = likesService.save(likesRequestDto);
 
         // then
         Long deleteId = likesService.delete(user.getId(), board.getId());
 
         // when
-        // 임시 값 200L
+        // 검토 - (임시) 200L
         assertThat(deleteId).isEqualTo(200L);
         assertThat(likesRepository.findById(deleteId)).isEqualTo(Optional.empty());
     }
