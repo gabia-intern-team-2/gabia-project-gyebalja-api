@@ -1,9 +1,22 @@
 package com.gabia.gyebalja.board;
 
-import com.gabia.gyebalja.domain.*;
+import com.gabia.gyebalja.common.CommonJsonFormat;
+import com.gabia.gyebalja.common.StatusCode;
+import com.gabia.gyebalja.domain.Board;
+import com.gabia.gyebalja.domain.Category;
+import com.gabia.gyebalja.domain.Comment;
+import com.gabia.gyebalja.domain.Department;
+import com.gabia.gyebalja.domain.Education;
+import com.gabia.gyebalja.domain.EducationType;
+import com.gabia.gyebalja.domain.GenderType;
+import com.gabia.gyebalja.domain.User;
 import com.gabia.gyebalja.dto.board.BoardRequestDto;
-import com.gabia.gyebalja.dto.board.BoardResponseDto;
-import com.gabia.gyebalja.repository.*;
+import com.gabia.gyebalja.repository.BoardRepository;
+import com.gabia.gyebalja.repository.CategoryRepository;
+import com.gabia.gyebalja.repository.CommentRepository;
+import com.gabia.gyebalja.repository.DepartmentRepository;
+import com.gabia.gyebalja.repository.EducationRepository;
+import com.gabia.gyebalja.repository.UserRepository;
 import com.gabia.gyebalja.service.BoardService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,16 +26,28 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class BoardControllerTest {
+
+    @Autowired private BoardRepository boardRepository;
+    @Autowired private DepartmentRepository departmentRepository;
+    @Autowired private UserRepository userRepository;
+    @Autowired private CategoryRepository categoryRepository;
+    @Autowired private EducationRepository educationRepository;
+    @Autowired private CommentRepository commentRepository;
+
     @Autowired
     private BoardService boardService;
 
@@ -31,16 +56,6 @@ public class BoardControllerTest {
 
     @LocalServerPort
     private int port;
-
-    @PersistenceContext
-    EntityManager em;
-
-    private final BoardRepository boardRepository;
-    private final DepartmentRepository departmentRepository;
-    private final UserRepository userRepository;
-    private final CategoryRepository categoryRepository;
-    private final EducationRepository educationRepository;
-    private final CommentRepository commentRepository;
 
     private Department department;
     private User user;
@@ -57,8 +72,6 @@ public class BoardControllerTest {
 
     @AfterEach
     public void cleanUp() {
-        System.out.println(">>>>>>>>>>>>>>>>>>>> cleanUp() method");
-
         this.boardRepository.deleteAll();
         this.departmentRepository.deleteAll();
         this.userRepository.deleteAll();
@@ -68,17 +81,7 @@ public class BoardControllerTest {
     }
 
     @Autowired
-    public BoardControllerTest(BoardRepository boardRepository, DepartmentRepository departmentRepository, UserRepository userRepository, CategoryRepository categoryRepository, EducationRepository educationRepository, CommentRepository commentRepository) {
-        System.out.println(">>>>>>>>>>>>>>>>>>>> BoardControllerTest() method");
-
-        // Repository
-        this.boardRepository = boardRepository;
-        this.departmentRepository = departmentRepository;
-        this.userRepository = userRepository;
-        this.categoryRepository = categoryRepository;
-        this.educationRepository = educationRepository;
-        this.commentRepository = commentRepository;
-
+    public BoardControllerTest() {
         // Department
         this.department = Department.builder()
                 .name("테스트팀")
@@ -119,9 +122,7 @@ public class BoardControllerTest {
                 .build();
     }
 
-    /**
-     * 등록 - board 한 건 (게시글 등록)
-     */
+    /** 등록 - board 한 건 (게시글 등록) */
     @Test
     @DisplayName("BoardController.postOneBoard() 테스트 (단건 저장)")
     public void postOneBoard() {
@@ -133,19 +134,19 @@ public class BoardControllerTest {
         BoardRequestDto boardRequestDto = BoardRequestDto.builder().title(title).content(content).user(user).education(education).build();
 
         // when
-        ResponseEntity<Long> responseEntity = restTemplate.postForEntity(url, boardRequestDto, Long.class);
+        ResponseEntity<CommonJsonFormat> responseEntity = restTemplate.postForEntity(url, boardRequestDto, CommonJsonFormat.class);
 
         // then
-        BoardResponseDto boardResponseDto = boardService.findById(responseEntity.getBody());
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(responseEntity.getBody()).isGreaterThan(0L);
-        assertThat(boardResponseDto.getTitle()).isEqualTo(title);
-        assertThat(boardResponseDto.getContent()).isEqualTo(content);
+        assertThat(responseEntity.getBody().getCode()).isEqualTo(StatusCode.OK.getCode());
+        assertThat(responseEntity.getBody().getMessage()).isEqualTo(StatusCode.OK.getMessage());
+//        LinkedHashMap response = (LinkedHashMap) responseEntity.getBody().getResponse();
+//        assertThat(response.get("id")).isNotNull();
+//        assertThat(response.get("title")).isEqualTo(title);
+//        assertThat(response.get("content")).isEqualTo(content);
     }
 
-    /**
-     * 조회 - board 한 건 (상세페이지)
-     */
+    /** 조회 - board 한 건 (상세페이지) */
     @Test
     @DisplayName("BoardController.getOneBoard() 테스트 (단건 조회)")
     public void getOneBoard() {
@@ -158,13 +159,16 @@ public class BoardControllerTest {
         String url = "http://localhost:" + port + "/api/v1/boards/" + saveId;
 
         // when
-        ResponseEntity<BoardResponseDto> responseEntity = restTemplate.getForEntity(url, BoardResponseDto.class);
-        System.out.println(responseEntity.getBody());
+        ResponseEntity<CommonJsonFormat> responseEntity = restTemplate.getForEntity(url, CommonJsonFormat.class);
 
         // then
+        LinkedHashMap response = (LinkedHashMap) responseEntity.getBody().getResponse();
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(responseEntity.getBody().getTitle()).isEqualTo(title);
-        assertThat(responseEntity.getBody().getContent()).isEqualTo(content);
+        assertThat(responseEntity.getBody().getCode()).isEqualTo(StatusCode.OK.getCode());
+        assertThat(responseEntity.getBody().getMessage()).isEqualTo(StatusCode.OK.getMessage());
+        assertThat(response.get("id")).isNotNull();
+        assertThat(response.get("title")).isEqualTo(title);
+        assertThat(response.get("content")).isEqualTo(content);
     }
 
     @Test
@@ -185,13 +189,17 @@ public class BoardControllerTest {
         }
 
         // when
-        ResponseEntity<BoardResponseDto> responseEntity = restTemplate.getForEntity(url, BoardResponseDto.class);
+        ResponseEntity<CommonJsonFormat> responseEntity = restTemplate.getForEntity(url, CommonJsonFormat.class);
 
         // then
+        LinkedHashMap response = (LinkedHashMap) responseEntity.getBody().getResponse();
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(responseEntity.getBody().getTitle()).isEqualTo(title);
-        assertThat(responseEntity.getBody().getContent()).isEqualTo(content);
-        assertThat(responseEntity.getBody().getCommentList().size()).isEqualTo(totalNumberOfData);
+        assertThat(responseEntity.getBody().getCode()).isEqualTo(StatusCode.OK.getCode());
+        assertThat(responseEntity.getBody().getMessage()).isEqualTo(StatusCode.OK.getMessage());
+        assertThat(response.get("id")).isNotNull();
+        assertThat(response.get("title")).isEqualTo(title);
+        assertThat(response.get("content")).isEqualTo(content);
+        assertThat(((ArrayList) response.get("commentList")).size()).isEqualTo(totalNumberOfData);
     }
 
     /**
@@ -215,14 +223,16 @@ public class BoardControllerTest {
         HttpEntity<BoardRequestDto> requestEntity = new HttpEntity<>(boardRequestDto);
 
         // when
-        ResponseEntity<Long> responseEntity = restTemplate.exchange(url, HttpMethod.PUT, requestEntity, Long.class); // restTemplate.put(url, boardDto)
+        ResponseEntity<CommonJsonFormat> responseEntity = restTemplate.exchange(url, HttpMethod.PUT, requestEntity, CommonJsonFormat.class); // restTemplate.put(url, boardDto)
 
         // then
-        Board board = boardRepository.findById(updateId).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다."));
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(responseEntity.getBody()).isGreaterThan(0L);
-        assertThat(board.getTitle()).isEqualTo(updateTitle);
-        assertThat(board.getContent()).isEqualTo(updateContent);
+        assertThat(responseEntity.getBody().getCode()).isEqualTo(StatusCode.OK.getCode());
+        assertThat(responseEntity.getBody().getMessage()).isEqualTo(StatusCode.OK.getMessage());
+//        LinkedHashMap response = (LinkedHashMap) responseEntity.getBody().getResponse();
+//        assertThat(response.get("id")).isNotNull();
+//        assertThat(response.get("title")).isEqualTo(updateTitle);
+//        assertThat(response.get("content")).isEqualTo(updateContent);
     }
 
     /**
@@ -245,17 +255,16 @@ public class BoardControllerTest {
         HttpEntity requestEntity = new HttpEntity(headers);
 
         //when
-        ResponseEntity<Long> responseEntity = restTemplate.exchange(url, HttpMethod.DELETE, requestEntity, Long.class);
+        ResponseEntity<CommonJsonFormat> responseEntity = restTemplate.exchange(url, HttpMethod.DELETE, requestEntity, CommonJsonFormat.class);
 
         //then
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(responseEntity.getBody()).isGreaterThan(0L);
+        assertThat(responseEntity.getBody().getCode()).isEqualTo(StatusCode.NO_CONTENT.getCode());
+        assertThat(responseEntity.getBody().getMessage()).isEqualTo(StatusCode.NO_CONTENT.getMessage());
         assertThat(boardRepository.count()).isEqualTo(totalNumberOfData);
     }
 
-    /**
-     * 조회 - board 전체 (페이징)
-     */
+    /** 조회 - board 전체 (페이징) */
     @Test
     @DisplayName("BoardController.getAllBoard() 테스트 (전체 조회, 페이징)")
     public void getAllBoard() {
@@ -273,15 +282,17 @@ public class BoardControllerTest {
         HttpEntity requestEntity = new HttpEntity(headers);
 
         // when
-        ResponseEntity<RestPageImpl> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, RestPageImpl.class);
+        ResponseEntity<CommonJsonFormat> responseEntity = restTemplate.exchange(url, HttpMethod.GET, requestEntity, CommonJsonFormat.class);
 
         // then
+        LinkedHashMap response = (LinkedHashMap) responseEntity.getBody().getResponse();
+        ArrayList responseContentList = (ArrayList) response.get("content");
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(responseEntity.getBody().getTotalElements()).isEqualTo(totalNumberOfData);
-
-//        // 테스트 - 값 비교 (추가 예정)
-//        ObjectMapper mapper = new ObjectMapper();
-//        BoardResponseDto boardResponseDto = mapper.convertValue(responseEntity.getBody().getContent().get(0), BoardResponseDto.class);
-//        assertThat(boardResponseDto.getTitle()).isEqualTo(title);
+        assertThat(responseEntity.getBody().getCode()).isEqualTo(StatusCode.OK.getCode());
+        assertThat(responseEntity.getBody().getMessage()).isEqualTo(StatusCode.OK.getMessage());
+        assertThat(response.get("totalElements")).isEqualTo(totalNumberOfData);
+        responseContentList.forEach(responseContent -> assertThat(((LinkedHashMap) responseContent).get("title")).isEqualTo(title));
+        responseContentList.forEach(responseContent -> assertThat(((LinkedHashMap) responseContent).get("content")).isEqualTo(content));
+        // 참고 : totalElements=29, totalPages=3, last=false, size=10, number=0, sort={sorted=true, unsorted=false, empty=false}, numberOfElements=10, first=true, empty=false
     }
 }

@@ -1,5 +1,7 @@
 package com.gabia.gyebalja.controller;
 
+import com.gabia.gyebalja.common.CommonJsonFormat;
+import com.gabia.gyebalja.common.StatusCode;
 import com.gabia.gyebalja.dto.board.BoardRequestDto;
 import com.gabia.gyebalja.dto.board.BoardResponseDto;
 import com.gabia.gyebalja.service.BoardService;
@@ -8,7 +10,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
@@ -18,60 +26,42 @@ public class BoardApiController {
 
     /** 등록 - board 한 건 (게시글 등록) */
     @PostMapping("/api/v1/boards")
-    public Long postOneBoard(@RequestBody BoardRequestDto boardRequestDto){
+    public CommonJsonFormat postOneBoard(@RequestBody BoardRequestDto boardRequestDto){
         Long boardId = boardService.save(boardRequestDto);
 
-        return boardId;
+        return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), boardId);
     }
 
     /** 조회 - board 한 건 (상세페이지) */
     @GetMapping("/api/v1/boards/{id}")
-    public BoardResponseDto getOneBoard(@PathVariable("id") Long id) {
+    public CommonJsonFormat getOneBoard(@PathVariable("id") Long id) {
         BoardResponseDto boardResponseDto = boardService.findById(id);
 
-        return boardResponseDto;
+        return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), boardResponseDto);
     }
 
     /** 수정 - board 한 건 (상세페이지에서) */
     @PutMapping("/api/v1/boards/{id}")
-    public Long putOneBoard(@PathVariable("id") Long id, @RequestBody BoardRequestDto boardRequestDto){
-        Long boradId = boardService.update(id, boardRequestDto);
+    public CommonJsonFormat putOneBoard(@PathVariable("id") Long id, @RequestBody BoardRequestDto boardRequestDto){
+        Long boardId = boardService.update(id, boardRequestDto);
 
-        return boradId;
+        return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), boardId);
     }
 
     /** 삭제 - board 한 건 (상세페이지에서) */
     @DeleteMapping("/api/v1/boards/{id}")
-    public Long deleteOneBoard(@PathVariable("id") Long id){
+    public CommonJsonFormat deleteOneBoard(@PathVariable("id") Long id){
         boardService.delete(id);
 
-        return 200L; // 검토.
+        return new CommonJsonFormat(StatusCode.NO_CONTENT.getCode(), StatusCode.NO_CONTENT.getMessage(), 200L);
     }
 
     /** 조회 - board 전체 (페이징) */
     @GetMapping("/api/v1/boards")
-    public Page<BoardResponseDto> getAllBoard(@PageableDefault(size=10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
+    public CommonJsonFormat getAllBoard(@PageableDefault(size=10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
         // Example - http://localhost:8080/api/v1/boards?page=0&size=4&sort=id,desc
         Page<BoardResponseDto> boardDtoPage = boardService.findAll(pageable);
 
-        return boardDtoPage;
+        return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), boardDtoPage);
     }
-
-//    /** 조회 - board 전체 (페이징) */
-//    @GetMapping("/api/v1/boards")
-//    public Result getAllBoard(@PageableDefault(size=10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
-//        Page<BoardResponseDto> boardResponseDtosPage = boardService.findAll(pageable);
-//        List<BoardResponseDto> boardRequestDtos = boardResponseDtosPage.getContent();
-//        Pageable pageInfo = boardResponseDtosPage.getPageable();
-//
-//        return new Result(code, message, result);
-//    }
-//
-//    @Data
-//    @AllArgsConstructor
-//    static class Result<T> {
-//        private T code;
-//        private T message;
-//        private T result;
-//    }
 }
