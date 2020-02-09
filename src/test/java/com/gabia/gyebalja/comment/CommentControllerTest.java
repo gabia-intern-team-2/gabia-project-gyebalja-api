@@ -1,8 +1,15 @@
 package com.gabia.gyebalja.comment;
 
-import com.gabia.gyebalja.domain.*;
+import com.gabia.gyebalja.common.CommonJsonFormat;
+import com.gabia.gyebalja.common.StatusCode;
+import com.gabia.gyebalja.domain.Board;
+import com.gabia.gyebalja.domain.Category;
+import com.gabia.gyebalja.domain.Department;
+import com.gabia.gyebalja.domain.Education;
+import com.gabia.gyebalja.domain.EducationType;
+import com.gabia.gyebalja.domain.GenderType;
+import com.gabia.gyebalja.domain.User;
 import com.gabia.gyebalja.dto.comment.CommentRequestDto;
-import com.gabia.gyebalja.dto.comment.CommentResponseDto;
 import com.gabia.gyebalja.repository.BoardRepository;
 import com.gabia.gyebalja.repository.CategoryRepository;
 import com.gabia.gyebalja.repository.CommentRepository;
@@ -24,15 +31,20 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-
 import java.time.LocalDate;
+import java.util.LinkedHashMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class CommentControllerTest {
+
+    @Autowired private BoardRepository boardRepository;
+    @Autowired private DepartmentRepository departmentRepository;
+    @Autowired private UserRepository userRepository;
+    @Autowired private CategoryRepository categoryRepository;
+    @Autowired private EducationRepository educationRepository;
+    @Autowired private CommentRepository commentRepository;
 
     @Autowired
     CommentService commentService;
@@ -42,16 +54,6 @@ public class CommentControllerTest {
 
     @LocalServerPort
     private int port;
-
-    @PersistenceContext
-    EntityManager em;
-
-    private final BoardRepository boardRepository;
-    private final DepartmentRepository departmentRepository;
-    private final UserRepository userRepository;
-    private final CategoryRepository categoryRepository;
-    private final EducationRepository educationRepository;
-    private final CommentRepository commentRepository;
 
     private Department department;
     private User user;
@@ -70,8 +72,6 @@ public class CommentControllerTest {
 
     @AfterEach
     public void cleanUp(){
-        System.out.println(">>>>>>>>>>>>>>>>>>>> cleanUp() method");
-
         this.boardRepository.deleteAll();
         this.departmentRepository.deleteAll();
         this.userRepository.deleteAll();
@@ -81,17 +81,7 @@ public class CommentControllerTest {
     }
 
     @Autowired
-    public CommentControllerTest(CommentRepository commentRepository, BoardRepository boardRepository, DepartmentRepository departmentRepository, UserRepository userRepository, CategoryRepository categoryRepository, EducationRepository educationRepository){
-        System.out.println(">>>>>>>>>>>>>>>>>>>> CommentControllerTest() method");
-
-        // Repository
-        this.boardRepository = boardRepository;
-        this.departmentRepository = departmentRepository;
-        this.userRepository = userRepository;
-        this.categoryRepository = categoryRepository;
-        this.educationRepository = educationRepository;
-        this.commentRepository = commentRepository;
-
+    public CommentControllerTest(){
         // Department
         this.department = Department.builder()
                 .name("테스트팀")
@@ -152,14 +142,17 @@ public class CommentControllerTest {
         CommentRequestDto commentRequestDto = CommentRequestDto.builder().content(content).userId(user.getId()).boardId(board.getId()).build();
 
         //when
-        ResponseEntity<Long> responseEntity = restTemplate.postForEntity(url, commentRequestDto, Long.class);
+        ResponseEntity<CommonJsonFormat> responseEntity = restTemplate.postForEntity(url, commentRequestDto, CommonJsonFormat.class);
 
         //then
-        CommentResponseDto commentResponseDto = commentService.findById(responseEntity.getBody());
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(responseEntity.getBody()).isGreaterThan(0L);
-        assertThat(commentResponseDto.getContent()).isEqualTo(content);
-        System.out.println(commentResponseDto.toString());
+        assertThat(responseEntity.getBody().getCode()).isEqualTo(StatusCode.OK.getCode());
+        assertThat(responseEntity.getBody().getMessage()).isEqualTo(StatusCode.OK.getMessage());
+//        LinkedHashMap response = (LinkedHashMap) responseEntity.getBody().getResponse();
+//        assertThat(response.get("id")).isNotNull();
+//        assertThat(response.get("content")).isEqualTo(content);
+//        assertThat(response.get("userId").toString()).isEqualTo(user.getId().toString());
+//        assertThat(response.get("boardId").toString()).isEqualTo(board.getId().toString());
     }
 
     /** 조회 - comment 한 건 */
@@ -174,11 +167,17 @@ public class CommentControllerTest {
         String url = "http://localhost:" + port + "/api/v1/comments/" + saveId;
 
         //when
-        ResponseEntity<CommentResponseDto> responseEntity = restTemplate.getForEntity(url, CommentResponseDto.class);
+        ResponseEntity<CommonJsonFormat> responseEntity = restTemplate.getForEntity(url, CommonJsonFormat.class);
 
         //then
+        LinkedHashMap response = (LinkedHashMap) responseEntity.getBody().getResponse();
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(responseEntity.getBody().getContent()).isEqualTo(content);
+        assertThat(responseEntity.getBody().getCode()).isEqualTo(StatusCode.OK.getCode());
+        assertThat(responseEntity.getBody().getMessage()).isEqualTo(StatusCode.OK.getMessage());
+        assertThat(response.get("id")).isNotNull();
+        assertThat(response.get("content")).isEqualTo(content);
+        assertThat(response.get("userId").toString()).isEqualTo(user.getId().toString());
+        assertThat(response.get("boardId").toString()).isEqualTo(board.getId().toString());
     }
 
     /** 수정 - comment 한 건 */
@@ -193,19 +192,22 @@ public class CommentControllerTest {
         Long updateId = saveId;
         String updateContent = "테스트 - 댓글 작성 업데이트";
         CommentRequestDto updateCommentRequestDto = CommentRequestDto.builder().content(updateContent).userId(user.getId()).boardId(board.getId()).build();
-        String url = "http://localhost:" + port + "/api/v1/comments/" + updateId;
 
+        String url = "http://localhost:" + port + "/api/v1/comments/" + updateId;
         HttpEntity<CommentRequestDto> requestEntity = new HttpEntity<>(updateCommentRequestDto);
 
         //when
-        ResponseEntity<Long> responseEntity = restTemplate.exchange(url, HttpMethod.PUT, requestEntity, Long.class);
+        ResponseEntity<CommonJsonFormat> responseEntity = restTemplate.exchange(url, HttpMethod.PUT, requestEntity, CommonJsonFormat.class);
 
         //then
-        CommentResponseDto commentResponseDto = commentService.findById(responseEntity.getBody());
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(responseEntity.getBody()).isGreaterThan(0L);
-        assertThat(commentResponseDto.getContent()).isEqualTo(updateContent);
-        System.out.println(commentResponseDto.toString());
+        assertThat(responseEntity.getBody().getCode()).isEqualTo(StatusCode.OK.getCode());
+        assertThat(responseEntity.getBody().getMessage()).isEqualTo(StatusCode.OK.getMessage());
+//        LinkedHashMap response = (LinkedHashMap) responseEntity.getBody().getResponse();
+//        assertThat(response.get("id")).isNotNull();
+//        assertThat(response.get("content")).isEqualTo(updateContent);
+//        assertThat(response.get("userId").toString()).isEqualTo(user.getId().toString());
+//        assertThat(response.get("boardId").toString()).isEqualTo(board.getId().toString());
     }
 
     /** 삭제 - comment 한 건
@@ -227,11 +229,12 @@ public class CommentControllerTest {
         HttpEntity requestEntity = new HttpEntity(headers);
 
         //when
-        ResponseEntity<Long> responseEntity = restTemplate.exchange(url, HttpMethod.DELETE, requestEntity, Long.class); // 검토. 왜 select ?
+        ResponseEntity<CommonJsonFormat> responseEntity = restTemplate.exchange(url, HttpMethod.DELETE, requestEntity, CommonJsonFormat.class);
 
         //then
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(responseEntity.getBody()).isGreaterThan(0L);
+        assertThat(responseEntity.getBody().getCode()).isEqualTo(StatusCode.NO_CONTENT.getCode());
+        assertThat(responseEntity.getBody().getMessage()).isEqualTo(StatusCode.NO_CONTENT.getMessage());
         assertThat(commentRepository.count()).isEqualTo(totalNumberOfData);
     }
 }
