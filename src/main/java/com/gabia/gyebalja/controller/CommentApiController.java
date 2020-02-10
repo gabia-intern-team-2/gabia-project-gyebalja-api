@@ -1,5 +1,7 @@
 package com.gabia.gyebalja.controller;
 
+import com.gabia.gyebalja.common.CommonJsonFormat;
+import com.gabia.gyebalja.common.StatusCode;
 import com.gabia.gyebalja.dto.comment.CommentRequestDto;
 import com.gabia.gyebalja.dto.comment.CommentResponseDto;
 import com.gabia.gyebalja.service.CommentService;
@@ -20,32 +22,32 @@ public class CommentApiController {
 
     /** 등록 - comment 한 건 */
     @PostMapping("/api/v1/comments")
-    public Long postOneComment(@RequestBody CommentRequestDto commentRequestDto){
-        Long commentId = commentService.save(commentRequestDto);
+    public CommonJsonFormat postOneComment(@RequestBody CommentRequestDto commentRequestDto){
+        Long response = commentService.save(commentRequestDto);
 
-        return commentId;
+        return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), response);
     }
 
     /** 조회 - comment 한 건 */
-    @GetMapping("/api/v1/comments/{id}")
-    public CommentResponseDto getOneComment(@PathVariable("id") Long id){
-        CommentResponseDto commentResponseDto = commentService.findById(id);
+    @GetMapping("/api/v1/comments/{commentId}")
+    public CommonJsonFormat getOneComment(@PathVariable("commentId") Long commentId){
+        CommentResponseDto response = commentService.findById(commentId);
 
-        return commentResponseDto;
+        return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), response);
     }
 
     /** 수정 - comment 한 건 */
-    @PutMapping("/api/v1/comments/{id}")
-    public Long putOneComment(@PathVariable("id") Long id, @RequestBody CommentRequestDto commentRequestDto){
-        Long commentId = commentService.update(id, commentRequestDto);
+    @PutMapping("/api/v1/comments/{commentId}")
+    public CommonJsonFormat putOneComment(@PathVariable("commentId") Long commentId, @RequestBody CommentRequestDto commentRequestDto){
+        Long response = commentService.update(commentId, commentRequestDto);
 
-        return commentId;
+        return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), response);
     }
 
-    @DeleteMapping("/api/v1/comments/{id}")
-    public Long deleteOneComment(@PathVariable("id") Long id){
-        commentService.delete(id);  // 검토. try - catch?
+    @DeleteMapping("/api/v1/comments/{commentId}")
+    public CommonJsonFormat deleteOneComment(@PathVariable("commentId") Long commentId){
+        Long response = commentService.delete(commentId);  // 검토. try - catch?
 
-        return 200L;    // 검토. return 값 무엇으로?
+        return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), response);
     }
 }
