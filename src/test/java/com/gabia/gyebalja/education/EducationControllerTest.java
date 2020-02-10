@@ -121,13 +121,13 @@ public class EducationControllerTest {
                 .totalHours(totalHours)
                 .type(type)
                 .place(place)
-                .user(user)
-                .category(category)
+                .userId(user.getId())
+                .categoryId(category.getId())
                 .build();
 
         //when
         ResponseEntity<CommonJsonFormat> responseEntity = restTemplate.postForEntity(url, educationRequestDto, CommonJsonFormat.class);
-        EducationResponseDto findEducation = educationService.findById(Long.parseLong(responseEntity.getBody().getResponse().toString()));
+        EducationResponseDto findEducation = educationService.getOneEducation(Long.parseLong(responseEntity.getBody().getResponse().toString()));
         //then
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody().getCode()).isEqualTo(200);
@@ -185,11 +185,11 @@ public class EducationControllerTest {
                  .totalHours(totalHours)
                  .type(type)
                  .place(place)
-                 .user(user)
-                 .category(category)
+                 .userId(user.getId())
+                 .categoryId(category.getId())
                  .build();
 
-         Long saveId = educationService.save(educationRequestDto);
+         Long saveId = educationService.postOneEducation(educationRequestDto);
          String url = "http://localhost:" + port + "/api/v1/educations/" + saveId;
          //when
          ResponseEntity<CommonJsonFormat> responseEntity = restTemplate.getForEntity(url, CommonJsonFormat.class); //response 부분이 LinkedHashMap -> 제네릭은 런타임에 타입정보가 사라짐
@@ -251,11 +251,11 @@ public class EducationControllerTest {
                 .totalHours(totalHours)
                 .type(type)
                 .place(place)
-                .user(user)
-                .category(category)
+                .userId(user.getId())
+                .categoryId(category.getId())
                 .build();
 
-        Long saveId = educationService.save(educationRequestDto);
+        Long saveId = educationService.postOneEducation(educationRequestDto);
 
         String url = "http://localhost:" + port + "/api/v1/educations/" + saveId;
         String updateTitle = "제목 변경";
@@ -268,8 +268,8 @@ public class EducationControllerTest {
                 .totalHours(totalHours)
                 .type(type)
                 .place(place)
-                .user(user)
-                .category(category)
+                .userId(user.getId())
+                .categoryId(category.getId())
                 .build();
 
         HttpEntity<EducationRequestDto> requestEntity = new HttpEntity<>(updateRequestDto);
@@ -333,11 +333,11 @@ public class EducationControllerTest {
                 .totalHours(totalHours)
                 .type(type)
                 .place(place)
-                .user(user)
-                .category(category)
+                .userId(user.getId())
+                .categoryId(category.getId())
                 .build();
 
-        Long saveId = educationService.save(educationRequestDto);
+        Long saveId = educationService.postOneEducation(educationRequestDto);
 
         String url = "http://localhost:" + port + "/api/v1/educations/" + saveId;
         // when
@@ -396,20 +396,20 @@ public class EducationControllerTest {
                 .totalHours(totalHours)
                 .type(type)
                 .place(place)
-                .user(user)
-                .category(category)
+                .userId(user.getId())
+                .categoryId(category.getId())
                 .build();
 
         for(int i =0; i<totalNum; i++) {
-            educationService.save(educationRequestDto);
+            educationService.postOneEducation(educationRequestDto);
         }
         String url = "http://localhost:" + port + "/api/v1/users/" + user.getId() + "/educations";
 
         // when
-        CommonJsonFormat requestEntity = restTemplate.getForObject(url, CommonJsonFormat.class);
+        CommonJsonFormat responseEntity = restTemplate.getForObject(url, CommonJsonFormat.class);
         // then
-        LinkedHashMap castResult = (LinkedHashMap) requestEntity.getResponse();
-        ArrayList result = (ArrayList) castResult.get("content");
+        LinkedHashMap response = (LinkedHashMap) responseEntity.getResponse();
+        ArrayList result = (ArrayList) response.get("content");
         assertThat(result.size()).isEqualTo(10); //추후 검증로직 추가 예정
     }
 

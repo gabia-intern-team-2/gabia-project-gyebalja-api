@@ -27,7 +27,7 @@ public class EducationApiController {
     /** 등록 - education 한 건 (게시글 등록) */
     @PostMapping("/api/v1/educations")
     public CommonJsonFormat postOneEducation(@RequestBody EducationRequestDto educationRequestDto) {
-        Long eduId = educationService.save(educationRequestDto);
+        Long eduId = educationService.postOneEducation(educationRequestDto);
 
         return new CommonJsonFormat(200,"success",eduId);
     }
@@ -35,7 +35,7 @@ public class EducationApiController {
     /** 조회 - bard 한 건 (상세페이지) */
     @GetMapping("/api/v1/educations/{id}")
     public CommonJsonFormat getOneEducation(@PathVariable("id") Long id) {
-        EducationResponseDto educationResponseDto = educationService.findById(id);
+        EducationResponseDto educationResponseDto = educationService.getOneEducation(id);
 
         return new CommonJsonFormat(200,"success",educationResponseDto);
     }
@@ -43,7 +43,7 @@ public class EducationApiController {
     /** 수정 - education 한 건 (상세페이지) */
     @PutMapping("/api/v1/educations/{id}")
     public CommonJsonFormat putOneEducation(@PathVariable("id") Long id, @RequestBody EducationRequestDto educationRequestDto) {
-        Long eduId = educationService.update(id, educationRequestDto);
+        Long eduId = educationService.putOneEducation(id, educationRequestDto);
 
         return new CommonJsonFormat(200,"success",eduId);
     }
@@ -51,7 +51,7 @@ public class EducationApiController {
     /** 삭제 - education 한 건 (상세페이지) */
     @DeleteMapping("/api/v1/educations/{id}")
     public CommonJsonFormat deleteOneEducation(@PathVariable("id") Long id) {
-        Long eduId = educationService.delete(id);
+        Long eduId = educationService.deleteOneEducation(id);
 
         return new CommonJsonFormat(200, "success", eduId);
     }
@@ -59,7 +59,7 @@ public class EducationApiController {
     /** 조회 - education 전체 (페이징) */
     @GetMapping("/api/v1/users/{id}/educations")
     public CommonJsonFormat getAllEducationByUserId(@PathVariable("id") Long id, @PageableDefault(size=10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<EducationResponseDto> educationDtoPage = educationService.findByUserId(id, pageable);
+        Page<EducationResponseDto> educationDtoPage = educationService.getAllEducationByUserId(id, pageable);
 
         return new CommonJsonFormat(200, "success", educationDtoPage);
     }

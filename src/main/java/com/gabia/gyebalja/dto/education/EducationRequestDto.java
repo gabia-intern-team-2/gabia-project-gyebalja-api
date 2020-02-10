@@ -1,14 +1,14 @@
 package com.gabia.gyebalja.dto.education;
 
-import com.gabia.gyebalja.domain.Category;
 import com.gabia.gyebalja.domain.Education;
 import com.gabia.gyebalja.domain.EducationType;
-import com.gabia.gyebalja.domain.User;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Min;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 @NoArgsConstructor
 @Data
@@ -21,11 +21,13 @@ public class EducationRequestDto {
     private int totalHours;
     private EducationType type;
     private String place;
-    private User user;
-    private Category category;
+    private Long userId;
+    private Long categoryId;
+    private ArrayList<Long> tagId = new ArrayList<>();
+
 
     @Builder
-    public EducationRequestDto( String title, String content, LocalDate startDate, LocalDate endDate, int totalHours, EducationType type, String place, User user, Category category ) {
+    public EducationRequestDto( String title, String content, LocalDate startDate, LocalDate endDate, int totalHours, EducationType type, String place, Long userId, Long categoryId, ArrayList<Long> tagId ) {
         this.title = title;
         this.content = content;
         this.startDate = startDate;
@@ -33,21 +35,9 @@ public class EducationRequestDto {
         this.totalHours = totalHours;
         this.type = type;
         this.place = place;
-        this.user = user;
-        this.category = category;
+        this.userId = userId;
+        this.categoryId = categoryId;
+        this.tagId = tagId;
     }
 
-    public Education toEntity() {
-        return Education.builder()
-                .title(title)
-                .content(content)
-                .startDate(startDate)
-                .endDate(endDate)
-                .totalHours(totalHours)
-                .type(type)
-                .place(place)
-                .user(user)
-                .category(category)
-                .build();
-    }
 }
