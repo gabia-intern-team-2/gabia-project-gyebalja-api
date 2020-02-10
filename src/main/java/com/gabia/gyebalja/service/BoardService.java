@@ -43,8 +43,8 @@ public class BoardService {
         Board board = boardRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다."));    // 검토. 404 Error?
 
         // 더티 체킹
+        // 게시글의 조회수 UP, boardDto 에 삽입
         board.upViews();
-
         BoardResponseDto boardResponseDto = new BoardResponseDto(board);
 
         // 게시글에 속한 댓글 조회, boardDto 에 삽입

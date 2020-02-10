@@ -184,7 +184,7 @@ public class BoardServiceTest {
     }
 
     @Test
-    @DisplayName("boardService.getOneBoardTestWithViews() 테스트 (조회수)")
+    @DisplayName("boardService.getOneBoardTestWithViews() 테스트 (단건 조회) - 조회수 테스트")
     public void getOneBoardTestWithViews(){
         // given
         int totalNumberOfData = 29;
@@ -207,8 +207,6 @@ public class BoardServiceTest {
         assertThat(boardResponseDto.getTitle()).isEqualTo(title);
         assertThat(boardResponseDto.getContent()).isEqualTo(content);
         assertThat(boardResponseDto.getViews()).isEqualTo(totalNumberOfData);
-        System.out.println("><><><");
-        System.out.println(boardResponseDto.toString());
     }
 
     @Test
