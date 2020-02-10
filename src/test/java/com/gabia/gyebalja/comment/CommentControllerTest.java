@@ -148,11 +148,6 @@ public class CommentControllerTest {
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody().getCode()).isEqualTo(StatusCode.OK.getCode());
         assertThat(responseEntity.getBody().getMessage()).isEqualTo(StatusCode.OK.getMessage());
-//        LinkedHashMap response = (LinkedHashMap) responseEntity.getBody().getResponse();
-//        assertThat(response.get("id")).isNotNull();
-//        assertThat(response.get("content")).isEqualTo(content);
-//        assertThat(response.get("userId").toString()).isEqualTo(user.getId().toString());
-//        assertThat(response.get("boardId").toString()).isEqualTo(board.getId().toString());
     }
 
     /** 조회 - comment 한 건 */
@@ -174,7 +169,7 @@ public class CommentControllerTest {
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody().getCode()).isEqualTo(StatusCode.OK.getCode());
         assertThat(responseEntity.getBody().getMessage()).isEqualTo(StatusCode.OK.getMessage());
-        assertThat(response.get("id")).isNotNull();
+        assertThat(response.get("id").toString()).isEqualTo(saveId.toString());
         assertThat(response.get("content")).isEqualTo(content);
         assertThat(response.get("userId").toString()).isEqualTo(user.getId().toString());
         assertThat(response.get("boardId").toString()).isEqualTo(board.getId().toString());
@@ -203,11 +198,6 @@ public class CommentControllerTest {
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody().getCode()).isEqualTo(StatusCode.OK.getCode());
         assertThat(responseEntity.getBody().getMessage()).isEqualTo(StatusCode.OK.getMessage());
-//        LinkedHashMap response = (LinkedHashMap) responseEntity.getBody().getResponse();
-//        assertThat(response.get("id")).isNotNull();
-//        assertThat(response.get("content")).isEqualTo(updateContent);
-//        assertThat(response.get("userId").toString()).isEqualTo(user.getId().toString());
-//        assertThat(response.get("boardId").toString()).isEqualTo(board.getId().toString());
     }
 
     /** 삭제 - comment 한 건
@@ -233,8 +223,8 @@ public class CommentControllerTest {
 
         //then
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(responseEntity.getBody().getCode()).isEqualTo(StatusCode.NO_CONTENT.getCode());
-        assertThat(responseEntity.getBody().getMessage()).isEqualTo(StatusCode.NO_CONTENT.getMessage());
+        assertThat(responseEntity.getBody().getCode()).isEqualTo(StatusCode.OK.getCode());
+        assertThat(responseEntity.getBody().getMessage()).isEqualTo(StatusCode.OK.getMessage());
         assertThat(commentRepository.count()).isEqualTo(totalNumberOfData);
     }
 }
