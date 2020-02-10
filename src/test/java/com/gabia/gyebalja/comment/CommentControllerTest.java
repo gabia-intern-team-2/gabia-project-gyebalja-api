@@ -1,6 +1,12 @@
 package com.gabia.gyebalja.comment;
 
-import com.gabia.gyebalja.domain.*;
+import com.gabia.gyebalja.domain.Board;
+import com.gabia.gyebalja.domain.Category;
+import com.gabia.gyebalja.domain.Department;
+import com.gabia.gyebalja.domain.Education;
+import com.gabia.gyebalja.domain.EducationType;
+import com.gabia.gyebalja.domain.GenderType;
+import com.gabia.gyebalja.domain.User;
 import com.gabia.gyebalja.dto.comment.CommentRequestDto;
 import com.gabia.gyebalja.dto.comment.CommentResponseDto;
 import com.gabia.gyebalja.repository.BoardRepository;
@@ -155,7 +161,7 @@ public class CommentControllerTest {
         ResponseEntity<Long> responseEntity = restTemplate.postForEntity(url, commentRequestDto, Long.class);
 
         //then
-        CommentResponseDto commentResponseDto = commentService.findById(responseEntity.getBody());
+        CommentResponseDto commentResponseDto = commentService.getOneComment(responseEntity.getBody());
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody()).isGreaterThan(0L);
         assertThat(commentResponseDto.getContent()).isEqualTo(content);
@@ -170,7 +176,7 @@ public class CommentControllerTest {
         String content = "테스트 - 댓글 작성";
         CommentRequestDto commentRequestDto = CommentRequestDto.builder().content(content).userId(user.getId()).boardId(board.getId()).build();
 
-        Long saveId = commentService.save(commentRequestDto);
+        Long saveId = commentService.postOneComment(commentRequestDto);
         String url = "http://localhost:" + port + "/api/v1/comments/" + saveId;
 
         //when
@@ -188,7 +194,7 @@ public class CommentControllerTest {
         //given
         String content = "테스트 - 댓글 작성";
         CommentRequestDto saveCommentRequestDto = CommentRequestDto.builder().content(content).userId(user.getId()).boardId(board.getId()).build();
-        Long saveId = commentService.save(saveCommentRequestDto);
+        Long saveId = commentService.postOneComment(saveCommentRequestDto);
 
         Long updateId = saveId;
         String updateContent = "테스트 - 댓글 작성 업데이트";
@@ -201,7 +207,7 @@ public class CommentControllerTest {
         ResponseEntity<Long> responseEntity = restTemplate.exchange(url, HttpMethod.PUT, requestEntity, Long.class);
 
         //then
-        CommentResponseDto commentResponseDto = commentService.findById(responseEntity.getBody());
+        CommentResponseDto commentResponseDto = commentService.getOneComment(responseEntity.getBody());
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody()).isGreaterThan(0L);
         assertThat(commentResponseDto.getContent()).isEqualTo(updateContent);
@@ -218,7 +224,7 @@ public class CommentControllerTest {
         long totalNumberOfData = commentRepository.count();
         String content = "테스트 - 댓글 작성";
         CommentRequestDto saveCommentRequestDto = CommentRequestDto.builder().content(content).userId(user.getId()).boardId(board.getId()).build();
-        Long saveId = commentService.save(saveCommentRequestDto);
+        Long saveId = commentService.postOneComment(saveCommentRequestDto);
 
         Long deleteId = saveId;
         String url = "http://localhost:" + port + "/api/v1/comments/" + deleteId;
