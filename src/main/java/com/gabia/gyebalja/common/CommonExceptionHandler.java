@@ -16,8 +16,8 @@ public class CommonExceptionHandler {
      */
     @ExceptionHandler(IllegalArgumentException.class)
     protected ResponseEntity<CommonJsonFormat> handleIllegalArgumentException(IllegalArgumentException e) {
-        System.out.println("handleMethodArgumentNotValidException" + e);
-        final CommonJsonFormat response = CommonJsonFormat.of(ErrorCode.BAD_REQUEST);
+        System.out.println("handleIllegalArgumentException - " + e);
+        final CommonJsonFormat response = CommonJsonFormat.of(StatusCode.BAD_REQUEST);
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
@@ -27,8 +27,8 @@ public class CommonExceptionHandler {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     protected ResponseEntity<CommonJsonFormat> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-        System.out.println("handleMethodArgumentNotValidException" + e);
-        final CommonJsonFormat response = CommonJsonFormat.of(ErrorCode.BAD_REQUEST);
+        System.out.println("handleMethodArgumentNotValidException - " + e);
+        final CommonJsonFormat response = CommonJsonFormat.of(StatusCode.BAD_REQUEST);
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
@@ -38,8 +38,8 @@ public class CommonExceptionHandler {
      */
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     protected ResponseEntity<CommonJsonFormat> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
-        System.out.println("handleMethodArgumentTypeMismatchException" + e);
-        final CommonJsonFormat response = CommonJsonFormat.of(ErrorCode.BAD_REQUEST);
+        System.out.println("handleMethodArgumentTypeMismatchException - " + e);
+        final CommonJsonFormat response = CommonJsonFormat.of(StatusCode.BAD_REQUEST);
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
@@ -49,8 +49,8 @@ public class CommonExceptionHandler {
      */
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     protected ResponseEntity<CommonJsonFormat> handleHttpRequestMethodNotSupportedException(HttpRequestMethodNotSupportedException e) {
-        System.out.println("handleHttpRequestMethodNotSupportedException" + e);
-        final CommonJsonFormat response = CommonJsonFormat.of(ErrorCode.METHOD_NOT_ALLOWED);
+        System.out.println("handleHttpRequestMethodNotSupportedException - " + e);
+        final CommonJsonFormat response = CommonJsonFormat.of(StatusCode.METHOD_NOT_ALLOWED);
         return new ResponseEntity<>(response, HttpStatus.METHOD_NOT_ALLOWED);
     }
 
@@ -60,8 +60,8 @@ public class CommonExceptionHandler {
      * */
     @ExceptionHandler(Exception.class)
     protected ResponseEntity<CommonJsonFormat> handleException(Exception e) {
-        System.out.println("handleEntityNotFoundException" + e);
-        final CommonJsonFormat response = CommonJsonFormat.of(ErrorCode.INTERNAL_SERVER_ERROR);
+        System.out.println("Exception - " + e);
+        final CommonJsonFormat response = CommonJsonFormat.of(StatusCode.INTERNAL_SERVER_ERROR);
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
