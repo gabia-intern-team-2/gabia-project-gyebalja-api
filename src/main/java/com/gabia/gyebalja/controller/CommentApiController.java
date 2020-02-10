@@ -23,7 +23,7 @@ public class CommentApiController {
     /** 등록 - comment 한 건 */
     @PostMapping("/api/v1/comments")
     public CommonJsonFormat postOneComment(@RequestBody CommentRequestDto commentRequestDto){
-        Long response = commentService.save(commentRequestDto);
+        Long response = commentService.postOneComment(commentRequestDto);
 
         return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), response);
     }
@@ -31,7 +31,7 @@ public class CommentApiController {
     /** 조회 - comment 한 건 */
     @GetMapping("/api/v1/comments/{commentId}")
     public CommonJsonFormat getOneComment(@PathVariable("commentId") Long commentId){
-        CommentResponseDto response = commentService.findById(commentId);
+        CommentResponseDto response = commentService.getOneComment(commentId);
 
         return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), response);
     }
@@ -39,14 +39,14 @@ public class CommentApiController {
     /** 수정 - comment 한 건 */
     @PutMapping("/api/v1/comments/{commentId}")
     public CommonJsonFormat putOneComment(@PathVariable("commentId") Long commentId, @RequestBody CommentRequestDto commentRequestDto){
-        Long response = commentService.update(commentId, commentRequestDto);
+        Long response = commentService.putOneComment(commentId, commentRequestDto);
 
         return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), response);
     }
 
     @DeleteMapping("/api/v1/comments/{commentId}")
     public CommonJsonFormat deleteOneComment(@PathVariable("commentId") Long commentId){
-        Long response = commentService.delete(commentId);  // 검토. try - catch?
+        Long response = commentService.deleteOneComment(commentId);  // 검토. try - catch?
 
         return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), response);
     }

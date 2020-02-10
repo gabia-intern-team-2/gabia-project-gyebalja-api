@@ -158,7 +158,7 @@ public class CommentControllerTest {
         String content = "테스트 - 댓글 작성";
         CommentRequestDto commentRequestDto = CommentRequestDto.builder().content(content).userId(user.getId()).boardId(board.getId()).build();
 
-        Long saveId = commentService.save(commentRequestDto);
+        Long saveId = commentService.postOneComment(commentRequestDto);
         String url = "http://localhost:" + port + "/api/v1/comments/" + saveId;
 
         //when
@@ -182,7 +182,7 @@ public class CommentControllerTest {
         //given
         String content = "테스트 - 댓글 작성";
         CommentRequestDto saveCommentRequestDto = CommentRequestDto.builder().content(content).userId(user.getId()).boardId(board.getId()).build();
-        Long saveId = commentService.save(saveCommentRequestDto);
+        Long saveId = commentService.postOneComment(saveCommentRequestDto);
 
         Long updateId = saveId;
         String updateContent = "테스트 - 댓글 작성 업데이트";
@@ -210,7 +210,7 @@ public class CommentControllerTest {
         long totalNumberOfData = commentRepository.count();
         String content = "테스트 - 댓글 작성";
         CommentRequestDto saveCommentRequestDto = CommentRequestDto.builder().content(content).userId(user.getId()).boardId(board.getId()).build();
-        Long saveId = commentService.save(saveCommentRequestDto);
+        Long saveId = commentService.postOneComment(saveCommentRequestDto);
 
         Long deleteId = saveId;
         String url = "http://localhost:" + port + "/api/v1/comments/" + deleteId;
