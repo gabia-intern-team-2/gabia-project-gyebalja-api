@@ -187,8 +187,6 @@ public class BoardControllerTest {
         assertThat(response.get("content")).isEqualTo(content);
         assertThat(response.get("likes")).isEqualTo(totalNumberOfData);
         assertThat(((ArrayList) response.get("commentList")).size()).isEqualTo(totalNumberOfData);
-        System.out.println(">>>>>>>>>>>>>>>>>><<<<<<<<<<<<<");
-        System.out.println(response.toString());
     }
 
     /** 수정 - board 한 건 (상세페이지에서) */
