@@ -9,7 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -40,5 +42,34 @@ public class CategoryService {
                                     .id(findCategory.get().getId())
                                     .name(findCategory.get().getName())
                                     .build();
+    }
+
+    /** 수정 - category 한 건 */
+    @Transactional
+    public Long putOneCategory(Long id, CategoryRequestDto categoryRequestDto) {
+        Optional<Category> category = categoryRepository.findById(id); //1차 캐시에 저장
+
+        if(!category.isPresent())
+            throw new NotExistCategoryException("존재하지 않는 카테고리입니다.");
+
+        category.get().changeCategoryName(categoryRequestDto.getName());
+
+        return id;
+    }
+
+    /** 삭제 - category 한 건 */
+    @Transactional
+    public Long deleteOneCategory(Long id) {
+        categoryRepository.deleteById(id);
+
+        return id;
+    }
+
+    /** 조회 - category 전체 (전체조회) */ //해당 카테고리를 모두 뿌려줄거기때문에 페이징 불필요.
+    public Stream<CategoryResponseDto> getAllCategory() {
+        List<Category> categories = categoryRepository.findAll();
+        Stream<CategoryResponseDto> categoryResponseDtoStream = categories.stream().map(c -> CategoryResponseDto.builder().id(c.getId()).name(c.getName()).build()); // Entity를 노출 시키지않고 Dto로 변환후 리턴
+
+        return categoryResponseDtoStream;
     }
 }
