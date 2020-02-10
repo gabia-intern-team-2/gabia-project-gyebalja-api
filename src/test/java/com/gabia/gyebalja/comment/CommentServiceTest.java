@@ -124,35 +124,35 @@ public class CommentServiceTest {
     }
 
     @Test
-    @DisplayName("CommentService.save() 테스트 (단건 저장)")
-    public void saveTest(){
+    @DisplayName("commentService.postOneComment() 테스트 (단건 저장)")
+    public void postOneCommentTest(){
         // given
         String content = "테스트 - 댓글 본문";
         CommentRequestDto commentRequestDto = CommentRequestDto.builder().content(content).userId(user.getId()).boardId(board.getId()).build();
 
         // when
-        Long saveId = commentService.save(commentRequestDto);
+        Long saveId = commentService.postOneComment(commentRequestDto);
         em.flush();
         em.clear();
 
         // then
-        CommentResponseDto commentResponseDto = commentService.findById(saveId);
+        CommentResponseDto commentResponseDto = commentService.getOneComment(saveId);
         assertThat(commentResponseDto.getId()).isEqualTo(saveId);
     }
 
     @Test
-    @DisplayName("CommentService.findById() 테스트 (단건 조회)")
-    public void findTest(){
+    @DisplayName("commentService.getOneComment() 테스트 (단건 조회)")
+    public void getOneCommentTest(){
         // given
         String content = "테스트 - 댓글 본문";
         CommentRequestDto commentRequestDto = CommentRequestDto.builder().content(content).userId(user.getId()).boardId(board.getId()).build();
 
-        Long saveId = commentService.save(commentRequestDto);
+        Long saveId = commentService.postOneComment(commentRequestDto);
         em.flush();
         em.clear();
 
         // when
-        CommentResponseDto commentResponseDto = commentService.findById(saveId);
+        CommentResponseDto commentResponseDto = commentService.getOneComment(saveId);
 
         // then
         assertThat(commentResponseDto.getId()).isEqualTo(saveId);
@@ -160,39 +160,39 @@ public class CommentServiceTest {
     }
 
     @Test
-    @DisplayName("CommentService.update() 테스트 (단건 업데이트)")
-    public void updateTest(){
+    @DisplayName("commentService.putOneComment() 테스트 (단건 업데이트)")
+    public void putOneCommentTest(){
         // given
         String content = "테스트 - 댓글 본문";
         CommentRequestDto commentRequestDto = CommentRequestDto.builder().content(content).userId(user.getId()).boardId(board.getId()).build();
         String updateContent = "테스트 - 댓글 본문 업데이트";
         CommentRequestDto updateCommentRequestDto = CommentRequestDto.builder().content(updateContent).userId(user.getId()).boardId(board.getId()).build();
 
-        Long saveId = commentService.save(commentRequestDto);
+        Long saveId = commentService.postOneComment(commentRequestDto);
         em.flush();
         em.clear();
 
         // then
-        Long updateId = commentService.update(saveId, updateCommentRequestDto);
+        Long updateId = commentService.putOneComment(saveId, updateCommentRequestDto);
 
         // when
-        CommentResponseDto commentResponseDto = commentService.findById(updateId);
+        CommentResponseDto commentResponseDto = commentService.getOneComment(updateId);
         assertThat(updateId).isEqualTo(saveId);
         assertThat(commentResponseDto.getContent()).isEqualTo(updateContent);
         System.out.println(commentResponseDto.toString());
     }
 
     @Test
-    @DisplayName("CommentService.delete() 테스트 (단건 삭제)")
-    public void deleteTest(){
+    @DisplayName("commentService.deleteOneComment() 테스트 (단건 삭제)")
+    public void deleteOneCommentTest(){
         // given
         String content = "테스트 - 댓글 본문";
         CommentRequestDto commentRequestDto = CommentRequestDto.builder().content(content).userId(user.getId()).boardId(board.getId()).build();
 
-        Long saveId = commentService.save(commentRequestDto);
+        Long saveId = commentService.postOneComment(commentRequestDto);
 
         // when
-        Long deleteId = commentService.delete(saveId);
+        Long deleteId = commentService.deleteOneComment(saveId);
 
         // then
         assertThat(deleteId).isEqualTo(saveId);

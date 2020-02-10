@@ -28,20 +28,19 @@ public class CommentService {
 
     /** 등록 - comment 한 건 (댓글 등록) */
     @Transactional
-    public Long save(CommentRequestDto commentRequestDto){
+    public Long postOneComment(CommentRequestDto commentRequestDto){
 
         User user = userRepository.findById(commentRequestDto.getUserId()).orElseThrow(() -> new IllegalArgumentException("해당 데이터가 없습니다."));
         Board board = boardRepository.findById(commentRequestDto.getBoardId()).orElseThrow(() -> new IllegalArgumentException("해당 데이터가 없습니다."));
 
         Long commentId = commentRepository.save(Comment.builder().content(commentRequestDto.getContent()).user(user).board(board).build()).getId();
-        // Long commentId = commentRepository.save(commentRequestDto.toEntity()).getId();
 
         return commentId;
     }
 
     /** 조회 - comment 한 건 (어디서 사용할 지 모르지만 일단 구현) */
     @Transactional
-    public CommentResponseDto findById(Long id){
+    public CommentResponseDto getOneComment(Long id){
         Comment comment = commentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 댓글이 없습니다."));
 
         return new CommentResponseDto(comment);
@@ -49,7 +48,7 @@ public class CommentService {
 
     /** 수정 - comment 한 건 */
     @Transactional
-    public Long update(Long id, CommentRequestDto commentRequestDto){
+    public Long putOneComment(Long id, CommentRequestDto commentRequestDto){
         Comment comment = commentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 댓글이 없습니다."));
 
         // 더티 체킹
@@ -62,7 +61,7 @@ public class CommentService {
 
     /** 삭제 - comment 한 건 */
     @Transactional
-    public Long delete(Long id){
+    public Long deleteOneComment(Long id){
         commentRepository.deleteById(id);
         em.flush();
         em.clear();

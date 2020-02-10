@@ -1,5 +1,7 @@
 package com.gabia.gyebalja.controller;
 
+import com.gabia.gyebalja.common.CommonJsonFormat;
+import com.gabia.gyebalja.common.StatusCode;
 import com.gabia.gyebalja.dto.likes.LikesRequestDto;
 import com.gabia.gyebalja.service.LikesService;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+
 @RequiredArgsConstructor
 @RestController
 public class LikesApiController {
@@ -17,17 +20,17 @@ public class LikesApiController {
 
     /** 등록 - likes 한 개 */
     @PostMapping("/api/v1/likes")
-    public Long postOneLikes(@RequestBody LikesRequestDto likesRequestDto){
-        Long likesId = likesService.save(likesRequestDto);
+    public CommonJsonFormat postOneLikes(@RequestBody LikesRequestDto likesRequestDto){
+        Long response = likesService.postOneLikes(likesRequestDto);
 
-        return likesId;
+        return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), response);
     }
 
     /** 삭제 - likes 한 개 */
     @DeleteMapping("/api/v1/likes/users/{userId}/boards/{boardId}")
-    public Long deleteOneLikes(@PathVariable("userId") Long userId, @PathVariable("boardId") Long boardId){
-        likesService.delete(userId, boardId);
+    public CommonJsonFormat deleteOneLikes(@PathVariable("userId") Long userId, @PathVariable("boardId") Long boardId){
+        Long response = likesService.deleteOneLikes(userId, boardId);
 
-        return 200L;
+        return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), response);
     }
 }
