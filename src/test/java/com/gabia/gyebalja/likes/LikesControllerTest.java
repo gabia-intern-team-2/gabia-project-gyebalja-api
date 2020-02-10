@@ -1,17 +1,18 @@
 package com.gabia.gyebalja.likes;
 
+import com.gabia.gyebalja.common.CommonJsonFormat;
+import com.gabia.gyebalja.common.StatusCode;
 import com.gabia.gyebalja.domain.Board;
 import com.gabia.gyebalja.domain.Category;
 import com.gabia.gyebalja.domain.Department;
 import com.gabia.gyebalja.domain.Education;
 import com.gabia.gyebalja.domain.EducationType;
 import com.gabia.gyebalja.domain.GenderType;
-import com.gabia.gyebalja.domain.Likes;
 import com.gabia.gyebalja.domain.User;
 import com.gabia.gyebalja.dto.likes.LikesRequestDto;
+import com.gabia.gyebalja.dto.likes.LikesResponseDto;
 import com.gabia.gyebalja.repository.BoardRepository;
 import com.gabia.gyebalja.repository.CategoryRepository;
-import com.gabia.gyebalja.repository.CommentRepository;
 import com.gabia.gyebalja.repository.DepartmentRepository;
 import com.gabia.gyebalja.repository.EducationRepository;
 import com.gabia.gyebalja.repository.LikesRepository;
@@ -32,12 +33,19 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class LikesControllerTest {
+
+    @Autowired private BoardRepository boardRepository;
+    @Autowired private DepartmentRepository departmentRepository;
+    @Autowired private UserRepository userRepository;
+    @Autowired private CategoryRepository categoryRepository;
+    @Autowired private EducationRepository educationRepository;
 
     @Autowired
     private LikesService likesService;
@@ -47,13 +55,6 @@ public class LikesControllerTest {
 
     @LocalServerPort
     private int port;
-
-    private final LikesRepository likesRepository;
-    private final BoardRepository boardRepository;
-    private final DepartmentRepository departmentRepository;
-    private final UserRepository userRepository;
-    private final CategoryRepository categoryRepository;
-    private final EducationRepository educationRepository;
 
     private Board board;
     private Department department;
@@ -72,26 +73,15 @@ public class LikesControllerTest {
 
     @AfterEach
     public void cleanUp() {
-        System.out.println(">>>>>>>>>>>>>>>>>>>> cleanUp() method");
-
         this.boardRepository.deleteAll();
         this.departmentRepository.deleteAll();
         this.userRepository.deleteAll();
         this.categoryRepository.deleteAll();
         this.educationRepository.deleteAll();
     }
+
     @Autowired
-    public LikesControllerTest(LikesRepository likesRepository, BoardRepository boardRepository, DepartmentRepository departmentRepository, UserRepository userRepository, CategoryRepository categoryRepository, EducationRepository educationRepository, CommentRepository commentRepository) {
-        System.out.println(">>>>>>>>>>>>>>>>>>>> LikesControllerTest() method");
-
-        // Repository
-        this.likesRepository = likesRepository;
-        this.boardRepository = boardRepository;
-        this.departmentRepository = departmentRepository;
-        this.userRepository = userRepository;
-        this.categoryRepository = categoryRepository;
-        this.educationRepository = educationRepository;
-
+    public LikesControllerTest() {
         // Department
         this.department = Department.builder()
                 .name("테스트팀")
@@ -150,12 +140,12 @@ public class LikesControllerTest {
         LikesRequestDto likesRequestDto = LikesRequestDto.builder().userId(user.getId()).boardId(board.getId()).build();
 
         // when
-        ResponseEntity<Long> responseEntity = restTemplate.postForEntity(url, likesRequestDto, Long.class);
+        ResponseEntity<CommonJsonFormat> responseEntity = restTemplate.postForEntity(url, likesRequestDto, CommonJsonFormat.class);
 
         // then
-        Likes likes = likesRepository.findById(responseEntity.getBody()).orElseThrow(() -> new IllegalArgumentException("해당 데이터가 없습니다."));
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(likes.getId()).isEqualTo(responseEntity.getBody());
+        assertThat(responseEntity.getBody().getCode()).isEqualTo(StatusCode.OK.getCode());
+        assertThat(responseEntity.getBody().getMessage()).isEqualTo(StatusCode.OK.getMessage());
     }
 
     /** 삭제 - likes 한 개 */
@@ -164,17 +154,18 @@ public class LikesControllerTest {
     public void deleteOneLikes(){
         // given
         LikesRequestDto likesRequestDto = LikesRequestDto.builder().userId(user.getId()).boardId(board.getId()).build();
-        Long saveId = likesService.save(likesRequestDto);
+        Long saveId = likesService.postOneLikes(likesRequestDto);
         String url = "http://localhost:" + port + "/api/v1/likes/users/" + user.getId() + "/boards/" + board.getId();
 
         HttpHeaders headers = new HttpHeaders();
         HttpEntity requestEntity = new HttpEntity(headers);
 
         // when
-        ResponseEntity<Long> responseEntity = restTemplate.exchange(url, HttpMethod.DELETE, requestEntity, Long.class);
+        ResponseEntity<CommonJsonFormat> responseEntity = restTemplate.exchange(url, HttpMethod.DELETE, requestEntity, CommonJsonFormat.class);
 
         // then
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(likesRepository.findById(saveId)).isEqualTo(Optional.empty());
+        assertThat(responseEntity.getBody().getCode()).isEqualTo(StatusCode.OK.getCode());
+        assertThat(responseEntity.getBody().getMessage()).isEqualTo(StatusCode.OK.getMessage());
     }
 }
