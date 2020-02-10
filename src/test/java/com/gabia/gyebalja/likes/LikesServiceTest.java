@@ -115,22 +115,20 @@ public class LikesServiceTest {
     }
 
     @Test
-    @DisplayName("LikesService.save() 테스트 (한 개)")
-    public void saveTest(){
+    @DisplayName("likesService.postOneLikes() 테스트 (한 개)")
+    public void postOneLikesTest(){
         // given
         LikesRequestDto likesRequestDto = LikesRequestDto.builder().userId(user.getId()).boardId(board.getId()).build();
 
         // when
-        LikesResponseDto likesResponseDto = likesService.save(likesRequestDto);
+        Long saveId = likesService.postOneLikes(likesRequestDto);
         em.flush();
         em.clear();
 
         // then
-        Likes likes = likesRepository.findById(likesResponseDto.getId()).orElseThrow(() -> new IllegalArgumentException("해당 데이터가 없습니다."));
-        assertThat(likesResponseDto.getUserId()).isEqualTo(likesRequestDto.getUserId());
-        assertThat(likesResponseDto.getBoardId()).isEqualTo(likesRequestDto.getBoardId());
-        System.out.println(likes.getUser().toString());
-        System.out.println(likes.getBoard().toString());
+        Likes likes = likesRepository.findById(saveId).orElseThrow(() -> new IllegalArgumentException("해당 데이터가 없습니다."));
+        assertThat(likes.getUser().getId()).isEqualTo(likesRequestDto.getUserId());
+        assertThat(likes.getBoard().getId()).isEqualTo(likesRequestDto.getBoardId());
     }
 
     @Test
@@ -138,14 +136,14 @@ public class LikesServiceTest {
     public void deleteTest(){
         // given
         LikesRequestDto likesRequestDto = LikesRequestDto.builder().userId(user.getId()).boardId(board.getId()).build();
-        LikesResponseDto likesResponseDto = likesService.save(likesRequestDto);
+        Long saveId = likesService.postOneLikes(likesRequestDto);
 
         // then
         Long deleteId = likesService.delete(user.getId(), board.getId());
 
         // when
         // 검토 - (임시) 200L
-        assertThat(deleteId).isEqualTo(200L);
+        assertThat(deleteId).isEqualTo(user.getId());
         assertThat(likesRepository.findById(deleteId)).isEqualTo(Optional.empty());
     }
 }

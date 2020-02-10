@@ -28,13 +28,13 @@ public class LikesService {
     private final BoardRepository boardRepository;
 
     /** 등록 - likes 한 개 */
-    public LikesResponseDto save(LikesRequestDto likesRequestDto){
+    public Long postOneLikes(LikesRequestDto likesRequestDto){
         User user = userRepository.findById(likesRequestDto.getUserId()).orElseThrow(() -> new IllegalArgumentException("해당 데이터가 없습니다."));
         Board board = boardRepository.findById(likesRequestDto.getBoardId()).orElseThrow(() -> new IllegalArgumentException("해당 데이터가 없습니다."));
 
-        Likes likes = likesRepository.save(Likes.builder().user(user).board(board).build());
+        Long likesId = likesRepository.save(Likes.builder().user(user).board(board).build()).getId();
 
-        return new LikesResponseDto(likes);
+        return likesId;
     }
 
     /** 삭제 - likes 한 개 */
@@ -43,7 +43,7 @@ public class LikesService {
         em.flush();
         em.clear();
 
-        // 검토 - (임시) 200L
-        return 200L;
+        // 검토 - (임시) userId
+        return userId;
     }
 }
