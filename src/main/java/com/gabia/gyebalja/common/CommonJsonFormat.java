@@ -20,7 +20,7 @@ public class CommonJsonFormat<T> {
         this.response = response;
     }
 
-    public static CommonJsonFormat of(ErrorCode e) {
+    public static CommonJsonFormat of(StatusCode e) {
         return CommonJsonFormat.builder()
                 .code(e.getCode())
                 .message(e.getMessage())

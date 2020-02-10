@@ -2,8 +2,10 @@ package com.gabia.gyebalja.dto.likes;
 
 import com.gabia.gyebalja.domain.Likes;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+@NoArgsConstructor
 @ToString
 @Getter
 public class LikesResponseDto {
