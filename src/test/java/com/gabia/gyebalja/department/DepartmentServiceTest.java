@@ -42,7 +42,7 @@ public class DepartmentServiceTest {
 
     @Test
     @DisplayName("DepartmentService.getOneDepartment() 테스트 (단건 조회)")
-    public void findTest(){
+    public void getOneDepartmentTest(){
         // given
         Long saveId = departmentRepository.save(department).getId();
         em.flush();
