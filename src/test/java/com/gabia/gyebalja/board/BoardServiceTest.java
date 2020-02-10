@@ -156,8 +156,8 @@ public class BoardServiceTest {
     }
 
     @Test
-    @DisplayName("boardService.getOneBoard() 테스트 (단건 조회) - 댓글 테스트")
-    public void findTestWithComments(){
+    @DisplayName("boardService.getOneBoardTestWithComments() 테스트 (단건 조회) - 댓글 테스트")
+    public void getOneBoardTestWithComments(){
         // given
         String title = "테스트 - BoardRequestDto title";
         String content = "테스트 - BoardRequestDto content";
@@ -181,6 +181,34 @@ public class BoardServiceTest {
         assertThat(boardResponseDto.getTitle()).isEqualTo(title);
         assertThat(boardResponseDto.getContent()).isEqualTo(content);
         assertThat(boardResponseDto.getCommentList().size()).isEqualTo(totalNumberOfData);
+    }
+
+    @Test
+    @DisplayName("boardService.getOneBoardTestWithViews() 테스트 (조회수)")
+    public void getOneBoardTestWithViews(){
+        // given
+        int totalNumberOfData = 29;
+        String title = "테스트 - BoardRequestDto title";
+        String content = "테스트 - BoardRequestDto content";
+        BoardRequestDto boardRequestDto = BoardRequestDto.builder().title(title).content(content).user(user).education(education).build();
+
+        Long saveId = boardService.postOneBoard(boardRequestDto);
+        em.clear();
+        em.flush();
+
+        // when
+        BoardResponseDto boardResponseDto = boardService.getOneBoard(saveId);
+        for (int i = 0; i < totalNumberOfData - 1; i++) {
+            boardResponseDto = boardService.getOneBoard(saveId);
+        }
+
+        // then
+        assertThat(boardResponseDto.getId()).isEqualTo(saveId);
+        assertThat(boardResponseDto.getTitle()).isEqualTo(title);
+        assertThat(boardResponseDto.getContent()).isEqualTo(content);
+        assertThat(boardResponseDto.getViews()).isEqualTo(totalNumberOfData);
+        System.out.println("><><><");
+        System.out.println(boardResponseDto.toString());
     }
 
     @Test
