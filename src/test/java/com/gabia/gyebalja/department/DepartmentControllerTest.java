@@ -1,9 +1,9 @@
 package com.gabia.gyebalja.department;
 
 import com.gabia.gyebalja.common.CommonJsonFormat;
+import com.gabia.gyebalja.common.StatusCode;
 import com.gabia.gyebalja.domain.Department;
 import com.gabia.gyebalja.repository.DepartmentRepository;
-import com.gabia.gyebalja.service.DepartmentService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +21,13 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class DepartmentControllerTest {
 
     @Autowired
+    private DepartmentRepository departmentRepository;
+
+    @Autowired
     private TestRestTemplate restTemplate;
 
     @LocalServerPort
     private int port;
-
-    @Autowired
-    private DepartmentRepository departmentRepository;
 
     private Department department;
 
@@ -52,6 +52,8 @@ public class DepartmentControllerTest {
 
         // then
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody().getCode()).isEqualTo(StatusCode.OK.getCode());
+        assertThat(responseEntity.getBody().getMessage()).isEqualTo(StatusCode.OK.getMessage());
         assertThat(((LinkedHashMap) responseEntity.getBody().getResponse()).get("id")).isEqualTo(saveId.intValue());
     }
 }
