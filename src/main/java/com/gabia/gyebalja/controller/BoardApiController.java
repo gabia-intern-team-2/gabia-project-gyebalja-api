@@ -27,7 +27,7 @@ public class BoardApiController {
     /** 등록 - board 한 건 (게시글 등록) */
     @PostMapping("/api/v1/boards")
     public CommonJsonFormat postOneBoard(@RequestBody BoardRequestDto boardRequestDto){
-        Long response = boardService.save(boardRequestDto);
+        Long response = boardService.postOneBoard(boardRequestDto);
 
         return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), response);
     }
@@ -35,7 +35,7 @@ public class BoardApiController {
     /** 조회 - board 한 건 (상세페이지) */
     @GetMapping("/api/v1/boards/{boardId}")
     public CommonJsonFormat getOneBoard(@PathVariable("boardId") Long boardId) {
-        BoardResponseDto response = boardService.findById(boardId);
+        BoardResponseDto response = boardService.getOneBoard(boardId);
 
         return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), response);
     }
@@ -43,7 +43,7 @@ public class BoardApiController {
     /** 수정 - board 한 건 (상세페이지에서) */
     @PutMapping("/api/v1/boards/{boardId}")
     public CommonJsonFormat putOneBoard(@PathVariable("boardId") Long boardId, @RequestBody BoardRequestDto boardRequestDto){
-        Long response = boardService.update(boardId, boardRequestDto);
+        Long response = boardService.putOneBoard(boardId, boardRequestDto);
 
         return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), response);
     }
@@ -51,7 +51,7 @@ public class BoardApiController {
     /** 삭제 - board 한 건 (상세페이지에서) */
     @DeleteMapping("/api/v1/boards/{boardId}")
     public CommonJsonFormat deleteOneBoard(@PathVariable("boardId") Long boardId){
-        Long response = boardService.delete(boardId);
+        Long response = boardService.deleteOneBoard(boardId);
 
         return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), response);
     }
@@ -60,7 +60,7 @@ public class BoardApiController {
     @GetMapping("/api/v1/boards")
     public CommonJsonFormat getAllBoard(@PageableDefault(size=10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
         // Example - http://localhost:8080/api/v1/boards?page=0&size=4&sort=id,desc
-        Page<BoardResponseDto> response = boardService.findAll(pageable);
+        Page<BoardResponseDto> response = boardService.getAllBoard(pageable);
 
         return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), response);
     }
