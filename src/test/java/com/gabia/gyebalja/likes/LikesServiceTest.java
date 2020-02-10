@@ -132,14 +132,14 @@ public class LikesServiceTest {
     }
 
     @Test
-    @DisplayName("LikesService.delete() 테스트 (한 개)")
-    public void deleteTest(){
+    @DisplayName("likesService.deleteOneLikes() 테스트 (한 개)")
+    public void deleteOneLikesTest(){
         // given
         LikesRequestDto likesRequestDto = LikesRequestDto.builder().userId(user.getId()).boardId(board.getId()).build();
         Long saveId = likesService.postOneLikes(likesRequestDto);
 
         // then
-        Long deleteId = likesService.delete(user.getId(), board.getId());
+        Long deleteId = likesService.deleteOneLikes(user.getId(), board.getId());
 
         // when
         // 검토 - (임시) 200L

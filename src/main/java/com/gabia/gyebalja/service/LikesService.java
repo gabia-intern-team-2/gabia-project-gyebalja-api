@@ -38,7 +38,7 @@ public class LikesService {
     }
 
     /** 삭제 - likes 한 개 */
-    public Long delete(Long userId, Long boardId){
+    public Long deleteOneLikes(Long userId, Long boardId){
         likesRepository.deleteByUserIdAndBoardId(userId, boardId);
         em.flush();
         em.clear();
