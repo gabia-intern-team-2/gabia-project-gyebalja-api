@@ -18,7 +18,7 @@ public class DepartmentApiController {
     /** 조회 - department (한 부서) */
     @GetMapping("/api/v1/departments/{departmentId}")
     public CommonJsonFormat getOneDepartment(@PathVariable("departmentId") Long departmentId){
-        DepartmentResponseDto response = departmentService.findById(departmentId);
+        DepartmentResponseDto response = departmentService.getOneDepartment(departmentId);
 
         return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), response);
     }
