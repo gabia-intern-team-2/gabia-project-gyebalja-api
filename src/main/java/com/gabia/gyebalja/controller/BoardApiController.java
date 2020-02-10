@@ -27,41 +27,41 @@ public class BoardApiController {
     /** 등록 - board 한 건 (게시글 등록) */
     @PostMapping("/api/v1/boards")
     public CommonJsonFormat postOneBoard(@RequestBody BoardRequestDto boardRequestDto){
-        Long boardId = boardService.save(boardRequestDto);
+        Long response = boardService.save(boardRequestDto);
 
-        return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), boardId);
+        return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), response);
     }
 
     /** 조회 - board 한 건 (상세페이지) */
-    @GetMapping("/api/v1/boards/{id}")
-    public CommonJsonFormat getOneBoard(@PathVariable("id") Long id) {
-        BoardResponseDto boardResponseDto = boardService.findById(id);
+    @GetMapping("/api/v1/boards/{boardId}")
+    public CommonJsonFormat getOneBoard(@PathVariable("boardId") Long boardId) {
+        BoardResponseDto response = boardService.findById(boardId);
 
-        return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), boardResponseDto);
+        return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), response);
     }
 
     /** 수정 - board 한 건 (상세페이지에서) */
-    @PutMapping("/api/v1/boards/{id}")
-    public CommonJsonFormat putOneBoard(@PathVariable("id") Long id, @RequestBody BoardRequestDto boardRequestDto){
-        Long boardId = boardService.update(id, boardRequestDto);
+    @PutMapping("/api/v1/boards/{boardId}")
+    public CommonJsonFormat putOneBoard(@PathVariable("boardId") Long boardId, @RequestBody BoardRequestDto boardRequestDto){
+        Long response = boardService.update(boardId, boardRequestDto);
 
-        return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), boardId);
+        return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), response);
     }
 
     /** 삭제 - board 한 건 (상세페이지에서) */
-    @DeleteMapping("/api/v1/boards/{id}")
-    public CommonJsonFormat deleteOneBoard(@PathVariable("id") Long id){
-        boardService.delete(id);
+    @DeleteMapping("/api/v1/boards/{boardId}")
+    public CommonJsonFormat deleteOneBoard(@PathVariable("boardId") Long boardId){
+        Long response = boardService.delete(boardId);
 
-        return new CommonJsonFormat(StatusCode.NO_CONTENT.getCode(), StatusCode.NO_CONTENT.getMessage(), 200L);
+        return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), response);
     }
 
     /** 조회 - board 전체 (페이징) */
     @GetMapping("/api/v1/boards")
     public CommonJsonFormat getAllBoard(@PageableDefault(size=10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
         // Example - http://localhost:8080/api/v1/boards?page=0&size=4&sort=id,desc
-        Page<BoardResponseDto> boardDtoPage = boardService.findAll(pageable);
+        Page<BoardResponseDto> response = boardService.findAll(pageable);
 
-        return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), boardDtoPage);
+        return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), response);
     }
 }

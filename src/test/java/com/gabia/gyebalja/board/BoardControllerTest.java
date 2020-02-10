@@ -63,7 +63,7 @@ public class BoardControllerTest {
     private Category category;
 
     @BeforeEach
-    public void setUp(){
+    public void setUp() {
         departmentRepository.save(this.department);
         userRepository.save(this.user);
         categoryRepository.save(this.category);
@@ -140,10 +140,6 @@ public class BoardControllerTest {
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody().getCode()).isEqualTo(StatusCode.OK.getCode());
         assertThat(responseEntity.getBody().getMessage()).isEqualTo(StatusCode.OK.getMessage());
-//        LinkedHashMap response = (LinkedHashMap) responseEntity.getBody().getResponse();
-//        assertThat(response.get("id")).isNotNull();
-//        assertThat(response.get("title")).isEqualTo(title);
-//        assertThat(response.get("content")).isEqualTo(content);
     }
 
     /** 조회 - board 한 건 (상세페이지) */
@@ -166,7 +162,7 @@ public class BoardControllerTest {
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody().getCode()).isEqualTo(StatusCode.OK.getCode());
         assertThat(responseEntity.getBody().getMessage()).isEqualTo(StatusCode.OK.getMessage());
-        assertThat(response.get("id")).isNotNull();
+        assertThat(response.get("id").toString()).isEqualTo(saveId.toString());
         assertThat(response.get("title")).isEqualTo(title);
         assertThat(response.get("content")).isEqualTo(content);
     }
@@ -184,7 +180,7 @@ public class BoardControllerTest {
 
         int totalNumberOfData = 29;
         Board board = boardRepository.findById(saveId).orElseThrow(() -> new IllegalArgumentException("해당 데이터가 없습니다."));
-        for(int i =0; i < totalNumberOfData; i++) {
+        for (int i = 0; i < totalNumberOfData; i++) {
             commentRepository.save(Comment.builder().content("테스트 - 댓글").user(user).board(board).build());
         }
 
@@ -196,15 +192,13 @@ public class BoardControllerTest {
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody().getCode()).isEqualTo(StatusCode.OK.getCode());
         assertThat(responseEntity.getBody().getMessage()).isEqualTo(StatusCode.OK.getMessage());
-        assertThat(response.get("id")).isNotNull();
+        assertThat(response.get("id").toString()).toString();
         assertThat(response.get("title")).isEqualTo(title);
         assertThat(response.get("content")).isEqualTo(content);
         assertThat(((ArrayList) response.get("commentList")).size()).isEqualTo(totalNumberOfData);
     }
 
-    /**
-     * 수정 - board 한 건 (상세페이지에서)
-     */
+    /** 수정 - board 한 건 (상세페이지에서) */
     @Test
     @DisplayName("BoardController.putOneBoard() 테스트 (단건 업데이트)")
     public void putOneBoard() {
@@ -229,15 +223,9 @@ public class BoardControllerTest {
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody().getCode()).isEqualTo(StatusCode.OK.getCode());
         assertThat(responseEntity.getBody().getMessage()).isEqualTo(StatusCode.OK.getMessage());
-//        LinkedHashMap response = (LinkedHashMap) responseEntity.getBody().getResponse();
-//        assertThat(response.get("id")).isNotNull();
-//        assertThat(response.get("title")).isEqualTo(updateTitle);
-//        assertThat(response.get("content")).isEqualTo(updateContent);
     }
 
-    /**
-     * 삭제 - board 한 건 (상세페이지에서)
-     */
+    /** 삭제 - board 한 건 (상세페이지에서) */
     @Test
     @DisplayName("BoardController.deleteOneBoard() 테스트 (단건 삭제)")
     public void deleteOneBoard() {
@@ -259,8 +247,8 @@ public class BoardControllerTest {
 
         //then
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(responseEntity.getBody().getCode()).isEqualTo(StatusCode.NO_CONTENT.getCode());
-        assertThat(responseEntity.getBody().getMessage()).isEqualTo(StatusCode.NO_CONTENT.getMessage());
+        assertThat(responseEntity.getBody().getCode()).isEqualTo(StatusCode.OK.getCode());
+        assertThat(responseEntity.getBody().getMessage()).isEqualTo(StatusCode.OK.getMessage());
         assertThat(boardRepository.count()).isEqualTo(totalNumberOfData);
     }
 
