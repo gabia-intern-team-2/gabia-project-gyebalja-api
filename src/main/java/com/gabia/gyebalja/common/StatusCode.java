@@ -1,6 +1,7 @@
 package com.gabia.gyebalja.common;
 
 import lombok.Getter;
+
 import org.springframework.http.HttpStatus;
 
 @Getter
