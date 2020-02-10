@@ -1,7 +1,9 @@
 package com.gabia.gyebalja.domain;
 
-import lombok.*;
-
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -20,7 +22,8 @@ import java.time.LocalDate;
 public class Education extends BaseTime {
 
     //교육 테이블 id (PK)
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) //기본키 생성을 DB에 위임
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY) //기본키 생성을 DB에 위임
     private Long id;
 
     //교육 테이블 제목
@@ -43,6 +46,7 @@ public class Education extends BaseTime {
 
     //교육 유형 (ONLINE, OFFLINE)
     @Enumerated(EnumType.STRING) //ORIGINAL로 하면 유지보수성이 떨어짐으로 STRING으로 사용
+    @Column(nullable = false)
     private EducationType type;
 
     //교육 장소
