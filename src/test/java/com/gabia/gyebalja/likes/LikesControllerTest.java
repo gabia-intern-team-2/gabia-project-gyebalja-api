@@ -143,13 +143,9 @@ public class LikesControllerTest {
         ResponseEntity<CommonJsonFormat> responseEntity = restTemplate.postForEntity(url, likesRequestDto, CommonJsonFormat.class);
 
         // then
-        LinkedHashMap response = (LinkedHashMap) responseEntity.getBody().getResponse();
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody().getCode()).isEqualTo(StatusCode.OK.getCode());
         assertThat(responseEntity.getBody().getMessage()).isEqualTo(StatusCode.OK.getMessage());
-//        assertThat(response.get("id")).isNotNull();
-//        assertThat(response.get("userId").toString()).isEqualTo(user.getId().toString());
-//        assertThat(response.get("boardId").toString()).isEqualTo(board.getId().toString());
     }
 
     /** 삭제 - likes 한 개 */
@@ -158,7 +154,7 @@ public class LikesControllerTest {
     public void deleteOneLikes(){
         // given
         LikesRequestDto likesRequestDto = LikesRequestDto.builder().userId(user.getId()).boardId(board.getId()).build();
-        LikesResponseDto likesResponseDto = likesService.save(likesRequestDto);
+        Long saveId = likesService.postOneLikes(likesRequestDto);
         String url = "http://localhost:" + port + "/api/v1/likes/users/" + user.getId() + "/boards/" + board.getId();
 
         HttpHeaders headers = new HttpHeaders();
@@ -168,9 +164,8 @@ public class LikesControllerTest {
         ResponseEntity<CommonJsonFormat> responseEntity = restTemplate.exchange(url, HttpMethod.DELETE, requestEntity, CommonJsonFormat.class);
 
         // then
-        ArrayList response = (ArrayList) responseEntity.getBody().getResponse();
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(responseEntity.getBody().getCode()).isEqualTo(StatusCode.NO_CONTENT.getCode());
-        assertThat(responseEntity.getBody().getMessage()).isEqualTo(StatusCode.NO_CONTENT.getMessage());
+        assertThat(responseEntity.getBody().getCode()).isEqualTo(StatusCode.OK.getCode());
+        assertThat(responseEntity.getBody().getMessage()).isEqualTo(StatusCode.OK.getMessage());
     }
 }
