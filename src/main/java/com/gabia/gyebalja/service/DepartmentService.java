@@ -15,7 +15,7 @@ public class DepartmentService {
     private final DepartmentRepository departmentRepository;
 
     /** 조회 - department (한 부서) */
-    public DepartmentResponseDto findById(Long departmentId){
+    public DepartmentResponseDto getOneDepartment(Long departmentId){
         Department department = departmentRepository.findById(departmentId).orElseThrow(() -> new IllegalArgumentException("해당 데이터가 없습니다."));
         DepartmentResponseDto departmentResponseDto = new DepartmentResponseDto(department);
 
