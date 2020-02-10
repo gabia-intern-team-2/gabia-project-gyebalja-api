@@ -4,7 +4,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -85,5 +84,15 @@ public class Education extends BaseTime {
         this.content = content;
     }
 
+    //교육내용 변경 메서드
+    public void changeEducation(String title, String content, LocalDate startDate, LocalDate endDate, int totalHours, EducationType type, String place ) {
+        this.title = title;
+        this.content = content;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.totalHours = totalHours;
+        this.type = type;
+        this.place = place;
+    }
 
 }

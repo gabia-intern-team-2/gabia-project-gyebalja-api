@@ -117,37 +117,37 @@ public class BoardServiceTest {
     }
 
     @Test
-    @DisplayName("BoardService.save() 테스트 (단건 저장)")
-    public void saveTest(){
+    @DisplayName("boardService.postOneBoard() 테스트 (단건 저장)")
+    public void postOneBoardTest(){
         // given
         String title = "테스트 - BoardRequestDto title";
         String content = "테스트 - BoardRequestDto content";
         BoardRequestDto boardRequestDto = BoardRequestDto.builder().title(title).content(content).user(user).education(education).build();
 
         // when
-        Long saveId = boardService.save(boardRequestDto);
+        Long saveId = boardService.postOneBoard(boardRequestDto);
         em.clear();
         em.flush();
 
         // then
-        BoardResponseDto boardResponseDto = boardService.findById(saveId);
+        BoardResponseDto boardResponseDto = boardService.getOneBoard(saveId);
         assertThat(boardResponseDto.getId()).isEqualTo(saveId);
     }
 
     @Test
-    @DisplayName("BoardService.findById() 테스트 (단건 조회)")
-    public void findTest(){
+    @DisplayName("boardService.getOneBoard() 테스트 (단건 조회)")
+    public void getOneBoardTest(){
         // given
         String title = "테스트 - BoardRequestDto title";
         String content = "테스트 - BoardRequestDto content";
         BoardRequestDto boardRequestDto = BoardRequestDto.builder().title(title).content(content).user(user).education(education).build();
 
-        Long saveId = boardService.save(boardRequestDto);
+        Long saveId = boardService.postOneBoard(boardRequestDto);
         em.clear();
         em.flush();
 
         // when
-        BoardResponseDto boardResponseDto = boardService.findById(saveId);
+        BoardResponseDto boardResponseDto = boardService.getOneBoard(saveId);
 
         // then
         assertThat(boardResponseDto.getId()).isEqualTo(saveId);
@@ -156,14 +156,14 @@ public class BoardServiceTest {
     }
 
     @Test
-    @DisplayName("BoardService.findById() 테스트 (단건 조회) - 댓글 테스트")
+    @DisplayName("boardService.getOneBoard() 테스트 (단건 조회) - 댓글 테스트")
     public void findTestWithComments(){
         // given
         String title = "테스트 - BoardRequestDto title";
         String content = "테스트 - BoardRequestDto content";
         BoardRequestDto boardRequestDto = BoardRequestDto.builder().title(title).content(content).user(user).education(education).build();
 
-        Long saveId = boardService.save(boardRequestDto);
+        Long saveId = boardService.postOneBoard(boardRequestDto);
         em.clear();
         em.flush();
 
@@ -174,7 +174,7 @@ public class BoardServiceTest {
         }
 
         // when
-        BoardResponseDto boardResponseDto = boardService.findById(saveId);
+        BoardResponseDto boardResponseDto = boardService.getOneBoard(saveId);
 
         // then
         assertThat(boardResponseDto.getId()).isEqualTo(saveId);
@@ -184,8 +184,8 @@ public class BoardServiceTest {
     }
 
     @Test
-    @DisplayName("BoardService.update() 테스트 (단건 업데이트)")
-    public void updateTest() {
+    @DisplayName("boardService.putOneBoard() 테스트 (단건 업데이트)")
+    public void putOneBoardTest() {
         // given
         String title = "테스트 - BoardRequestDto title";
         String content = "테스트 - BoardRequestDto content";
@@ -194,32 +194,32 @@ public class BoardServiceTest {
         String updateContent = "테스트 - BoardRequestDto content 업데이트";
         BoardRequestDto updateBoardRequestDto = BoardRequestDto.builder().title(updateTitle).content(updateContent).user(user).education(education).build();
 
-        Long saveId = boardService.save(boardRequestDto);
+        Long saveId = boardService.postOneBoard(boardRequestDto);
         em.flush();
         em.clear();
 
         // when
-        Long updateId = boardService.update(saveId, updateBoardRequestDto);
+        Long updateId = boardService.putOneBoard(saveId, updateBoardRequestDto);
 
         // then
-        BoardResponseDto boardResponseDto = boardService.findById(updateId);
+        BoardResponseDto boardResponseDto = boardService.getOneBoard(updateId);
         assertThat(updateId).isEqualTo(saveId);
         assertThat(boardResponseDto.getTitle()).isEqualTo(updateTitle);
         assertThat(boardResponseDto.getContent()).isEqualTo(updateContent);
     }
 
     @Test
-    @DisplayName("BoardService.delete() 테스트 (단건 삭제)")
-    public void deleteTest() {
+    @DisplayName("boardService.deleteOneBoard() 테스트 (단건 삭제)")
+    public void deleteOneBoardTest() {
         // given
         String title = "테스트 - BoardRequestDto title";
         String content = "테스트 - BoardRequestDto content";
         BoardRequestDto boardRequestDto = BoardRequestDto.builder().title(title).content(content).user(user).education(education).build();
 
-        Long saveId = boardService.save(boardRequestDto);
+        Long saveId = boardService.postOneBoard(boardRequestDto);
 
         // when
-        Long deleteId = boardService.delete(saveId);
+        Long deleteId = boardService.deleteOneBoard(saveId);
 
         // then
         assertThat(deleteId).isEqualTo(saveId);
@@ -227,8 +227,8 @@ public class BoardServiceTest {
     }
 
     @Test
-    @DisplayName("BoardService.findAll() 테스트 (전체 조회, 페이징)")
-    public void findAllTest() {
+    @DisplayName("boardService.getAllBoard() 테스트 (전체 조회, 페이징)")
+    public void getAllBoardTest() {
         // given
         int page = 0;
         int size = 10;
@@ -239,13 +239,13 @@ public class BoardServiceTest {
         String title = "테스트 - BoardRequestDto title";
         String content = "테스트 - BoardRequestDto content";
         for (int i = 0; i < totalNumberOfData; i++) {
-            boardService.save(BoardRequestDto.builder().title(title).content(content).user(user).education(education).build());
+            boardService.postOneBoard(BoardRequestDto.builder().title(title).content(content).user(user).education(education).build());
         }
         em.clear();
         em.flush();
 
         // when
-        Page<BoardResponseDto> boardResponseDtos = boardService.findAll(pageable);
+        Page<BoardResponseDto> boardResponseDtos = boardService.getAllBoard(pageable);
 
         // then
         assertThat(boardResponseDtos.getTotalElements()).isEqualTo(totalNumberOfData);

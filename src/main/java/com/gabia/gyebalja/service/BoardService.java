@@ -31,7 +31,7 @@ public class BoardService {
 
     /** 등록 - board 한 건 (게시글 등록) */
     @Transactional
-    public Long save(BoardRequestDto boardRequestDto){
+    public Long postOneBoard(BoardRequestDto boardRequestDto){
         Long boardId = boardRepository.save(boardRequestDto.toEntity()).getId(); // 검토. getId() 적절한지?
 
         return boardId;
@@ -39,7 +39,7 @@ public class BoardService {
 
     /** 조회 - board 한 건 (상세페이지) */
     @Transactional
-    public BoardResponseDto findById(Long id){
+    public BoardResponseDto getOneBoard(Long id){
         Board board = boardRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다."));    // 검토. 404 Error?
         BoardResponseDto boardResponseDto = new BoardResponseDto(board);
 
@@ -53,7 +53,7 @@ public class BoardService {
 
     /** 수정 - board 한 건 (상세페이지에서) */
     @Transactional
-    public Long update(Long id, BoardRequestDto boardRequestDtoDto){
+    public Long putOneBoard(Long id, BoardRequestDto boardRequestDtoDto){
         Board board = boardRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다."));    // 검토. 404 Error?
 
         // 더티 체킹
@@ -67,7 +67,7 @@ public class BoardService {
 
     /** 삭제 - board 한 건 (상세페이지에서) */
     @Transactional
-    public Long delete(Long id){
+    public Long deleteOneBoard(Long id){
         boardRepository.deleteById(id);
         em.flush();
         em.clear();
@@ -77,7 +77,7 @@ public class BoardService {
 
     /** 조회 - board 전체 (페이징) */
     @Transactional
-    public Page<BoardResponseDto> findAll(Pageable pageable){
+    public Page<BoardResponseDto> getAllBoard(Pageable pageable){
         Page<Board> boardPage = boardRepository.findAll(pageable);
         Page<BoardResponseDto> boardDtoPage = boardPage.map(board -> new BoardResponseDto(board));  // 검토. stream?
 
