@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -66,10 +66,12 @@ public class CategoryService {
     }
 
     /** 조회 - category 전체 (전체조회) */ //해당 카테고리를 모두 뿌려줄거기때문에 페이징 불필요.
-    public Stream<CategoryResponseDto> getAllCategory() {
+    public List<CategoryResponseDto> getAllCategory() {
         List<Category> categories = categoryRepository.findAll();
-        Stream<CategoryResponseDto> categoryResponseDtoStream = categories.stream().map(c -> CategoryResponseDto.builder().id(c.getId()).name(c.getName()).build()); // Entity를 노출 시키지않고 Dto로 변환후 리턴
+        List<CategoryResponseDto> categoryResponseDtos = categories.stream()
+                                                                    .map(c -> CategoryResponseDto.builder().id(c.getId()).name(c.getName()).build())
+                                                                    .collect(Collectors.toList());// Entity를 노출 시키지않고 Dto로 변환후 리턴
 
-        return categoryResponseDtoStream;
+        return categoryResponseDtos;
     }
 }
