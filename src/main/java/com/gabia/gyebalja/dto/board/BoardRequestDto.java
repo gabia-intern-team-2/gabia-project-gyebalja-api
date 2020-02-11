@@ -1,8 +1,5 @@
 package com.gabia.gyebalja.dto.board;
 
-import com.gabia.gyebalja.domain.Board;
-import com.gabia.gyebalja.domain.Education;
-import com.gabia.gyebalja.domain.User;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
@@ -18,18 +15,14 @@ public class BoardRequestDto {
     private String title;
     private String content;
     private int views;
-    private User user;
-    private Education education;
+    private Long userId;
+    private Long educationId;
 
     @Builder
-    public BoardRequestDto(String title, String content, User user, Education education){
+    public BoardRequestDto(String title, String content, Long userId, Long educationId){
         this.title = title;
         this.content = content;
-        this.user = user;
-        this.education = education;
-    }
-
-    public Board toEntity(){
-        return Board.builder().title(title).content(content).views(0).user(user).education(education).build();
+        this.userId = userId;
+        this.educationId = educationId;
     }
 }

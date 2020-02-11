@@ -116,7 +116,7 @@ public class BoardServiceTest {
         // given
         String title = "테스트 - BoardRequestDto title";
         String content = "테스트 - BoardRequestDto content";
-        BoardRequestDto boardRequestDto = BoardRequestDto.builder().title(title).content(content).user(user).education(education).build();
+        BoardRequestDto boardRequestDto = BoardRequestDto.builder().title(title).content(content).userId(user.getId()).educationId(education.getId()).build();
 
         // when
         Long saveId = boardService.postOneBoard(boardRequestDto);
@@ -134,7 +134,7 @@ public class BoardServiceTest {
         // given
         String title = "테스트 - BoardRequestDto title";
         String content = "테스트 - BoardRequestDto content";
-        BoardRequestDto boardRequestDto = BoardRequestDto.builder().title(title).content(content).user(user).education(education).build();
+        BoardRequestDto boardRequestDto = BoardRequestDto.builder().title(title).content(content).userId(user.getId()).educationId(education.getId()).build();
 
         Long saveId = boardService.postOneBoard(boardRequestDto);
         em.clear();
@@ -155,7 +155,7 @@ public class BoardServiceTest {
         // given
         String title = "테스트 - BoardRequestDto title";
         String content = "테스트 - BoardRequestDto content";
-        BoardRequestDto boardRequestDto = BoardRequestDto.builder().title(title).content(content).user(user).education(education).build();
+        BoardRequestDto boardRequestDto = BoardRequestDto.builder().title(title).content(content).userId(user.getId()).educationId(education.getId()).build();
 
         Long saveId = boardService.postOneBoard(boardRequestDto);
         em.clear();
@@ -186,7 +186,7 @@ public class BoardServiceTest {
         int totalNumberOfData = 29;
         String title = "테스트 - BoardRequestDto title";
         String content = "테스트 - BoardRequestDto content";
-        BoardRequestDto boardRequestDto = BoardRequestDto.builder().title(title).content(content).user(user).education(education).build();
+        BoardRequestDto boardRequestDto = BoardRequestDto.builder().title(title).content(content).userId(user.getId()).educationId(education.getId()).build();
 
         Long saveId = boardService.postOneBoard(boardRequestDto);
         em.clear();
@@ -211,10 +211,10 @@ public class BoardServiceTest {
         // given
         String title = "테스트 - BoardRequestDto title";
         String content = "테스트 - BoardRequestDto content";
-        BoardRequestDto boardRequestDto = BoardRequestDto.builder().title(title).content(content).user(user).education(education).build();
+        BoardRequestDto boardRequestDto = BoardRequestDto.builder().title(title).content(content).userId(user.getId()).educationId(education.getId()).build();
         String updateTitle = "테스트 - BoardRequestDto title 업데이트";
         String updateContent = "테스트 - BoardRequestDto content 업데이트";
-        BoardRequestDto updateBoardRequestDto = BoardRequestDto.builder().title(updateTitle).content(updateContent).user(user).education(education).build();
+        BoardRequestDto updateBoardRequestDto = BoardRequestDto.builder().title(updateTitle).content(updateContent).userId(user.getId()).educationId(education.getId()).build();
 
         Long saveId = boardService.postOneBoard(boardRequestDto);
         em.flush();
@@ -236,7 +236,7 @@ public class BoardServiceTest {
         // given
         String title = "테스트 - BoardRequestDto title";
         String content = "테스트 - BoardRequestDto content";
-        BoardRequestDto boardRequestDto = BoardRequestDto.builder().title(title).content(content).user(user).education(education).build();
+        BoardRequestDto boardRequestDto = BoardRequestDto.builder().title(title).content(content).userId(user.getId()).educationId(education.getId()).build();
 
         Long saveId = boardService.postOneBoard(boardRequestDto);
 
@@ -263,7 +263,7 @@ public class BoardServiceTest {
         String title = "테스트 - BoardRequestDto title";
         String content = "테스트 - BoardRequestDto content";
         for (int i = 0; i < totalNumberOfData; i++) {
-            boardService.postOneBoard(BoardRequestDto.builder().title(title).content(content).user(user).education(education).build());
+            boardService.postOneBoard(BoardRequestDto.builder().title(title).content(content).userId(user.getId()).educationId(education.getId()).build());
         }
         em.clear();
         em.flush();

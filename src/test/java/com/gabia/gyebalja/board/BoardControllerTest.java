@@ -2,9 +2,23 @@ package com.gabia.gyebalja.board;
 
 import com.gabia.gyebalja.common.CommonJsonFormat;
 import com.gabia.gyebalja.common.StatusCode;
-import com.gabia.gyebalja.domain.*;
+import com.gabia.gyebalja.domain.Board;
+import com.gabia.gyebalja.domain.Category;
+import com.gabia.gyebalja.domain.Comment;
+import com.gabia.gyebalja.domain.Department;
+import com.gabia.gyebalja.domain.Education;
+import com.gabia.gyebalja.domain.EducationType;
+import com.gabia.gyebalja.domain.GenderType;
+import com.gabia.gyebalja.domain.Likes;
+import com.gabia.gyebalja.domain.User;
 import com.gabia.gyebalja.dto.board.BoardRequestDto;
-import com.gabia.gyebalja.repository.*;
+import com.gabia.gyebalja.repository.BoardRepository;
+import com.gabia.gyebalja.repository.CategoryRepository;
+import com.gabia.gyebalja.repository.CommentRepository;
+import com.gabia.gyebalja.repository.DepartmentRepository;
+import com.gabia.gyebalja.repository.EducationRepository;
+import com.gabia.gyebalja.repository.LikesRepository;
+import com.gabia.gyebalja.repository.UserRepository;
 import com.gabia.gyebalja.service.BoardService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -120,7 +134,7 @@ public class BoardControllerTest {
         String content = "테스트 - BoardRequestDto content";
         String url = "http://localhost:" + port + "/api/v1/boards";
 
-        BoardRequestDto boardRequestDto = BoardRequestDto.builder().title(title).content(content).user(user).education(education).build();
+        BoardRequestDto boardRequestDto = BoardRequestDto.builder().title(title).content(content).userId(user.getId()).educationId(education.getId()).build();
 
         // when
         ResponseEntity<CommonJsonFormat> responseEntity = restTemplate.postForEntity(url, boardRequestDto, CommonJsonFormat.class);
@@ -138,7 +152,7 @@ public class BoardControllerTest {
         // given
         String title = "테스트 - BoardRequestDto title";
         String content = "테스트 - BoardRequestDto content";
-        BoardRequestDto boardRequestDto = BoardRequestDto.builder().title(title).content(content).user(user).education(education).build();
+        BoardRequestDto boardRequestDto = BoardRequestDto.builder().title(title).content(content).userId(user.getId()).educationId(education.getId()).build();
 
         Long saveId = boardService.postOneBoard(boardRequestDto);
         String url = "http://localhost:" + port + "/api/v1/boards/" + saveId;
@@ -162,7 +176,7 @@ public class BoardControllerTest {
         // given
         String title = "테스트 - BoardRequestDto title";
         String content = "테스트 - BoardRequestDto content";
-        BoardRequestDto boardRequestDto = BoardRequestDto.builder().title(title).content(content).user(user).education(education).build();
+        BoardRequestDto boardRequestDto = BoardRequestDto.builder().title(title).content(content).userId(user.getId()).educationId(education.getId()).build();
 
         Long saveId = boardService.postOneBoard(boardRequestDto);
         String url = "http://localhost:" + port + "/api/v1/boards/" + saveId;
@@ -196,7 +210,7 @@ public class BoardControllerTest {
         // given
         String title = "테스트 - BoardRequestDto title";
         String content = "테스트 - BoardRequestDto content";
-        BoardRequestDto saveBoardRequestDto = BoardRequestDto.builder().title(title).content(content).user(user).education(education).build();
+        BoardRequestDto saveBoardRequestDto = BoardRequestDto.builder().title(title).content(content).userId(user.getId()).educationId(education.getId()).build();
         Long saveId = boardService.postOneBoard(saveBoardRequestDto);
 
         Long updateId = saveId;
@@ -204,7 +218,7 @@ public class BoardControllerTest {
         String updateContent = "테스트 - BoardRequestDto content 업데이트";
         String url = "http://localhost:" + port + "/api/v1/boards/" + updateId;
 
-        BoardRequestDto boardRequestDto = BoardRequestDto.builder().title(updateTitle).content(updateContent).user(user).education(education).build();
+        BoardRequestDto boardRequestDto = BoardRequestDto.builder().title(updateTitle).content(updateContent).userId(user.getId()).educationId(education.getId()).build();
         HttpEntity<BoardRequestDto> requestEntity = new HttpEntity<>(boardRequestDto);
 
         // when
@@ -224,7 +238,7 @@ public class BoardControllerTest {
         long totalNumberOfData = boardRepository.count();
         String title = "테스트 - BoardRequestDto title";
         String content = "테스트 - BoardRequestDto content";
-        BoardRequestDto saveBoardRequestDto = BoardRequestDto.builder().title(title).content(content).user(user).education(education).build();
+        BoardRequestDto saveBoardRequestDto = BoardRequestDto.builder().title(title).content(content).userId(user.getId()).educationId(education.getId()).build();
         Long saveId = boardService.postOneBoard(saveBoardRequestDto);
 
         Long deleteId = saveId;
@@ -252,7 +266,7 @@ public class BoardControllerTest {
         String title = "테스트 - BoardRequestDto title";
         String content = "테스트 - BoardRequestDto content";
         for (int i = 0; i < totalNumberOfData; i++) {
-            boardService.postOneBoard(BoardRequestDto.builder().title(title).content(content).user(user).education(education).build());
+            boardService.postOneBoard(BoardRequestDto.builder().title(title).content(content).userId(user.getId()).educationId(education.getId()).build());
         }
 
         String url = "http://localhost:" + port + "/api/v1/boards";
