@@ -1,11 +1,23 @@
 package com.gabia.gyebalja.likes;
 
-import com.gabia.gyebalja.domain.*;
-import com.gabia.gyebalja.repository.*;
+import com.gabia.gyebalja.domain.Board;
+import com.gabia.gyebalja.domain.Category;
+import com.gabia.gyebalja.domain.Department;
+import com.gabia.gyebalja.domain.Education;
+import com.gabia.gyebalja.domain.EducationType;
+import com.gabia.gyebalja.domain.GenderType;
+import com.gabia.gyebalja.domain.Likes;
+import com.gabia.gyebalja.domain.User;
+import com.gabia.gyebalja.repository.BoardRepository;
+import com.gabia.gyebalja.repository.CategoryRepository;
+import com.gabia.gyebalja.repository.DepartmentRepository;
+import com.gabia.gyebalja.repository.EducationRepository;
+import com.gabia.gyebalja.repository.LikesRepository;
+import com.gabia.gyebalja.repository.UserRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -15,20 +27,20 @@ import java.time.LocalDate;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @Transactional
 @SpringBootTest
 class LikesRepositoryTest {
+
+    @Autowired private LikesRepository likesRepository;
+    @Autowired private BoardRepository boardRepository;
+    @Autowired private DepartmentRepository departmentRepository;
+    @Autowired private UserRepository userRepository;
+    @Autowired private CategoryRepository categoryRepository;
+    @Autowired private EducationRepository educationRepository;
+
     @PersistenceContext
     EntityManager em;
-
-    private final LikesRepository likesRepository;
-    private final BoardRepository boardRepository;
-    private final DepartmentRepository departmentRepository;
-    private final UserRepository userRepository;
-    private final CategoryRepository categoryRepository;
-    private final EducationRepository educationRepository;
 
     private Likes likes;
     private Board board;
@@ -37,15 +49,17 @@ class LikesRepositoryTest {
     private Education education;
     private Category category;
 
-    @Autowired
-    public LikesRepositoryTest(LikesRepository likesRepository, BoardRepository boardRepository ,DepartmentRepository departmentRepository, UserRepository userRepository, CategoryRepository categoryRepository, EducationRepository educationRepository){
-        this.likesRepository = likesRepository;
-        this.boardRepository = boardRepository;
-        this.departmentRepository = departmentRepository;
-        this.userRepository = userRepository;
-        this.categoryRepository = categoryRepository;
-        this.educationRepository = educationRepository;
+    @BeforeEach
+    public void setUp(){
+        departmentRepository.save(this.department);
+        userRepository.save(this.user);
+        categoryRepository.save(this.category);
+        educationRepository.save(this.education);
+        boardRepository.save(this.board);
+    }
 
+    @Autowired
+    public LikesRepositoryTest(){
         // Department
         this.department = Department.builder()
                 .name("테스트팀")
@@ -96,12 +110,6 @@ class LikesRepositoryTest {
     @Test
     public void saveTest(){
         // given
-        departmentRepository.save(this.department);
-        userRepository.save(this.user);
-        categoryRepository.save(this.category);
-        educationRepository.save(this.education);
-        boardRepository.save(this.board);
-
         Long totalNumberOfData = likesRepository.count();
         Likes likes = this.likes;
 
@@ -122,12 +130,6 @@ class LikesRepositoryTest {
     @Test
     public void findTest(){
         // given
-        departmentRepository.save(this.department);
-        userRepository.save(this.user);
-        categoryRepository.save(this.category);
-        educationRepository.save(this.education);
-        boardRepository.save(this.board);
-
         Likes likes = this.likes;
         Likes saveLikes = likesRepository.save(likes);
         em.flush();
@@ -162,12 +164,6 @@ class LikesRepositoryTest {
     @Test
     public void deleteTest(){
         // given
-        departmentRepository.save(this.department);
-        userRepository.save(this.user);
-        categoryRepository.save(this.category);
-        educationRepository.save(this.education);
-        boardRepository.save(this.board);
-
         Long totalNumberOfData = likesRepository.count();
         Likes likes = this.likes;
         Likes saveLikes = likesRepository.save(likes);

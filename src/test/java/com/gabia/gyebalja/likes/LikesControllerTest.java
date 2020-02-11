@@ -10,12 +10,10 @@ import com.gabia.gyebalja.domain.EducationType;
 import com.gabia.gyebalja.domain.GenderType;
 import com.gabia.gyebalja.domain.User;
 import com.gabia.gyebalja.dto.likes.LikesRequestDto;
-import com.gabia.gyebalja.dto.likes.LikesResponseDto;
 import com.gabia.gyebalja.repository.BoardRepository;
 import com.gabia.gyebalja.repository.CategoryRepository;
 import com.gabia.gyebalja.repository.DepartmentRepository;
 import com.gabia.gyebalja.repository.EducationRepository;
-import com.gabia.gyebalja.repository.LikesRepository;
 import com.gabia.gyebalja.repository.UserRepository;
 import com.gabia.gyebalja.service.LikesService;
 import org.junit.jupiter.api.AfterEach;
@@ -33,8 +31,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
