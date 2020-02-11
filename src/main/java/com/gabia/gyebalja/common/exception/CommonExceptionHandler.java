@@ -1,5 +1,6 @@
 package com.gabia.gyebalja.common.exception;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import com.gabia.gyebalja.common.CommonJsonFormat;
 import com.gabia.gyebalja.common.StatusCode;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -7,10 +8,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 /** 참조 : https://cheese10yun.github.io/spring-guide-exception/ */
 
@@ -52,6 +51,17 @@ public class CommonExceptionHandler {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     protected ResponseEntity<CommonJsonFormat> handleHttpMessageNotReadableException(HttpMessageNotReadableException e){
         System.out.println("handleHttpMessageNotReadableException - " + e);
+        final CommonJsonFormat response = CommonJsonFormat.of(StatusCode.BAD_REQUEST);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    /**
+     * EmptyResultDataAccessException.class
+     * 목적 : 삭제 API 호출 시에 데이터베이스에 없는 값을 삭제하려고 할 경우 발생
+     */
+    @ExceptionHandler(EmptyResultDataAccessException.class)
+    protected ResponseEntity<CommonJsonFormat> handleEmptyResultDataAccessException(EmptyResultDataAccessException e) {
+        System.out.println("handleEmptyResultDataAccessException - " + e);
         final CommonJsonFormat response = CommonJsonFormat.of(StatusCode.BAD_REQUEST);
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
