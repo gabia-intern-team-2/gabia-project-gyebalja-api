@@ -1,5 +1,6 @@
 package com.gabia.gyebalja.common;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -65,6 +66,16 @@ public class CommonExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    /**
+     * Exception.class
+     * 목적 : 삭제 API 호출 시에 데이터베이스에 없는 값을 삭제하려고 할 경우 발생
+     */
+    @ExceptionHandler(EmptyResultDataAccessException.class)
+    protected ResponseEntity<CommonJsonFormat> handleEmptyResultDataAccessException(EmptyResultDataAccessException e) {
+        System.out.println("handleEmptyResultDataAccessException - " + e);
+        final CommonJsonFormat response = CommonJsonFormat.of(StatusCode.BAD_REQUEST);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
 //    /**
 //     * @ModelAttribut 으로 binding error 발생시 BindException 발생한다.
 //     * ref https://docs.spring.io/spring/docs/current/spring-framework-reference/web.html#mvc-ann-modelattrib-method-args

@@ -5,7 +5,6 @@ import com.gabia.gyebalja.common.StatusCode;
 import com.gabia.gyebalja.domain.Category;
 import com.gabia.gyebalja.dto.category.CategoryRequestDto;
 import com.gabia.gyebalja.dto.category.CategoryResponseDto;
-import com.gabia.gyebalja.dto.education.EducationResponseDto;
 import com.gabia.gyebalja.repository.CategoryRepository;
 import com.gabia.gyebalja.service.CategoryService;
 import org.assertj.core.api.Assertions;
