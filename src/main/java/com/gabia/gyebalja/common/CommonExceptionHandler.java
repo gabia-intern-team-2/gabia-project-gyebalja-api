@@ -72,7 +72,7 @@ public class CommonExceptionHandler {
      */
     @ExceptionHandler(EmptyResultDataAccessException.class)
     protected ResponseEntity<CommonJsonFormat> handleEmptyResultDataAccessException(EmptyResultDataAccessException e) {
-        System.out.println("Exception - " + e);
+        System.out.println("handleEmptyResultDataAccessException - " + e);
         final CommonJsonFormat response = CommonJsonFormat.of(StatusCode.BAD_REQUEST);
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
