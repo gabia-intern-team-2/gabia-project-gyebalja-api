@@ -2,12 +2,16 @@ package com.gabia.gyebalja.service;
 
 import com.gabia.gyebalja.domain.Board;
 import com.gabia.gyebalja.domain.Comment;
+import com.gabia.gyebalja.domain.Education;
+import com.gabia.gyebalja.domain.User;
 import com.gabia.gyebalja.dto.board.BoardRequestDto;
 import com.gabia.gyebalja.dto.board.BoardResponseDto;
 import com.gabia.gyebalja.dto.comment.CommentResponseDto;
 import com.gabia.gyebalja.repository.BoardRepository;
 import com.gabia.gyebalja.repository.CommentRepository;
+import com.gabia.gyebalja.repository.EducationRepository;
 import com.gabia.gyebalja.repository.LikesRepository;
+import com.gabia.gyebalja.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,12 +32,23 @@ public class BoardService {
     EntityManager em;
 
     private final BoardRepository boardRepository;
+    private final UserRepository userRepository;
+    private final EducationRepository educationRepository;
     private final CommentRepository commentRepository;
     private final LikesRepository likesRepository;
 
     /** 등록 - board 한 건 (게시글 등록) */
     public Long postOneBoard(BoardRequestDto boardRequestDto){
-        Long boardId = boardRepository.save(boardRequestDto.toEntity()).getId();
+        User user = userRepository.findById(boardRequestDto.getUserId()).orElseThrow(() -> new IllegalArgumentException("해당 데이터가 없습니다."));
+        Education education = educationRepository.findById(boardRequestDto.getEducationId()).orElseThrow(() -> new IllegalArgumentException("해당 데이터가 없습니다."));
+
+        Long boardId = boardRepository.save(Board.builder()
+                .title(boardRequestDto.getTitle())
+                .content(boardRequestDto.getContent())
+                .views(0)
+                .user(user)
+                .education(education)
+                .build()).getId();
 
         return boardId;
     }
