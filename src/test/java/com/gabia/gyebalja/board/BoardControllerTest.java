@@ -2,21 +2,9 @@ package com.gabia.gyebalja.board;
 
 import com.gabia.gyebalja.common.CommonJsonFormat;
 import com.gabia.gyebalja.common.StatusCode;
-import com.gabia.gyebalja.domain.Board;
-import com.gabia.gyebalja.domain.Category;
-import com.gabia.gyebalja.domain.Comment;
-import com.gabia.gyebalja.domain.Department;
-import com.gabia.gyebalja.domain.Education;
-import com.gabia.gyebalja.domain.EducationType;
-import com.gabia.gyebalja.domain.GenderType;
-import com.gabia.gyebalja.domain.User;
+import com.gabia.gyebalja.domain.*;
 import com.gabia.gyebalja.dto.board.BoardRequestDto;
-import com.gabia.gyebalja.repository.BoardRepository;
-import com.gabia.gyebalja.repository.CategoryRepository;
-import com.gabia.gyebalja.repository.CommentRepository;
-import com.gabia.gyebalja.repository.DepartmentRepository;
-import com.gabia.gyebalja.repository.EducationRepository;
-import com.gabia.gyebalja.repository.UserRepository;
+import com.gabia.gyebalja.repository.*;
 import com.gabia.gyebalja.service.BoardService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -47,6 +35,7 @@ public class BoardControllerTest {
     @Autowired private CategoryRepository categoryRepository;
     @Autowired private EducationRepository educationRepository;
     @Autowired private CommentRepository commentRepository;
+    @Autowired private LikesRepository likesRepository;
 
     @Autowired
     private BoardService boardService;
@@ -168,8 +157,8 @@ public class BoardControllerTest {
     }
 
     @Test
-    @DisplayName("BoardController.getOneBoard() 테스트 (단건 조회) - 댓글 테스트")
-    public void getOneBoardWithComments() {
+    @DisplayName("BoardController.getOneBoard() 테스트 (단건 조회) - 댓글 테스트, 좋아요 개수 테스트")
+    public void getOneBoardWithCommentsAndLikes() {
         // given
         String title = "테스트 - BoardRequestDto title";
         String content = "테스트 - BoardRequestDto content";
@@ -182,6 +171,7 @@ public class BoardControllerTest {
         Board board = boardRepository.findById(saveId).orElseThrow(() -> new IllegalArgumentException("해당 데이터가 없습니다."));
         for (int i = 0; i < totalNumberOfData; i++) {
             commentRepository.save(Comment.builder().content("테스트 - 댓글").user(user).board(board).build());
+            likesRepository.save(Likes.builder().board(board).user(user).build());
         }
 
         // when
@@ -195,6 +185,7 @@ public class BoardControllerTest {
         assertThat(response.get("id").toString()).toString();
         assertThat(response.get("title")).isEqualTo(title);
         assertThat(response.get("content")).isEqualTo(content);
+        assertThat(response.get("likes")).isEqualTo(totalNumberOfData);
         assertThat(((ArrayList) response.get("commentList")).size()).isEqualTo(totalNumberOfData);
     }
 

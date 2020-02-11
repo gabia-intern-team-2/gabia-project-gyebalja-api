@@ -21,6 +21,7 @@ public class BoardResponseDto {
     private String title;
     private String content;
     private int views;
+    private int likes;
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
     private Long userId;
@@ -34,6 +35,7 @@ public class BoardResponseDto {
         this.title = board.getTitle();
         this.content = board.getContent();
         this.views = board.getViews();
+        this.likes = 0;
         this.createdDate = board.getCreatedDate();
         this.modifiedDate = board.getModifiedDate();
         this.userId = board.getUser().getId();
@@ -45,5 +47,9 @@ public class BoardResponseDto {
 
     public void changeCommentList(List<CommentResponseDto> commentResponseDtos){
         this.commentList = commentResponseDtos;
+    }
+
+    public void changeLikes(int likes){
+        this.likes = likes;
     }
 }
