@@ -52,9 +52,9 @@ public class Board extends BaseTime {
         this.title = title;
     }
 
-    public void changeContent(String content){
-        this.content = content;
-    }
+    public void changeContent(String content) { this.content = content; }
 
-    public void changeEducation(Education education){ this.education = education; }
+    public void changeEducation(Education education) { this.education = education; }
+
+    public void upViews() { this.views = this.views + 1; }
 }
