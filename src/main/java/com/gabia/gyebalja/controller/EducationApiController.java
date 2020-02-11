@@ -32,7 +32,7 @@ public class EducationApiController {
         return new CommonJsonFormat(200,"success",eduId);
     }
 
-    /** 조회 - bard 한 건 (상세페이지) */
+    /** 조회 - education 한 건 (상세페이지) */
     @GetMapping("/api/v1/educations/{id}")
     public CommonJsonFormat getOneEducation(@PathVariable("id") Long id) {
         EducationResponseDto educationResponseDto = educationService.getOneEducation(id);

@@ -13,7 +13,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import java.util.stream.Stream;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -56,7 +57,7 @@ public class CategoryApiController {
     /** 조회 - category 전체 조회 (페이징 x) */
     @GetMapping("/api/v1/categories")
     public CommonJsonFormat getAllCategory() {
-        Stream<CategoryResponseDto> allCategory = categoryService.getAllCategory();
+       List<CategoryResponseDto> allCategory = categoryService.getAllCategory();
 
         return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), allCategory);
     }
