@@ -43,6 +43,10 @@ public class BoardService {
     @Transactional
     public BoardResponseDto getOneBoard(Long boardId){
         Board board = boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다."));
+  
+        // 더티 체킹
+        // 게시글의 조회수 UP, boardDto 에 삽입
+        board.upViews();
         BoardResponseDto boardResponseDto = new BoardResponseDto(board);
 
         // 게시글의 댓글 조회, boardDto 에 삽입
