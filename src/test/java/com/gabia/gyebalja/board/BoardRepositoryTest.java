@@ -28,14 +28,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Transactional
 @SpringBootTest
 public class BoardRepositoryTest {
+
+    @Autowired private BoardRepository boardRepository;
+    @Autowired private DepartmentRepository departmentRepository;
+    @Autowired private UserRepository userRepository;
+    @Autowired private CategoryRepository categoryRepository;
+    @Autowired private EducationRepository educationRepository;
+
     @PersistenceContext
     EntityManager em;
-
-    private final BoardRepository boardRepository;
-    private final DepartmentRepository departmentRepository;
-    private final UserRepository userRepository;
-    private final CategoryRepository categoryRepository;
-    private final EducationRepository educationRepository;
 
     private Board board;
     private Department department;
@@ -52,14 +53,7 @@ public class BoardRepositoryTest {
     }
 
     @Autowired
-    public BoardRepositoryTest(BoardRepository boardRepository, DepartmentRepository departmentRepository, UserRepository userRepository, CategoryRepository categoryRepository, EducationRepository educationRepository) {
-        // Repository
-        this.boardRepository = boardRepository;
-        this.departmentRepository = departmentRepository;
-        this.userRepository = userRepository;
-        this.categoryRepository = categoryRepository;
-        this.educationRepository = educationRepository;
-
+    public BoardRepositoryTest() {
         // Department
         this.department = Department.builder()
                 .name("테스트팀")
