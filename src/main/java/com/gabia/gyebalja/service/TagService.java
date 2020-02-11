@@ -3,11 +3,9 @@ package com.gabia.gyebalja.service;
 import com.gabia.gyebalja.domain.Tag;
 import com.gabia.gyebalja.dto.tag.TagRequestDto;
 import com.gabia.gyebalja.dto.tag.TagResponseDto;
-import com.gabia.gyebalja.exception.NotExistCategoryException;
 import com.gabia.gyebalja.exception.NotExistTagException;
 import com.gabia.gyebalja.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -51,7 +49,7 @@ public class TagService {
         Optional<Tag> tag = tagRepository.findById(id); //1차 캐시에 저장
 
         if(!tag.isPresent())
-            throw new NotExistCategoryException("존재하지 않는 태그입니다.");
+            throw new NotExistTagException("존재하지 않는 태그입니다.");
 
         tag.get().changeTagName(tagRequestDto.getName());
 
