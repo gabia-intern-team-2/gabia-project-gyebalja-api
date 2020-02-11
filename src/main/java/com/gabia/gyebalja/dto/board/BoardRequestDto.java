@@ -4,7 +4,6 @@ import com.gabia.gyebalja.domain.Board;
 import com.gabia.gyebalja.domain.Education;
 import com.gabia.gyebalja.domain.User;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -12,7 +11,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString
 @Getter
-@Data
 public class BoardRequestDto {
 
     private String title;
