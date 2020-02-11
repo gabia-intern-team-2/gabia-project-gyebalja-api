@@ -1,7 +1,10 @@
 package com.gabia.gyebalja.dto.department;
 
 import com.gabia.gyebalja.domain.Department;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
