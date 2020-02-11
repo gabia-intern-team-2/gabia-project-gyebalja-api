@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
+@Transactional
 @Service
 public class BoardService {
 
@@ -30,9 +31,7 @@ public class BoardService {
     private final CommentRepository commentRepository;
     private final LikesRepository likesRepository;
 
-
     /** 등록 - board 한 건 (게시글 등록) */
-    @Transactional
     public Long postOneBoard(BoardRequestDto boardRequestDto){
         Long boardId = boardRepository.save(boardRequestDto.toEntity()).getId();
 
@@ -40,7 +39,6 @@ public class BoardService {
     }
 
     /** 조회 - board 한 건 (상세페이지) */
-    @Transactional
     public BoardResponseDto getOneBoard(Long boardId){
         Board board = boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다."));
   
@@ -62,7 +60,6 @@ public class BoardService {
     }
 
     /** 수정 - board 한 건 (상세페이지에서) */
-    @Transactional
     public Long putOneBoard(Long boardId, BoardRequestDto boardRequestDtoDto){
         Board board = boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다."));
 
@@ -76,7 +73,6 @@ public class BoardService {
     }
 
     /** 삭제 - board 한 건 (상세페이지에서) */
-    @Transactional
     public Long deleteOneBoard(Long boardId){
         boardRepository.deleteById(boardId);
         em.flush();
@@ -86,7 +82,6 @@ public class BoardService {
     }
 
     /** 조회 - board 전체 (페이징) */
-    @Transactional
     public Page<BoardResponseDto> getAllBoard(Pageable pageable){
         // 추후, 필요에 따라 댓글 개수, 좋아요 개수 등을 삽입하는 로직 추가
         Page<Board> boardPage = boardRepository.findAll(pageable);

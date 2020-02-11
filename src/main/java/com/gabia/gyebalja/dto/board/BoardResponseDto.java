@@ -2,7 +2,6 @@ package com.gabia.gyebalja.dto.board;
 
 import com.gabia.gyebalja.domain.Board;
 import com.gabia.gyebalja.dto.comment.CommentResponseDto;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -14,7 +13,6 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 @Getter
-@Data
 public class BoardResponseDto {
 
     private Long id;
