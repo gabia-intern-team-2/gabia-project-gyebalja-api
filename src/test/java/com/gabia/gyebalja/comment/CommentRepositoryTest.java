@@ -2,6 +2,7 @@ package com.gabia.gyebalja.comment;
 
 import com.gabia.gyebalja.domain.*;
 import com.gabia.gyebalja.repository.*;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,15 +18,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Transactional
 @SpringBootTest
 public class CommentRepositoryTest {
+
+    @Autowired private CommentRepository commentRepository;
+    @Autowired private BoardRepository boardRepository;
+    @Autowired private UserRepository userRepository;
+    @Autowired private DepartmentRepository departmentRepository;
+    @Autowired private CategoryRepository categoryRepository;
+    @Autowired private EducationRepository educationRepository;
+
     @PersistenceContext
     EntityManager em;
-
-    private final CommentRepository commentRepository;
-    private final BoardRepository boardRepository;
-    private final UserRepository userRepository;
-    private final DepartmentRepository departmentRepository;
-    private final CategoryRepository categoryRepository;
-    private final EducationRepository educationRepository;
 
     private Comment comment;
     private Board board;
@@ -34,16 +36,17 @@ public class CommentRepositoryTest {
     private Category category;
     private Education education;
 
-    @Autowired
-    public CommentRepositoryTest(CommentRepository commentRepository, BoardRepository boardRepository, UserRepository userRepository, DepartmentRepository departmentRepository,
-                                 CategoryRepository categoryRepository, EducationRepository educationRepository) {
-        this.commentRepository = commentRepository;
-        this.boardRepository = boardRepository;
-        this.userRepository = userRepository;
-        this.departmentRepository = departmentRepository;
-        this.categoryRepository = categoryRepository;
-        this.educationRepository = educationRepository;
+    @BeforeEach
+    public void setUp(){
+        departmentRepository.save(this.department);
+        userRepository.save(this.user);
+        categoryRepository.save(this.category);
+        educationRepository.save(this.education);
+        boardRepository.save(this.board);
+    }
 
+    @Autowired
+    public CommentRepositoryTest() {
         // Department
         this.department = Department.builder()
                 .name("테스트팀")
@@ -95,12 +98,6 @@ public class CommentRepositoryTest {
     @Test
     public void saveTest(){
         // given
-        departmentRepository.save(this.department);
-        userRepository.save(this.user);
-        categoryRepository.save(this.category);
-        educationRepository.save(this.education);
-        boardRepository.save(this.board);
-
         Long totalNumberOfData = commentRepository.count();
         Comment comment = this.comment;
         em.flush();
@@ -121,12 +118,6 @@ public class CommentRepositoryTest {
     @Test
     public void findComment(){
         // given
-        departmentRepository.save(this.department);
-        userRepository.save(this.user);
-        categoryRepository.save(this.category);
-        educationRepository.save(this.education);
-        boardRepository.save(this.board);
-
         Comment comment = this.comment;
         Comment saveComment = commentRepository.save(comment);
         em.flush();
@@ -146,12 +137,6 @@ public class CommentRepositoryTest {
     @Test
     public void updateComment(){
         // given
-        departmentRepository.save(this.department);
-        userRepository.save(this.user);
-        categoryRepository.save(this.category);
-        educationRepository.save(this.education);
-        boardRepository.save(this.board);
-
         Comment comment = this.comment;
         Comment saveComment = commentRepository.save(comment);
         Comment findComment = commentRepository.findById(saveComment.getId()).orElseThrow(() -> new IllegalArgumentException("해당 데이터가 없습니다."));
@@ -171,12 +156,6 @@ public class CommentRepositoryTest {
     @Test
     public void deleteComment(){
         // given
-        departmentRepository.save(this.department);
-        userRepository.save(this.user);
-        categoryRepository.save(this.category);
-        educationRepository.save(this.education);
-        boardRepository.save(this.board);
-
         Long totalNumberOfData = commentRepository.count();
         Comment comment = this.comment;
         Comment saveComment = commentRepository.save(comment);

@@ -4,7 +4,6 @@ import com.gabia.gyebalja.domain.Board;
 import com.gabia.gyebalja.domain.Likes;
 import com.gabia.gyebalja.domain.User;
 import com.gabia.gyebalja.dto.likes.LikesRequestDto;
-import com.gabia.gyebalja.dto.likes.LikesResponseDto;
 import com.gabia.gyebalja.repository.BoardRepository;
 import com.gabia.gyebalja.repository.LikesRepository;
 import com.gabia.gyebalja.repository.UserRepository;
