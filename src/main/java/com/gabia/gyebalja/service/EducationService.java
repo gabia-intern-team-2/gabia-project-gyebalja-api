@@ -3,6 +3,7 @@ package com.gabia.gyebalja.service;
 import com.gabia.gyebalja.domain.Category;
 import com.gabia.gyebalja.domain.Education;
 import com.gabia.gyebalja.domain.User;
+import com.gabia.gyebalja.dto.category.CategoryResponseDto;
 import com.gabia.gyebalja.dto.education.EducationRequestDto;
 import com.gabia.gyebalja.dto.education.EducationResponseDto;
 import com.gabia.gyebalja.exception.NotExistCategoryException;
@@ -64,7 +65,12 @@ public class EducationService {
     /** 조회 - education 한 건 (상세페이지) */
     public EducationResponseDto getOneEducation(Long id) {
         Education education = educationRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 데이터가 없습니다."));
-
+        // 추후 성능 최적화 대상. 현재는 education 조회 쿼리한번, category 조회 쿼리한번 발생(페치 조인으로 해결 예정) ManyToOne 관계라 페이징처리도 가능.
+        CategoryResponseDto categoryResponseDto = CategoryResponseDto.builder()
+                                                                        .id(education.getCategory().getId())
+                                                                        .name(education.getCategory().getName())
+                                                                        .build();
+        //강제 초기화
         return EducationResponseDto.builder()
                 .id(education.getId())
                 .title(education.getTitle())
@@ -74,6 +80,7 @@ public class EducationService {
                 .totalHours(education.getTotalHours())
                 .type(education.getType())
                 .place(education.getPlace())
+                .category(categoryResponseDto)
                 .build();
     }
 
