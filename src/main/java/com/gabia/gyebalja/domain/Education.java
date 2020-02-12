@@ -83,7 +83,7 @@ public class Education extends BaseTime {
     }
 
     //교육내용 변경 메서드
-    public void changeEducation(String title, String content, LocalDate startDate, LocalDate endDate, int totalHours, EducationType type, String place ) {
+    public void changeEducation(String title, String content, LocalDate startDate, LocalDate endDate, int totalHours, EducationType type, String place ,Category category) {
         this.title = title;
         this.content = content;
         this.startDate = startDate;
@@ -91,6 +91,7 @@ public class Education extends BaseTime {
         this.totalHours = totalHours;
         this.type = type;
         this.place = place;
+        this.category = category;
     }
 
 }

@@ -59,15 +59,15 @@ public class EducationControllerTest {
     @PersistenceContext
     EntityManager em;
 
-    @AfterEach
-    public void cleanUp() {
-        System.out.println("============================ cleanUp()");
-        //TestRestTemplate은 Transaction을 못 걸어주므로 테스트 종료 후 수동으로 디비 초기화
-        this.educationRepository.deleteAll();
-        this.userRepository.deleteAll();
-        this.categoryRepository.deleteAll();
-        this.departmentRepository.deleteAll();
-    }
+//    @AfterEach
+//    public void cleanUp() {
+//        System.out.println("============================ cleanUp()");
+//        //TestRestTemplate은 Transaction을 못 걸어주므로 테스트 종료 후 수동으로 디비 초기화
+//        this.educationRepository.deleteAll();
+//        this.userRepository.deleteAll();
+//        this.categoryRepository.deleteAll();
+//        this.departmentRepository.deleteAll();
+//    }
 
     /**
      * 등록 - education 한 건 (자기교육 등록)
@@ -113,16 +113,17 @@ public class EducationControllerTest {
         String place = "가비아 3층";
 
         EducationRequestDto educationRequestDto = EducationRequestDto.builder()
-                .title(title)
-                .content(content)
-                .startDate(startDate)
-                .endDate(endDate)
-                .totalHours(totalHours)
-                .type(type)
-                .place(place)
-                .userId(user.getId())
-                .categoryId(category.getId())
-                .build();
+                                                    .title(title)
+                                                    .content(content)
+                                                    .startDate(startDate)
+                                                    .endDate(endDate)
+                                                    .totalHours(totalHours)
+                                                    .type(type)
+                                                    .place(place)
+                                                    .userId(user.getId())
+                                                    .categoryId(category.getId())
+                                                    .hashTag("#")
+                                                    .build();
 
         //when
         ResponseEntity<CommonJsonFormat> responseEntity = restTemplate.postForEntity(url, educationRequestDto, CommonJsonFormat.class);
