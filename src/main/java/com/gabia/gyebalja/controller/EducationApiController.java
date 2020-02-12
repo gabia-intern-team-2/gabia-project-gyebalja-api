@@ -1,11 +1,11 @@
 package com.gabia.gyebalja.controller;
 
 import com.gabia.gyebalja.common.CommonJsonFormat;
+import com.gabia.gyebalja.dto.education.EducationAllResponseDto;
+import com.gabia.gyebalja.dto.education.EducationDetailResponseDto;
 import com.gabia.gyebalja.dto.education.EducationRequestDto;
-import com.gabia.gyebalja.dto.education.EducationResponseDto;
 import com.gabia.gyebalja.service.EducationService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RequiredArgsConstructor  //생성자 주입방식을 사용하기 위해 사용
 @RestController
@@ -35,7 +37,7 @@ public class EducationApiController {
     /** 조회 - education 한 건 (상세페이지) */
     @GetMapping("/api/v1/educations/{id}")
     public CommonJsonFormat getOneEducation(@PathVariable("id") Long id) {
-        EducationResponseDto educationResponseDto = educationService.getOneEducation(id);
+        EducationDetailResponseDto educationResponseDto = educationService.getOneEducation(id);
 
         return new CommonJsonFormat(200,"success",educationResponseDto);
     }
@@ -59,7 +61,7 @@ public class EducationApiController {
     /** 조회 - education 전체 (페이징) */
     @GetMapping("/api/v1/users/{id}/educations")
     public CommonJsonFormat getAllEducationByUserId(@PathVariable("id") Long id, @PageableDefault(size=10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<EducationResponseDto> educationDtoPage = educationService.getAllEducationByUserId(id, pageable);
+        List<EducationAllResponseDto> educationDtoPage = educationService.getAllEducationByUserId(id, pageable);
 
         return new CommonJsonFormat(200, "success", educationDtoPage);
     }

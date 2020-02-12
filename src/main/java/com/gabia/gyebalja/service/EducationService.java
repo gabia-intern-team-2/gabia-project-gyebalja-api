@@ -4,8 +4,10 @@ import com.gabia.gyebalja.domain.Category;
 import com.gabia.gyebalja.domain.Education;
 import com.gabia.gyebalja.domain.User;
 import com.gabia.gyebalja.dto.category.CategoryResponseDto;
+import com.gabia.gyebalja.dto.education.EducationAllResponseDto;
+import com.gabia.gyebalja.dto.education.EducationDetailResponseDto;
 import com.gabia.gyebalja.dto.education.EducationRequestDto;
-import com.gabia.gyebalja.dto.education.EducationResponseDto;
+import com.gabia.gyebalja.dto.edutag.EduTagResponseDto;
 import com.gabia.gyebalja.exception.NotExistCategoryException;
 import com.gabia.gyebalja.exception.NotExistUserException;
 import com.gabia.gyebalja.repository.CategoryRepository;
@@ -13,13 +15,14 @@ import com.gabia.gyebalja.repository.EduTagRepository;
 import com.gabia.gyebalja.repository.EducationRepository;
 import com.gabia.gyebalja.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 @RequiredArgsConstructor //final의 필드만 가지고 생성자를 만들어줌
 @Transactional(readOnly = true)
@@ -63,24 +66,33 @@ public class EducationService {
     }
 
     /** 조회 - education 한 건 (상세페이지) */
-    public EducationResponseDto getOneEducation(Long id) {
-        Education education = educationRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 데이터가 없습니다."));
-        // 추후 성능 최적화 대상. 현재는 education 조회 쿼리한번, category 조회 쿼리한번 발생(페치 조인으로 해결 예정) ManyToOne 관계라 페이징처리도 가능.
+    public EducationDetailResponseDto getOneEducation(Long id) {
+        //N+1 문제 해결을 위한 fetch join 사용 (성능 최적화)
+        Optional<Education> education = educationRepository.findEducationDetail(id);
+
+        if(!education.isPresent())
+            throw new NotExistCategoryException("존재하지 않는 교육입니다.");
+
         CategoryResponseDto categoryResponseDto = CategoryResponseDto.builder()
-                                                                        .id(education.getCategory().getId())
-                                                                        .name(education.getCategory().getName())
+                                                                        .id(education.get().getCategory().getId())
+                                                                        .name(education.get().getCategory().getName())
                                                                         .build();
-        //강제 초기화
-        return EducationResponseDto.builder()
-                .id(education.getId())
-                .title(education.getTitle())
-                .content(education.getContent())
-                .startDate(education.getStartDate())
-                .endDate(education.getEndDate())
-                .totalHours(education.getTotalHours())
-                .type(education.getType())
-                .place(education.getPlace())
+
+
+        List<EduTagResponseDto> tagList = education.get().getEduTags().stream().map(EduTagResponseDto::new)
+                                                                        .collect(toList());
+
+        return EducationDetailResponseDto.builder()
+                .id(education.get().getId())
+                .title(education.get().getTitle())
+                .content(education.get().getContent())
+                .startDate(education.get().getStartDate())
+                .endDate(education.get().getEndDate())
+                .totalHours(education.get().getTotalHours())
+                .type(education.get().getType())
+                .place(education.get().getPlace())
                 .category(categoryResponseDto)
+                .eduTag(tagList)
                 .build();
     }
 
@@ -103,19 +115,28 @@ public class EducationService {
     }
 
     /** 조회 - education 전체 (페이징) */
-    public Page<EducationResponseDto> getAllEducationByUserId(Long id, Pageable pageable) {
-        Page<Education> educationPage = educationRepository.findByUserId(id, pageable);
-        Page<EducationResponseDto> educationDtoPage = educationPage.map(education -> new EducationResponseDto().builder()
-                                                                                                                .id(education.getId())
-                                                                                                                .title(education.getTitle())
-                                                                                                                .content(education.getContent())
-                                                                                                                .startDate(education.getStartDate())
-                                                                                                                .endDate(education.getEndDate())
-                                                                                                                .totalHours(education.getTotalHours())
-                                                                                                                .type(education.getType())
-                                                                                                                .place(education.getPlace())
-                                                                                                                .build());
+    public List<EducationAllResponseDto> getAllEducationByUserId(Long id, Pageable pageable) {
+
+        Optional<User> findUser = userRepository.findById(id);
+
+        if(!findUser.isPresent())
+            throw new NotExistUserException("존재하지 않는 회원입니다.");
+
+        List<Education> educationPage = educationRepository.findEducationByUserId(id, pageable);
+
+        List<EducationAllResponseDto> educationDtoPage = educationPage.stream().map(e -> new EducationAllResponseDto().builder()
+                                                                                                            .id(e.getId())
+                                                                                                            .title(e.getTitle())
+                                                                                                            .content(e.getContent())
+                                                                                                            .startDate(e.getStartDate())
+                                                                                                            .endDate(e.getEndDate())
+                                                                                                            .totalHours(e.getTotalHours())
+                                                                                                            .type(e.getType())
+                                                                                                            .place(e.getPlace())
+                                                                                                            .category(CategoryResponseDto.builder().id(e.getCategory().getId()).name(e.getCategory().getName()).build())
+                                                                                                            .build()).collect(Collectors.toList());
         return educationDtoPage;
+
     }
 
 }
