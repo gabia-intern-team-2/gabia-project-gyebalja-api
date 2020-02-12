@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface CommentRepository extends JpaRepository<Comment, Long> {
-    List<Comment> findByBoardId(Long id);  // 검토. throws
+    List<Comment> findByBoardId(Long id);
 }

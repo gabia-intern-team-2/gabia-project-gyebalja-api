@@ -2,7 +2,6 @@ package com.gabia.gyebalja.comment;
 
 import com.gabia.gyebalja.domain.Board;
 import com.gabia.gyebalja.domain.Category;
-import com.gabia.gyebalja.domain.Comment;
 import com.gabia.gyebalja.domain.Department;
 import com.gabia.gyebalja.domain.Education;
 import com.gabia.gyebalja.domain.EducationType;
@@ -35,20 +34,19 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 public class CommentServiceTest {
 
+    @Autowired private CommentRepository commentRepository;
+    @Autowired private BoardRepository boardRepository;
+    @Autowired private DepartmentRepository departmentRepository;
+    @Autowired private UserRepository userRepository;
+    @Autowired private CategoryRepository categoryRepository;
+    @Autowired private EducationRepository educationRepository;
+
     @Autowired
     private CommentService commentService;
 
     @PersistenceContext
     EntityManager em;
 
-    private final CommentRepository commentRepository;
-    private final BoardRepository boardRepository;
-    private final DepartmentRepository departmentRepository;
-    private final UserRepository userRepository;
-    private final CategoryRepository categoryRepository;
-    private final EducationRepository educationRepository;
-
-    private Comment comment;
     private Board board;
     private Department department;
     private User user;
@@ -65,15 +63,7 @@ public class CommentServiceTest {
     }
 
     @Autowired
-    public CommentServiceTest(CommentRepository commentRepository, BoardRepository boardRepository, DepartmentRepository departmentRepository, UserRepository userRepository, CategoryRepository categoryRepository, EducationRepository educationRepository){
-        // Repository
-        this.commentRepository = commentRepository;
-        this.boardRepository = boardRepository;
-        this.departmentRepository = departmentRepository;
-        this.userRepository = userRepository;
-        this.categoryRepository = categoryRepository;
-        this.educationRepository = educationRepository;
-
+    public CommentServiceTest(){
         // Department
         this.department = Department.builder()
                 .name("테스트팀")
