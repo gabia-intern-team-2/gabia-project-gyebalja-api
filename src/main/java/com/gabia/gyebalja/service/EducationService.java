@@ -70,22 +70,23 @@ public class EducationService {
         Long eduId = educationRepository.save(education).getId();
 
         //해당 트랜잭션내에서 수행 필수 - 해시태그 삽입 로직
-        HashTagRegularExpression hashTagRegularExpression = new HashTagRegularExpression();
-        ArrayList<String> extractHashTagList = hashTagRegularExpression.getExtractHashTag(educationRequestDto.getHashTag());
+        if(educationRequestDto.getHashTag().length()>0) {
+            HashTagRegularExpression hashTagRegularExpression = new HashTagRegularExpression();
+            ArrayList<String> extractHashTagList = hashTagRegularExpression.getExtractHashTag(educationRequestDto.getHashTag());
 
-        for (String s : extractHashTagList) {
-            Optional<Tag> findHashTag = tagRepository.findHashTagByName(s);
+            for (String s : extractHashTagList) {
+                Optional<Tag> findHashTag = tagRepository.findHashTagByName(s);
 
-            if(!findHashTag.isPresent()){
-                Tag tag = tagRepository.save(Tag.builder().name(s).build());
-                EduTag eduTag = EduTag.builder().education(education).tag(tag).build();
-                eduTagRepository.save(eduTag);
-            }else{
-                EduTag eduTag = EduTag.builder().education(education).tag(findHashTag.get()).build();
-                eduTagRepository.save(eduTag);
+                if (!findHashTag.isPresent()) {
+                    Tag tag = tagRepository.save(Tag.builder().name(s).build());
+                    EduTag eduTag = EduTag.builder().education(education).tag(tag).build();
+                    eduTagRepository.save(eduTag);
+                } else {
+                    EduTag eduTag = EduTag.builder().education(education).tag(findHashTag.get()).build();
+                    eduTagRepository.save(eduTag);
+                }
             }
         }
-
         return eduId;
     }
 
@@ -138,23 +139,25 @@ public class EducationService {
         //태그 업데이트 로직.
         eduTagRepository.deleteByEduId(id);  //관계테이블의 데이터를 모두 삭제
         //등록과 동일하게 로직 수행
-        HashTagRegularExpression hashTagRegularExpression = new HashTagRegularExpression();
-        ArrayList<String> extractHashTagList = hashTagRegularExpression.getExtractHashTag(educationRequestDto.getHashTag());
+        if(educationRequestDto.getHashTag().length()>0) {
+            HashTagRegularExpression hashTagRegularExpression = new HashTagRegularExpression();
+            ArrayList<String> extractHashTagList = hashTagRegularExpression.getExtractHashTag(educationRequestDto.getHashTag());
 
-        for (String s : extractHashTagList) {
-            Optional<Tag> findHashTag = tagRepository.findHashTagByName(s);
+            for (String s : extractHashTagList) {
+                Optional<Tag> findHashTag = tagRepository.findHashTagByName(s);
 
-            if(!findHashTag.isPresent()){
-                Tag tag = tagRepository.save(Tag.builder().name(s).build());
-                EduTag eduTag = EduTag.builder().education(findEducation.get()).tag(tag).build();
-                eduTagRepository.save(eduTag);
-            }else{
-                EduTag eduTag = EduTag.builder().education(findEducation.get()).tag(findHashTag.get()).build();
-                eduTagRepository.save(eduTag);
+                if (!findHashTag.isPresent()) {
+                    Tag tag = tagRepository.save(Tag.builder().name(s).build());
+                    EduTag eduTag = EduTag.builder().education(findEducation.get()).tag(tag).build();
+                    eduTagRepository.save(eduTag);
+                } else {
+                    EduTag eduTag = EduTag.builder().education(findEducation.get()).tag(findHashTag.get()).build();
+                    eduTagRepository.save(eduTag);
+                }
             }
         }
         //태그 테이블의 튜플도(아무도 참조하고있지않을 경우) 삭제해 주는 로직을 추가해야하는 것인지
-        //객체 지향적인 관점으로 EduTag의 테이블 업데이트 로직을 생각해보기 - 추후 수정예정
+        //객체 지향적인 관점으로 EduTag의 테이블 업데이트 로직을 생각해보기(현재 Tag는 더티체킹에 의해서 업데이트가 이루어지지않음) - 추후 수정예정
         return id;
     }
 
