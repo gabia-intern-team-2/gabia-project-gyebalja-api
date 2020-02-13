@@ -1,6 +1,7 @@
 package com.gabia.gyebalja.controller;
 
 import com.gabia.gyebalja.common.CommonJsonFormat;
+import com.gabia.gyebalja.common.StatusCode;
 import com.gabia.gyebalja.dto.education.EducationAllResponseDto;
 import com.gabia.gyebalja.dto.education.EducationDetailResponseDto;
 import com.gabia.gyebalja.dto.education.EducationRequestDto;
@@ -31,7 +32,7 @@ public class EducationApiController {
     public CommonJsonFormat postOneEducation(@RequestBody EducationRequestDto educationRequestDto) {
         Long eduId = educationService.postOneEducation(educationRequestDto);
 
-        return new CommonJsonFormat(200,"success",eduId);
+        return new CommonJsonFormat(StatusCode.OK.getCode(),StatusCode.OK.getMessage(),eduId);
     }
 
     /** 조회 - education 한 건 (상세페이지) */
@@ -39,7 +40,7 @@ public class EducationApiController {
     public CommonJsonFormat getOneEducation(@PathVariable("id") Long id) {
         EducationDetailResponseDto educationResponseDto = educationService.getOneEducation(id);
 
-        return new CommonJsonFormat(200,"success",educationResponseDto);
+        return new CommonJsonFormat(StatusCode.OK.getCode(),StatusCode.OK.getMessage(),educationResponseDto);
     }
 
     /** 수정 - education 한 건 (상세페이지) */
@@ -47,7 +48,7 @@ public class EducationApiController {
     public CommonJsonFormat putOneEducation(@PathVariable("id") Long id, @RequestBody EducationRequestDto educationRequestDto) {
         Long eduId = educationService.putOneEducation(id, educationRequestDto);
 
-        return new CommonJsonFormat(200,"success",eduId);
+        return new CommonJsonFormat(StatusCode.OK.getCode(),StatusCode.OK.getMessage(),eduId);
     }
 
     /** 삭제 - education 한 건 (상세페이지) */
@@ -55,7 +56,7 @@ public class EducationApiController {
     public CommonJsonFormat deleteOneEducation(@PathVariable("id") Long id) {
         Long eduId = educationService.deleteOneEducation(id);
 
-        return new CommonJsonFormat(200, "success", eduId);
+        return new CommonJsonFormat(StatusCode.OK.getCode(),StatusCode.OK.getMessage(), eduId);
     }
 
     /** 조회 - education 전체 (페이징) */
@@ -63,7 +64,7 @@ public class EducationApiController {
     public CommonJsonFormat getAllEducationByUserId(@PathVariable("id") Long id, @PageableDefault(size=10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         List<EducationAllResponseDto> educationDtoPage = educationService.getAllEducationByUserId(id, pageable);
 
-        return new CommonJsonFormat(200, "success", educationDtoPage);
+        return new CommonJsonFormat(StatusCode.OK.getCode(),StatusCode.OK.getMessage(), educationDtoPage);
     }
 }
 
