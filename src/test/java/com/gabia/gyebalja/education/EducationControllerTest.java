@@ -7,8 +7,8 @@ import com.gabia.gyebalja.domain.Education;
 import com.gabia.gyebalja.domain.EducationType;
 import com.gabia.gyebalja.domain.GenderType;
 import com.gabia.gyebalja.domain.User;
+import com.gabia.gyebalja.dto.education.EducationDetailResponseDto;
 import com.gabia.gyebalja.dto.education.EducationRequestDto;
-import com.gabia.gyebalja.dto.education.EducationResponseDto;
 import com.gabia.gyebalja.repository.CategoryRepository;
 import com.gabia.gyebalja.repository.DepartmentRepository;
 import com.gabia.gyebalja.repository.EducationRepository;
@@ -26,7 +26,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
@@ -114,20 +113,21 @@ public class EducationControllerTest {
         String place = "가비아 3층";
 
         EducationRequestDto educationRequestDto = EducationRequestDto.builder()
-                .title(title)
-                .content(content)
-                .startDate(startDate)
-                .endDate(endDate)
-                .totalHours(totalHours)
-                .type(type)
-                .place(place)
-                .userId(user.getId())
-                .categoryId(category.getId())
-                .build();
+                                                    .title(title)
+                                                    .content(content)
+                                                    .startDate(startDate)
+                                                    .endDate(endDate)
+                                                    .totalHours(totalHours)
+                                                    .type(type)
+                                                    .place(place)
+                                                    .userId(user.getId())
+                                                    .categoryId(category.getId())
+                                                    .hashTag("#")
+                                                    .build();
 
         //when
         ResponseEntity<CommonJsonFormat> responseEntity = restTemplate.postForEntity(url, educationRequestDto, CommonJsonFormat.class);
-        EducationResponseDto findEducation = educationService.getOneEducation(Long.parseLong(responseEntity.getBody().getResponse().toString()));
+        EducationDetailResponseDto findEducation = educationService.getOneEducation(Long.parseLong(responseEntity.getBody().getResponse().toString()));
         //then
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody().getCode()).isEqualTo(200);
@@ -408,8 +408,7 @@ public class EducationControllerTest {
         // when
         CommonJsonFormat responseEntity = restTemplate.getForObject(url, CommonJsonFormat.class);
         // then
-        LinkedHashMap response = (LinkedHashMap) responseEntity.getResponse();
-        ArrayList result = (ArrayList) response.get("content");
+        ArrayList result = (ArrayList) responseEntity.getResponse();
         assertThat(result.size()).isEqualTo(10); //추후 검증로직 추가 예정
     }
 

@@ -6,8 +6,9 @@ import com.gabia.gyebalja.domain.Education;
 import com.gabia.gyebalja.domain.EducationType;
 import com.gabia.gyebalja.domain.GenderType;
 import com.gabia.gyebalja.domain.User;
+import com.gabia.gyebalja.dto.education.EducationAllResponseDto;
+import com.gabia.gyebalja.dto.education.EducationDetailResponseDto;
 import com.gabia.gyebalja.dto.education.EducationRequestDto;
-import com.gabia.gyebalja.dto.education.EducationResponseDto;
 import com.gabia.gyebalja.repository.CategoryRepository;
 import com.gabia.gyebalja.repository.DepartmentRepository;
 import com.gabia.gyebalja.repository.EducationRepository;
@@ -18,7 +19,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -26,6 +26,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -80,7 +82,7 @@ public class EducationServiceTest {
         userRepository.save(user);
 
         EducationRequestDto educationRequestDto = EducationRequestDto.builder()
-                .title("제목테스트")
+                .title("test")
                 .content("내용테스트")
                 .startDate(LocalDate.now())
                 .endDate(LocalDate.now())
@@ -89,6 +91,7 @@ public class EducationServiceTest {
                 .place("가비아 4층")
                 .categoryId(category.getId())
                 .userId(user.getId())
+                .hashTag("#Spring #CSS #HTML")
                 .build();
         //when
         Long saveId = educationService.postOneEducation(educationRequestDto);
@@ -148,7 +151,7 @@ public class EducationServiceTest {
         educationRepository.save(education);
         em.clear();
         //when
-        EducationResponseDto findEducation = educationService.getOneEducation(education.getId());
+        EducationDetailResponseDto findEducation = educationService.getOneEducation(education.getId());
         //then
         assertThat(findEducation.getId()).isEqualTo(education.getId());
         assertThat(findEducation.getTitle()).isEqualTo(education.getTitle());
@@ -326,10 +329,13 @@ public class EducationServiceTest {
             educationService.postOneEducation(educationRequestDto);
         }
         //when
-        Page<EducationResponseDto> allEducationByUserId = educationService.getAllEducationByUserId(user.getId(), pageable);
+        List<EducationAllResponseDto> allEducationByUserId = educationService.getAllEducationByUserId(user.getId(), pageable);
         //then
-        assertThat(allEducationByUserId.getContent().size()).isEqualTo(10); //한 페이지당 데이터 10개
-        assertThat(allEducationByUserId.getTotalPages()).isEqualTo(3);  //30개를 넣었으니 3페이지
+        assertThat(allEducationByUserId.size()).isEqualTo(10); //한 페이지당 데이터 10개
+    }
+
+    @Test
+    public void practice() throws Exception {
     }
 
 }
