@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -81,7 +82,7 @@ public class EducationServiceTest {
         userRepository.save(user);
 
         EducationRequestDto educationRequestDto = EducationRequestDto.builder()
-                .title("제목테스트")
+                .title("test")
                 .content("내용테스트")
                 .startDate(LocalDate.now())
                 .endDate(LocalDate.now())
@@ -90,6 +91,7 @@ public class EducationServiceTest {
                 .place("가비아 4층")
                 .categoryId(category.getId())
                 .userId(user.getId())
+                .hashTag("#Spring #CSS #HTML")
                 .build();
         //when
         Long saveId = educationService.postOneEducation(educationRequestDto);
@@ -334,12 +336,6 @@ public class EducationServiceTest {
 
     @Test
     public void practice() throws Exception {
-        //given
-        String tag = "#Spring Jpa #HTML      #test";
-        //when
-
-        //then
-
     }
 
 }
