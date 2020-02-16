@@ -16,18 +16,17 @@ import static org.assertj.core.api.Assertions.assertThat;
 @Transactional
 @SpringBootTest
 public class DepartmentRepositoryTest {
+
+    @Autowired
+    DepartmentRepository departmentRepository;
+
     @PersistenceContext
     EntityManager em;
-
-    private final DepartmentRepository departmentRepository;
 
     private Department department;
 
     @Autowired
-    public DepartmentRepositoryTest(DepartmentRepository departmentRepository){
-        // Repository
-        this.departmentRepository = departmentRepository;
-
+    public DepartmentRepositoryTest(){
         // Department
         this.department = Department.builder().name("테스트 - 팀").depth(0).parentDepartment(null).build();
     }

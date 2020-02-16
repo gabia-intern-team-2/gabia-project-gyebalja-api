@@ -9,7 +9,6 @@ import com.gabia.gyebalja.domain.GenderType;
 import com.gabia.gyebalja.domain.Likes;
 import com.gabia.gyebalja.domain.User;
 import com.gabia.gyebalja.dto.likes.LikesRequestDto;
-import com.gabia.gyebalja.dto.likes.LikesResponseDto;
 import com.gabia.gyebalja.repository.BoardRepository;
 import com.gabia.gyebalja.repository.CategoryRepository;
 import com.gabia.gyebalja.repository.DepartmentRepository;
@@ -142,7 +141,7 @@ public class LikesServiceTest {
         Long deleteId = likesService.deleteOneLikes(user.getId(), board.getId());
 
         // when
-        // 검토 - (임시) 200L
+        // 검토 - (임시) userId
         assertThat(deleteId).isEqualTo(user.getId());
         assertThat(likesRepository.findById(deleteId)).isEqualTo(Optional.empty());
     }

@@ -4,17 +4,11 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+
+import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED) //프록시가 이생성자를 사용함 다른생성자를 사용하려면 기본생성자가 필요한데 Protected로 기본생성자를 만들어줌.
@@ -62,8 +56,12 @@ public class Education extends BaseTime {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    //EduTag와 연관관계 (양방향 설정)
+    @OneToMany(mappedBy = "education", cascade = CascadeType.ALL)
+    private List<EduTag> eduTags = new ArrayList<>();
+
     @Builder
-    public Education(String title, String content, LocalDate startDate, LocalDate endDate, int totalHours, EducationType type, String place, User user, Category category ) {
+    public Education(String title, String content, LocalDate startDate, LocalDate endDate, int totalHours, EducationType type, String place, User user, Category category) {
         this.title = title;
         this.content = content;
         this.startDate = startDate;
@@ -85,7 +83,7 @@ public class Education extends BaseTime {
     }
 
     //교육내용 변경 메서드
-    public void changeEducation(String title, String content, LocalDate startDate, LocalDate endDate, int totalHours, EducationType type, String place ) {
+    public void changeEducation(String title, String content, LocalDate startDate, LocalDate endDate, int totalHours, EducationType type, String place ,Category category) {
         this.title = title;
         this.content = content;
         this.startDate = startDate;
@@ -93,6 +91,7 @@ public class Education extends BaseTime {
         this.totalHours = totalHours;
         this.type = type;
         this.place = place;
+        this.category = category;
     }
 
 }
