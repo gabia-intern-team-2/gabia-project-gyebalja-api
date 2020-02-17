@@ -3,9 +3,11 @@ package com.gabia.gyebalja.controller;
 import com.gabia.gyebalja.common.CommonJsonFormat;
 import com.gabia.gyebalja.common.StatusCode;
 import com.gabia.gyebalja.dto.likes.LikesRequestDto;
+import com.gabia.gyebalja.dto.likes.LikesResponseDto;
 import com.gabia.gyebalja.service.LikesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,6 +24,13 @@ public class LikesApiController {
     @PostMapping("/api/v1/likes")
     public CommonJsonFormat postOneLikes(@RequestBody LikesRequestDto likesRequestDto){
         Long response = likesService.postOneLikes(likesRequestDto);
+
+        return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), response);
+    }
+    /** 조회 - likes 한 개 */
+    @GetMapping("/api/v1/likes/users/{userId}/boards/{boardId}")
+    public CommonJsonFormat getOneLikes(@PathVariable("userId") Long userId, @PathVariable("boardId") Long boardId){
+        LikesResponseDto response = likesService.getOneLikes(userId, boardId);
 
         return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), response);
     }
