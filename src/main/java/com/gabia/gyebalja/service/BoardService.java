@@ -55,17 +55,22 @@ public class BoardService {
 
     /** 조회 - board 한 건 (상세페이지) */
     public BoardResponseDto getOneBoard(Long boardId){
-        Board board = boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다."));
-  
-        // 더티 체킹
-        // 게시글의 조회수 UP, boardDto 에 삽입
+        Board board = boardRepository.findBoardDetail(boardId).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다."));
+
         board.upViews();
         BoardResponseDto boardResponseDto = new BoardResponseDto(board);
 
-        // 게시글의 댓글 조회, boardDto 에 삽입
-        List<Comment> comments = commentRepository.findByBoardId(boardId);
-        List<CommentResponseDto> commentResponseDtos = comments.stream().map(comment -> new CommentResponseDto(comment)).collect(Collectors.toList());
-        boardResponseDto.changeCommentList(commentResponseDtos);
+//        Board board = boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다."));
+//
+//        // 더티 체킹
+//        // 게시글의 조회수 UP, boardDto 에 삽입
+//        board.upViews();
+//        BoardResponseDto boardResponseDto = new BoardResponseDto(board);
+//
+//        // 게시글의 댓글 조회, boardDto 에 삽입
+//        List<Comment> comments = commentRepository.findByBoardId(boardId);
+//        List<CommentResponseDto> commentResponseDtos = comments.stream().map(comment -> new CommentResponseDto(comment)).collect(Collectors.toList());
+//        boardResponseDto.changeCommentList(commentResponseDtos);
 
         // 게시글의 좋아요 조회, boardDto 에 삽입
         int totalNumberOfLikes = likesRepository.countByBoardId(boardId);
