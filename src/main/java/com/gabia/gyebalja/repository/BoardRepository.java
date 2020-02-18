@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface BoardRepository extends JpaRepository<Board, Long> {
     @Query("select board " +
-            "from Board board join fetch board.comments comments " +
+            "from Board board left join fetch board.comments comments " +
             "where board.id = :boardId")
     Optional<Board> findBoardDetail(@Param("boardId") Long boardId);
 }
