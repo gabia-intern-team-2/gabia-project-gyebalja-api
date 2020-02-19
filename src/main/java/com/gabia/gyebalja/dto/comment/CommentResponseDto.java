@@ -1,7 +1,6 @@
 package com.gabia.gyebalja.dto.comment;
 
 import com.gabia.gyebalja.domain.Comment;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;

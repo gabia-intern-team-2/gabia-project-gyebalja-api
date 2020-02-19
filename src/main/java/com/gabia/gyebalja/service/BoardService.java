@@ -55,19 +55,12 @@ public class BoardService {
 
     /** 조회 - board 한 건 (상세페이지) */
     public BoardResponseDto getOneBoard(Long boardId){
-        Board board = boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다."));
-  
-        // 더티 체킹
-        // 게시글의 조회수 UP, boardDto 에 삽입
+        Board board = boardRepository.findBoardDetail(boardId).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다."));
+
         board.upViews();
         BoardResponseDto boardResponseDto = new BoardResponseDto(board);
 
-        // 게시글의 댓글 조회, boardDto 에 삽입
-        List<Comment> comments = commentRepository.findByBoardId(boardId);
-        List<CommentResponseDto> commentResponseDtos = comments.stream().map(comment -> new CommentResponseDto(comment)).collect(Collectors.toList());
-        boardResponseDto.changeCommentList(commentResponseDtos);
-
-        // 게시글의 좋아요 조회, boardDto 에 삽입
+        // 게시글 좋아요 조회 - boardDto 삽입
         int totalNumberOfLikes = likesRepository.countByBoardId(boardId);
         boardResponseDto.changeLikes(totalNumberOfLikes);
 
@@ -98,7 +91,11 @@ public class BoardService {
 
     /** 조회 - board 전체 (페이징) */
     public Page<BoardResponseDto> getAllBoard(Pageable pageable){
-        // 추후, 필요에 따라 댓글 개수, 좋아요 개수 등을 삽입하는 로직 추가
+        /**
+         * [ResponseDto]
+         * 댓글 수, 좋아요 수 등 추가 가능
+         * 댓글 배열 삭제 필요
+         * */
         Page<Board> boardPage = boardRepository.findAll(pageable);
         Page<BoardResponseDto> boardResponseDtoPage = boardPage.map(board -> new BoardResponseDto(board));
 
