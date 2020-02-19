@@ -9,6 +9,7 @@ import lombok.ToString;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor
 @ToString
@@ -41,6 +42,7 @@ public class BoardResponseDto {
         this.educationId = board.getEducation().getId();
         this.educationTitle = board.getEducation().getTitle();
         this.commentList = new ArrayList<CommentResponseDto>();
+        this.commentList = board.getComments().stream().map(comment -> new CommentResponseDto(comment)).collect(Collectors.toList());
     }
 
     public void changeCommentList(List<CommentResponseDto> commentResponseDtos){
