@@ -27,6 +27,7 @@ public class LikesApiController {
 
         return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), response);
     }
+
     /** 조회 - likes 한 개 */
     @GetMapping("/api/v1/likes/users/{userId}/boards/{boardId}")
     public CommonJsonFormat getOneLikes(@PathVariable("userId") Long userId, @PathVariable("boardId") Long boardId){
