@@ -36,6 +36,7 @@ public class LikesService {
 
         return likesId;
     }
+
     /** 조회 - likes 한 개 */
     public LikesResponseDto getOneLikes(Long userId, Long boardId) {
         Likes likes = likesRepository.findByUserIdAndBoardId(userId, boardId).orElseThrow(() -> new IllegalArgumentException("해당 데이터가 없습니다."));
@@ -44,6 +45,7 @@ public class LikesService {
 
         return likesResponseDto;
     }
+
     /** 삭제 - likes 한 개 */
     public Long deleteOneLikes(Long userId, Long boardId){
         likesRepository.deleteByUserIdAndBoardId(userId, boardId);
