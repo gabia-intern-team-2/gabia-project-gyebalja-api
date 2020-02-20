@@ -132,11 +132,30 @@ public class LikesControllerTest {
     @DisplayName("LikesController.postOneLikes() 테스트 (한 개)")
     public void postOneLikes(){
         // given
-        String url = "http://localhost:" + port + "/api/v1/likes";
         LikesRequestDto likesRequestDto = LikesRequestDto.builder().userId(user.getId()).boardId(board.getId()).build();
+        String url = "http://localhost:" + port + "/api/v1/likes";
 
         // when
         ResponseEntity<CommonJsonFormat> responseEntity = restTemplate.postForEntity(url, likesRequestDto, CommonJsonFormat.class);
+
+        // then
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody().getCode()).isEqualTo(StatusCode.OK.getCode());
+        assertThat(responseEntity.getBody().getMessage()).isEqualTo(StatusCode.OK.getMessage());
+    }
+
+    /** 조회 - likes 한 개 */
+    @Test
+    @DisplayName("LikesController.getOneLikes() 테스트 (한 개)")
+    public void getOneLikes(){
+        // given
+        LikesRequestDto likesRequestDto = LikesRequestDto.builder().userId(user.getId()).boardId(board.getId()).build();
+        String url = "http://localhost:" + port + "/api/v1/likes/users/" + user.getId() + "/boards/" + board.getId();
+
+        Long saveId = likesService.postOneLikes(likesRequestDto);
+
+        // when
+        ResponseEntity<CommonJsonFormat> responseEntity = restTemplate.getForEntity(url, CommonJsonFormat.class);
 
         // then
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
