@@ -46,7 +46,7 @@ public class Board extends BaseTime {
     private Education education;
 
     @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
-    private List<Comment> comments = new ArrayList<>();
+    private List<Comment> comments = new ArrayList<Comment>();
 
     @Builder
     public Board(String title, String content, int views, User user, Education education){

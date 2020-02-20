@@ -51,7 +51,7 @@ public class BoardService {
 
     /** 조회 - board 한 건 (상세페이지) */
     public BoardResponseDto getOneBoard(Long boardId){
-        Board board = boardRepository.findBoardDetail(boardId).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다."));
+        Board board = boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다."));
 
         board.upViews();
         BoardResponseDto boardResponseDto = new BoardResponseDto(board);

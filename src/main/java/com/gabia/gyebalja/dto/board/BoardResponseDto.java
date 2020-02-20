@@ -41,7 +41,6 @@ public class BoardResponseDto {
         this.userName = board.getUser().getName();
         this.educationId = board.getEducation().getId();
         this.educationTitle = board.getEducation().getTitle();
-        this.commentList = new ArrayList<CommentResponseDto>();
         this.commentList = board.getComments().stream().map(comment -> new CommentResponseDto(comment)).collect(Collectors.toList());
     }
 
