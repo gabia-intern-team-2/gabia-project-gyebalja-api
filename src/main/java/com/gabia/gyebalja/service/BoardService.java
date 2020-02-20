@@ -68,12 +68,16 @@ public class BoardService {
     }
 
     /** 수정 - board 한 건 (상세페이지에서) */
-    public Long putOneBoard(Long boardId, BoardRequestDto boardRequestDtoDto){
-        Board board = boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다."));
+    public Long putOneBoard(Long boardId, BoardRequestDto boardRequestDto){
+        Board board = boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException("해당 데이터가 없습니다."));
 
         // 더티 체킹
-        board.changeTitle(boardRequestDtoDto.getTitle());
-        board.changeContent(boardRequestDtoDto.getContent());
+        Education education = educationRepository.findById(boardRequestDto.getEducationId()).orElseThrow(() -> new IllegalArgumentException("해당 데이터가 없습니다."));
+        board.changeTitle(boardRequestDto.getTitle());
+        board.changeContent(boardRequestDto.getContent());
+        board.changeEducation(education);
+        // board.changeBoard(boardRequestDto, education);
+
         em.flush();
         em.clear();
 
