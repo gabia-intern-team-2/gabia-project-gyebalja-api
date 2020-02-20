@@ -6,7 +6,6 @@ import com.gabia.gyebalja.domain.User;
 import com.gabia.gyebalja.dto.board.BoardRequestDto;
 import com.gabia.gyebalja.dto.board.BoardResponseDto;
 import com.gabia.gyebalja.repository.BoardRepository;
-import com.gabia.gyebalja.repository.CommentRepository;
 import com.gabia.gyebalja.repository.EducationRepository;
 import com.gabia.gyebalja.repository.LikesRepository;
 import com.gabia.gyebalja.repository.UserRepository;
@@ -30,7 +29,6 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
     private final EducationRepository educationRepository;
-    private final CommentRepository commentRepository;
     private final LikesRepository likesRepository;
 
     /** 등록 - board 한 건 (게시글 등록) */
