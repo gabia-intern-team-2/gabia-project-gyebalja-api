@@ -1,12 +1,10 @@
 package com.gabia.gyebalja.service;
 
 import com.gabia.gyebalja.domain.Board;
-import com.gabia.gyebalja.domain.Comment;
 import com.gabia.gyebalja.domain.Education;
 import com.gabia.gyebalja.domain.User;
 import com.gabia.gyebalja.dto.board.BoardRequestDto;
 import com.gabia.gyebalja.dto.board.BoardResponseDto;
-import com.gabia.gyebalja.dto.comment.CommentResponseDto;
 import com.gabia.gyebalja.repository.BoardRepository;
 import com.gabia.gyebalja.repository.CommentRepository;
 import com.gabia.gyebalja.repository.EducationRepository;
@@ -20,8 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Transactional

@@ -1,13 +1,11 @@
 package com.gabia.gyebalja.domain;
 
 import com.gabia.gyebalja.dto.board.BoardRequestDto;
-import com.gabia.gyebalja.repository.EducationRepository;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
