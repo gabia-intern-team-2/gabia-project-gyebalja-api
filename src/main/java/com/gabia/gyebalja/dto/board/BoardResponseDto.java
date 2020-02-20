@@ -1,5 +1,6 @@
 package com.gabia.gyebalja.dto.board;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.gabia.gyebalja.domain.Board;
 import com.gabia.gyebalja.dto.comment.CommentResponseDto;
 import lombok.Getter;
@@ -21,7 +22,9 @@ public class BoardResponseDto {
     private String content;
     private int views;
     private int likes;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime modifiedDate;
     private Long userId;
     private String userName;
