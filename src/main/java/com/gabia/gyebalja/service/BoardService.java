@@ -67,10 +67,7 @@ public class BoardService {
 
         // 더티 체킹
         Education education = educationRepository.findById(boardRequestDto.getEducationId()).orElseThrow(() -> new IllegalArgumentException("해당 데이터가 없습니다."));
-        board.changeTitle(boardRequestDto.getTitle());
-        board.changeContent(boardRequestDto.getContent());
-        board.changeEducation(education);
-        // board.changeBoard(boardRequestDto, education);
+        board.changeBoard(boardRequestDto, education);
 
         em.flush();
         em.clear();

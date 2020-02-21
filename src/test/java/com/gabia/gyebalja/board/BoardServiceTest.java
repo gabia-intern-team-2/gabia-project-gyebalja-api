@@ -158,8 +158,6 @@ public class BoardServiceTest {
         BoardRequestDto boardRequestDto = BoardRequestDto.builder().title(title).content(content).userId(user.getId()).educationId(education.getId()).build();
 
         Long saveId = boardService.postOneBoard(boardRequestDto);
-        em.clear();
-        em.flush();
 
         int totalNumberOfData = 29;
         Board board = boardRepository.findById(saveId).orElseThrow(() -> new IllegalArgumentException("해당 데이터가 없습니다."));
@@ -167,6 +165,8 @@ public class BoardServiceTest {
             commentRepository.save(Comment.builder().content("테스트 - 댓글").user(user).board(board).build());
             likesRepository.save(Likes.builder().board(board).user(user).build());
         }
+        em.flush();
+        em.clear();
 
         // when
         BoardResponseDto boardResponseDto = boardService.getOneBoard(saveId);
