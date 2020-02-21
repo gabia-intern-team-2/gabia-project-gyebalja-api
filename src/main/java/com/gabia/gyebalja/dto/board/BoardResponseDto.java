@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,7 +40,6 @@ public class BoardResponseDto {
         this.userName = board.getUser().getName();
         this.educationId = board.getEducation().getId();
         this.educationTitle = board.getEducation().getTitle();
-        this.commentList = new ArrayList<CommentResponseDto>();
         this.commentList = board.getComments().stream().map(comment -> new CommentResponseDto(comment)).collect(Collectors.toList());
     }
 

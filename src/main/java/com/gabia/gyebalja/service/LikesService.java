@@ -32,7 +32,7 @@ public class LikesService {
         User user = userRepository.findById(likesRequestDto.getUserId()).orElseThrow(() -> new IllegalArgumentException("해당 데이터가 없습니다."));
         Board board = boardRepository.findById(likesRequestDto.getBoardId()).orElseThrow(() -> new IllegalArgumentException("해당 데이터가 없습니다."));
 
-        Long likesId = likesRepository.save(Likes.builder().user(user).board(board).build()).getId();
+        Long likesId = likesRepository.save(likesRequestDto.toEntity(user, board)).getId();
 
         return likesId;
     }
