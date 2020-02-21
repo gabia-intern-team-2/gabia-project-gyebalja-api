@@ -9,6 +9,7 @@ import com.gabia.gyebalja.domain.GenderType;
 import com.gabia.gyebalja.domain.Likes;
 import com.gabia.gyebalja.domain.User;
 import com.gabia.gyebalja.dto.likes.LikesRequestDto;
+import com.gabia.gyebalja.dto.likes.LikesResponseDto;
 import com.gabia.gyebalja.repository.BoardRepository;
 import com.gabia.gyebalja.repository.CategoryRepository;
 import com.gabia.gyebalja.repository.DepartmentRepository;
@@ -131,16 +132,30 @@ public class LikesServiceTest {
     }
 
     @Test
+    @DisplayName("likesService.getOneLikes() 테스트 (한 개)")
+    public void getOneLikesTest(){
+        // given
+        LikesRequestDto likesRequestDto = LikesRequestDto.builder().userId(user.getId()).boardId(board.getId()).build();
+        Long saveId = likesService.postOneLikes(likesRequestDto);
+
+        // when
+        LikesResponseDto likesResponseDto = likesService.getOneLikes(user.getId(), board.getId());
+
+        // then
+        assertThat(likesResponseDto.getId()).isEqualTo(saveId);
+    }
+
+    @Test
     @DisplayName("likesService.deleteOneLikes() 테스트 (한 개)")
     public void deleteOneLikesTest(){
         // given
         LikesRequestDto likesRequestDto = LikesRequestDto.builder().userId(user.getId()).boardId(board.getId()).build();
         Long saveId = likesService.postOneLikes(likesRequestDto);
 
-        // then
+        // when
         Long deleteId = likesService.deleteOneLikes(user.getId(), board.getId());
 
-        // when
+        // then
         // 검토 - (임시) userId
         assertThat(deleteId).isEqualTo(user.getId());
         assertThat(likesRepository.findById(deleteId)).isEqualTo(Optional.empty());
