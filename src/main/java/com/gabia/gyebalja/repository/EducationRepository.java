@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,4 +21,15 @@ public interface EducationRepository extends JpaRepository<Education,Long> {
     //사용자의 교육목록을 가져오기 위한 메서드
     @Query("select e from Education e join fetch e.category c where e.user.id = :userId")
     List<Education> findEducationByUserId(@Param("userId") Long userId, Pageable pageable);
+
+    /** 방법 1 */
+    @Query("select count(e), sum(e.totalHours) from Education e where substring(e.startDate, 1, 4) in :year")
+    List<ArrayList<Long>> getMainStatisticsWithYear1(@Param("year") List<String> year);
+
+    /** 방법 2 */
+    @Query("select count(e) as totalEducationNumberOfEmployees, sum(e.totalHours) as totalEducationHourOfEmployees, substring(e.startDate, 1, 4) as year " +
+            "from Education e " +
+            "group by substring(e.startDate, 1, 4) " +
+            "order by substring(e.startDate, 1, 4) desc")
+    List<ArrayList<Long>> getMainStatisticsWithYear2(Pageable pageable);
 }
