@@ -1,11 +1,13 @@
 package com.gabia.gyebalja.domain;
 
+import com.gabia.gyebalja.dto.board.BoardRequestDto;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -14,12 +16,16 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 
 @ToString(of = {"id", "title", "content", "views"})
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 public class Board extends BaseTime {
+
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -39,6 +45,9 @@ public class Board extends BaseTime {
     @JoinColumn(name = "edu_id")
     private Education education;
 
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
+    private List<Comment> comments = new ArrayList<Comment>();
+
     @Builder
     public Board(String title, String content, int views, User user, Education education){
         this.title = title;
@@ -48,13 +57,17 @@ public class Board extends BaseTime {
         this.education = education;
     }
 
-    public void changeTitle(String title) {
-        this.title = title;
-    }
+    public void changeTitle(String title) { this.title = title; }
 
     public void changeContent(String content) { this.content = content; }
 
     public void changeEducation(Education education) { this.education = education; }
+
+    public void changeBoard(BoardRequestDto boardRequestDto, Education education){
+        this.title = boardRequestDto.getTitle();
+        this.content = boardRequestDto.getContent();
+        this.education = education;
+    }
 
     public void upViews() { this.views = this.views + 1; }
 }

@@ -1,5 +1,6 @@
 package com.gabia.gyebalja.dto.board;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.gabia.gyebalja.domain.Board;
 import com.gabia.gyebalja.dto.comment.CommentResponseDto;
 import lombok.Getter;
@@ -7,8 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor
 @ToString
@@ -20,7 +21,9 @@ public class BoardResponseDto {
     private String content;
     private int views;
     private int likes;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime modifiedDate;
     private Long userId;
     private String userName;
@@ -40,7 +43,7 @@ public class BoardResponseDto {
         this.userName = board.getUser().getName();
         this.educationId = board.getEducation().getId();
         this.educationTitle = board.getEducation().getTitle();
-        this.commentList = new ArrayList<CommentResponseDto>();
+        this.commentList = board.getComments().stream().map(comment -> new CommentResponseDto(comment)).collect(Collectors.toList());
     }
 
     public void changeCommentList(List<CommentResponseDto> commentResponseDtos){
