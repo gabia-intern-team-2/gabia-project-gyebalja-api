@@ -1,17 +1,20 @@
 package com.gabia.gyebalja.education;
 
 import com.gabia.gyebalja.common.CommonJsonFormat;
+import com.gabia.gyebalja.common.StatusCode;
 import com.gabia.gyebalja.domain.Category;
 import com.gabia.gyebalja.domain.Department;
 import com.gabia.gyebalja.domain.Education;
 import com.gabia.gyebalja.domain.EducationType;
 import com.gabia.gyebalja.domain.GenderType;
+import com.gabia.gyebalja.domain.Tag;
 import com.gabia.gyebalja.domain.User;
 import com.gabia.gyebalja.dto.education.EducationDetailResponseDto;
 import com.gabia.gyebalja.dto.education.EducationRequestDto;
 import com.gabia.gyebalja.repository.CategoryRepository;
 import com.gabia.gyebalja.repository.DepartmentRepository;
 import com.gabia.gyebalja.repository.EducationRepository;
+import com.gabia.gyebalja.repository.TagRepository;
 import com.gabia.gyebalja.repository.UserRepository;
 import com.gabia.gyebalja.service.EducationService;
 import org.assertj.core.api.Assertions;
@@ -49,6 +52,8 @@ public class EducationControllerTest {
     private CategoryRepository categoryRepository;
     @Autowired
     private DepartmentRepository departmentRepository;
+    @Autowired
+    private TagRepository tagRepository;
 
     @Autowired
     private TestRestTemplate restTemplate;
@@ -67,6 +72,7 @@ public class EducationControllerTest {
         this.userRepository.deleteAll();
         this.categoryRepository.deleteAll();
         this.departmentRepository.deleteAll();
+        this.tagRepository.deleteAll();
     }
 
     /**
@@ -82,6 +88,11 @@ public class EducationControllerTest {
                 .name("개발자")
                 .build();
         categoryRepository.save(category);
+
+        Tag tag = Tag.builder()
+                .name("#Spring")
+                .build();
+        tagRepository.save(tag);
 
         Department department = Department.builder()
                 .name("테스트팀")
@@ -122,7 +133,7 @@ public class EducationControllerTest {
                                                     .place(place)
                                                     .userId(user.getId())
                                                     .categoryId(category.getId())
-                                                    .hashTag("#")
+                                                    .hashTag(tag.getName().toString())
                                                     .build();
 
         //when
@@ -130,8 +141,8 @@ public class EducationControllerTest {
         EducationDetailResponseDto findEducation = educationService.getOneEducation(Long.parseLong(responseEntity.getBody().getResponse().toString()));
         //then
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(responseEntity.getBody().getCode()).isEqualTo(200);
-        assertThat(responseEntity.getBody().getMessage()).isEqualTo("success");
+        assertThat(responseEntity.getBody().getCode()).isEqualTo(StatusCode.OK.getCode());
+        assertThat(responseEntity.getBody().getMessage()).isEqualTo(StatusCode.OK.getMessage());
         assertThat(responseEntity.getBody().getResponse().toString()).isEqualTo(findEducation.getId().toString());
 
     }
@@ -147,6 +158,11 @@ public class EducationControllerTest {
                  .name("개발자")
                  .build();
          categoryRepository.save(category);
+
+         Tag tag = Tag.builder()
+                 .name("#Srping")
+                 .build();
+         tagRepository.save(tag);
 
          Department department = Department.builder()
                  .name("테스트팀")
@@ -187,6 +203,7 @@ public class EducationControllerTest {
                  .place(place)
                  .userId(user.getId())
                  .categoryId(category.getId())
+                 .hashTag(tag.getName().toString())
                  .build();
 
          Long saveId = educationService.postOneEducation(educationRequestDto);
@@ -196,8 +213,8 @@ public class EducationControllerTest {
          LinkedHashMap response = (LinkedHashMap) responseEntity.getBody().getResponse();
          //then
          assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-         assertThat(responseEntity.getBody().getCode()).isEqualTo(200);
-         assertThat(responseEntity.getBody().getMessage()).isEqualTo("success");
+         assertThat(responseEntity.getBody().getCode()).isEqualTo(StatusCode.OK.getCode());
+         assertThat(responseEntity.getBody().getMessage()).isEqualTo(StatusCode.OK.getMessage());
          assertThat(response.get("id").toString()).isEqualTo(saveId.toString());
          assertThat(response.get("title")).isEqualTo(title);
      }
@@ -213,6 +230,11 @@ public class EducationControllerTest {
                 .name("개발자")
                 .build();
         categoryRepository.save(category);
+
+        Tag tag = Tag.builder()
+                .name("#Spring")
+                .build();
+        tagRepository.save(tag);
 
         Department department = Department.builder()
                 .name("테스트팀")
@@ -253,6 +275,7 @@ public class EducationControllerTest {
                 .place(place)
                 .userId(user.getId())
                 .categoryId(category.getId())
+                .hashTag(tag.getName().toString())
                 .build();
 
         Long saveId = educationService.postOneEducation(educationRequestDto);
@@ -270,6 +293,7 @@ public class EducationControllerTest {
                 .place(place)
                 .userId(user.getId())
                 .categoryId(category.getId())
+                .hashTag(tag.getName().toString())
                 .build();
 
         HttpEntity<EducationRequestDto> requestEntity = new HttpEntity<>(updateRequestDto);
@@ -277,8 +301,8 @@ public class EducationControllerTest {
         ResponseEntity<CommonJsonFormat> responseEntity = restTemplate.exchange(url, HttpMethod.PUT, requestEntity, CommonJsonFormat.class);
         // then
         Education education = educationRepository.findById(saveId).orElseThrow(() -> new IllegalArgumentException("해당 데이터 없음"));
-        assertThat(responseEntity.getBody().getCode()).isEqualTo(200);
-        assertThat(responseEntity.getBody().getMessage()).isEqualTo("success");
+        assertThat(responseEntity.getBody().getCode()).isEqualTo(StatusCode.OK.getCode());
+        assertThat(responseEntity.getBody().getMessage()).isEqualTo(StatusCode.OK.getMessage());
         assertThat(responseEntity.getBody().getResponse().toString()).isEqualTo(saveId.toString());
         assertThat(education.getTitle()).isEqualTo(updateTitle);
         assertThat(education.getContent()).isEqualTo(updateContent);
@@ -295,6 +319,11 @@ public class EducationControllerTest {
                 .name("개발자")
                 .build();
         categoryRepository.save(category);
+
+        Tag tag = Tag.builder()
+                .name("#Spring")
+                .build();
+        tagRepository.save(tag);
 
         Department department = Department.builder()
                 .name("테스트팀")
@@ -335,6 +364,7 @@ public class EducationControllerTest {
                 .place(place)
                 .userId(user.getId())
                 .categoryId(category.getId())
+                .hashTag(tag.getName().toString())
                 .build();
 
         Long saveId = educationService.postOneEducation(educationRequestDto);
@@ -359,6 +389,11 @@ public class EducationControllerTest {
                 .build();
         categoryRepository.save(category);
 
+        Tag tag = Tag.builder()
+                .name("#Spring")
+                .build();
+        tagRepository.save(tag);
+
         Department department = Department.builder()
                 .name("테스트팀")
                 .depth(2)
@@ -398,6 +433,7 @@ public class EducationControllerTest {
                 .place(place)
                 .userId(user.getId())
                 .categoryId(category.getId())
+                .hashTag(tag.getName().toString())
                 .build();
 
         for(int i =0; i<totalNum; i++) {

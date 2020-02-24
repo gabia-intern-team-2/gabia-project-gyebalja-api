@@ -6,19 +6,17 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
-@SpringBootTest
+@DataJpaTest
 public class TagRepositoryTest {
 
     @PersistenceContext
@@ -34,7 +32,7 @@ public class TagRepositoryTest {
         long beforeCnt = tagRepository.count();
 
         Tag tag = Tag.builder()
-                    .name("Spring")
+                    .name("#Spring")
                     .build();
 
         //when
@@ -53,12 +51,12 @@ public class TagRepositoryTest {
     public void findByIdTest() throws Exception {
         //given
         Tag tag1 = Tag.builder()
-                .name("Spring")
+                .name("#Spring")
                 .build();
         tagRepository.save(tag1);
 
         Tag tag2 = Tag.builder()
-                .name("JPA")
+                .name("#JPA")
                 .build();
         tagRepository.save(tag2);
 
@@ -76,12 +74,12 @@ public class TagRepositoryTest {
     public void findAllTest() throws Exception {
         //given
         Tag tag1 = Tag.builder()
-                .name("Spring")
+                .name("#Spring")
                 .build();
         tagRepository.save(tag1);
 
         Tag tag2 = Tag.builder()
-                .name("JPA")
+                .name("#JPA")
                 .build();
         tagRepository.save(tag2);
 
@@ -100,12 +98,12 @@ public class TagRepositoryTest {
     public void countTest() throws Exception {
         //given
         Tag tag1 = Tag.builder()
-                .name("Spring")
+                .name("#Spring")
                 .build();
         tagRepository.save(tag1);
 
         Tag tag2 = Tag.builder()
-                .name("JPA")
+                .name("#JPA")
                 .build();
         tagRepository.save(tag2);
         //when
@@ -120,12 +118,12 @@ public class TagRepositoryTest {
     public void deleteTest() throws Exception {
         //given
         Tag tag1 = Tag.builder()
-                .name("Spring")
+                .name("#Spring")
                 .build();
         tagRepository.save(tag1);
 
         Tag tag2 = Tag.builder()
-                .name("JPA")
+                .name("#JPA")
                 .build();
         tagRepository.save(tag2);
 
@@ -145,7 +143,7 @@ public class TagRepositoryTest {
         String updateName = "이름 업데이트";
 
         Tag tag = Tag.builder()
-                    .name("Spring")
+                    .name("#Spring")
                     .build();
         tagRepository.save(tag);
         long beforeUpdateCnt = tagRepository.count();
@@ -160,9 +158,20 @@ public class TagRepositoryTest {
 
     }
 
-
-
-
-
+    @Test
+    @DisplayName("Tag 이름으로 조회 테스트(findHashTagByName)")
+    public void findHashTagByName() throws Exception {
+        //given
+        String hashTagName  = "#Spring";
+        Tag tag = Tag.builder()
+                .name(hashTagName)
+                .build();
+        Tag savedTag = tagRepository.save(tag);
+        //when
+        Tag findTagByName = tagRepository.findHashTagByName(hashTagName).get();
+        //then
+        assertThat(savedTag.getId()).isEqualTo(findTagByName.getId());
+        
+    }
 
 }

@@ -5,6 +5,7 @@ import com.gabia.gyebalja.domain.Department;
 import com.gabia.gyebalja.domain.Education;
 import com.gabia.gyebalja.domain.EducationType;
 import com.gabia.gyebalja.domain.GenderType;
+import com.gabia.gyebalja.domain.Tag;
 import com.gabia.gyebalja.domain.User;
 import com.gabia.gyebalja.dto.education.EducationAllResponseDto;
 import com.gabia.gyebalja.dto.education.EducationDetailResponseDto;
@@ -12,6 +13,7 @@ import com.gabia.gyebalja.dto.education.EducationRequestDto;
 import com.gabia.gyebalja.repository.CategoryRepository;
 import com.gabia.gyebalja.repository.DepartmentRepository;
 import com.gabia.gyebalja.repository.EducationRepository;
+import com.gabia.gyebalja.repository.TagRepository;
 import com.gabia.gyebalja.repository.UserRepository;
 import com.gabia.gyebalja.service.EducationService;
 import org.assertj.core.api.Assertions;
@@ -26,7 +28,6 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -47,6 +48,8 @@ public class EducationServiceTest {
     CategoryRepository categoryRepository;
     @Autowired
     DepartmentRepository departmentRepository;
+    @Autowired
+    TagRepository tagRepository;
 
     /**
      * 등록 - education 한 건 (자기교육 등록)
@@ -172,6 +175,11 @@ public class EducationServiceTest {
                 .build();
         categoryRepository.save(category);
 
+        Tag tag = Tag.builder()
+                .name("#Spring")
+                .build();
+        tagRepository.save(tag);
+
         Department department = Department.builder()
                 .name("테스트팀")
                 .depth(2)
@@ -203,6 +211,7 @@ public class EducationServiceTest {
                 .place("가비아 4층")
                 .categoryId(category.getId())
                 .userId(user.getId())
+                .hashTag(tag.getName().toString())
                 .build();
         Long saveId = educationService.postOneEducation(educationRequestDto);
         //when
@@ -284,6 +293,11 @@ public class EducationServiceTest {
                 .build();
         categoryRepository.save(category);
 
+        Tag tag = Tag.builder()
+                .name("#Spring")
+                .build();
+        tagRepository.save(tag);
+
         Department department = Department.builder()
                 .name("테스트팀")
                 .depth(2)
@@ -323,6 +337,7 @@ public class EducationServiceTest {
                 .place(place)
                 .userId(user.getId())
                 .categoryId(category.getId())
+                .hashTag(tag.getName().toString())
                 .build();
 
         for(int i =0; i<totalNum; i++) {
@@ -332,10 +347,6 @@ public class EducationServiceTest {
         List<EducationAllResponseDto> allEducationByUserId = educationService.getAllEducationByUserId(user.getId(), pageable);
         //then
         assertThat(allEducationByUserId.size()).isEqualTo(10); //한 페이지당 데이터 10개
-    }
-
-    @Test
-    public void practice() throws Exception {
     }
 
 }
