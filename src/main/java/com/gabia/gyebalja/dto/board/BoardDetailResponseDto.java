@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @ToString
 @Getter
-public class BoardResponseDto {
+public class BoardDetailResponseDto {
 
     private Long id;
     private String title;
@@ -31,7 +31,7 @@ public class BoardResponseDto {
     private String educationTitle;
     private List<CommentResponseDto> commentList;
 
-    public BoardResponseDto(Board board){
+    public BoardDetailResponseDto(Board board){
         this.id = board.getId();
         this.title = board.getTitle();
         this.content = board.getContent();
