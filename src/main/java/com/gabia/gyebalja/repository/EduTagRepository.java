@@ -8,8 +8,5 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 
 public interface EduTagRepository extends JpaRepository<EduTag, Long> {
-    @Modifying
-    @Transactional
-    @Query("delete from EduTag et where et.education.id = :eduId")
-    void deleteByEduId(@Param("eduId") Long eduId);
+    void deleteByEducationId(@Param("educationId") Long educationId);
 }

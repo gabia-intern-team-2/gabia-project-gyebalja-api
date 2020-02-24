@@ -137,7 +137,7 @@ public class EducationService {
         findEducation.get().changeEducation(educationRequestDto.getTitle(),educationRequestDto.getContent(),educationRequestDto.getStartDate(),educationRequestDto.getEndDate(), educationRequestDto.getTotalHours(), educationRequestDto.getType(), educationRequestDto.getPlace(), findCategory.get());
 
         //태그 업데이트 로직.
-        eduTagRepository.deleteByEduId(id);  //관계테이블의 데이터를 모두 삭제
+        eduTagRepository.deleteByEducationId(id);  //관계테이블의 데이터를 모두 삭제
         //등록과 동일하게 로직 수행
         if(educationRequestDto.getHashTag().length()>0) {
             HashTagRegularExpression hashTagRegularExpression = new HashTagRegularExpression();
