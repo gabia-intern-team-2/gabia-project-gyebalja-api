@@ -20,11 +20,11 @@ public interface StatisticsRepository extends JpaRepository<Education, Long>{
     List<ArrayList<Long>> getMainStatisticsWithYear1(@Param("year") List<String> year);
 
     // 방법 2
-    @Query("select substring(e.startDate, 6, 2) as year, count(e) as totalEducationNumberOfEmployees, sum(e.totalHours) as totalEducationHourOfEmployees " +
+    @Query("select substring(e.startDate, 1, 4) as year, count(e) as totalEducationNumberOfEmployees, sum(e.totalHours) as totalEducationHourOfEmployees " +
             "from Education e " +
-            "group by substring(e.startDate, 6, 2) " +
-            "order by substring(e.startDate, 6, 2) desc")
-    List<ArrayList<Long>> getMainStatisticsWithYear2(Pageable pageable);
+            "group by substring(e.startDate, 1, 4) " +
+            "order by substring(e.startDate, 1, 4) desc")
+    List<ArrayList<String>> getMainStatisticsWithYear2(Pageable pageable);
 
     /** 월별 교육 건수, 시간 */
     // 방법 1

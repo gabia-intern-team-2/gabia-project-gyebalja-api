@@ -6,6 +6,7 @@ import com.gabia.gyebalja.dto.statistics.StatisticsMainTagResponseDto;
 import com.gabia.gyebalja.dto.statistics.StatisticsMainYearResponseDto;
 import com.gabia.gyebalja.repository.EduTagRepository;
 import com.gabia.gyebalja.repository.EducationRepository;
+import com.gabia.gyebalja.repository.StatisticsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -19,22 +20,21 @@ import java.util.List;
 @Service
 public class StatisticsService {
 
-    private final EducationRepository educationRepository;
-    private final EduTagRepository eduTagRepository;
+    private final StatisticsRepository statisticsRepository;
 
     public StatisticsMainYearResponseDto getMainStatisticsWithYear(){
         int yearPage = 0;
         int yearSize = 5;
-        List<ArrayList<Long>> response = educationRepository.getMainStatisticsWithYear2(PageRequest.of(yearPage, yearSize));
-        ArrayList<Long> years = new ArrayList<>();
+        List<ArrayList<String>> response = statisticsRepository.getMainStatisticsWithYear2(PageRequest.of(yearPage, yearSize));
+        ArrayList<String> years = new ArrayList<>();
         ArrayList<Long> totalEducationHourOfEmployees = new ArrayList<>();
         ArrayList<Long> totalEducationNumberOfEmployees = new ArrayList<>();
 
         int yearIdx = 0, hourIdx = 1, numberIdx = 2;
-        for (ArrayList<Long> row : response) {
+        for (ArrayList<String> row : response) {
             years.add(row.get(yearIdx));
-            totalEducationHourOfEmployees.add(row.get(hourIdx));
-            totalEducationNumberOfEmployees.add(row.get(numberIdx));
+            totalEducationHourOfEmployees.add(Long.parseLong(row.get(hourIdx)));
+            totalEducationNumberOfEmployees.add(Long.parseLong(row.get(numberIdx)));
         }
 
         StatisticsMainYearResponseDto statisticsMainYearResponseDto = new StatisticsMainYearResponseDto(years, totalEducationHourOfEmployees, totalEducationNumberOfEmployees);
@@ -45,7 +45,7 @@ public class StatisticsService {
     public StatisticsMainMonthResponseDto getMainStatisticsWithMonth(){
         int monthPage = 0;
         int monthSize = 12;
-        List<ArrayList<String>> response = educationRepository.getMainStatisticsWithMonth(PageRequest.of(monthPage, monthSize));
+        List<ArrayList<String>> response = statisticsRepository.getMainStatisticsWithMonth(PageRequest.of(monthPage, monthSize));
         ArrayList<String> months = new ArrayList<>();
         ArrayList<Long> totalEducationHourOfEmployees = new ArrayList<>();
         ArrayList<Long> totalEducationNumberOfEmployees = new ArrayList<>();
@@ -65,7 +65,7 @@ public class StatisticsService {
     public StatisticsMainCategoryResponseDto getMainStatisticsWithCategory(){
         int categoryPage = 0;
         int categorySize = 3;
-        List<ArrayList<String>> response = educationRepository.getMainStatisticsWithCategory(PageRequest.of(categoryPage, categorySize));
+        List<ArrayList<String>> response = statisticsRepository.getMainStatisticsWithCategory(PageRequest.of(categoryPage, categorySize));
         ArrayList<String> names = new ArrayList<>();
         ArrayList<Long> totalNumber = new ArrayList<>();
 
@@ -83,7 +83,7 @@ public class StatisticsService {
     public StatisticsMainTagResponseDto getMainStatisticsWithTag(){
         int tagPage = 0;
         int tagSize = 3;
-        List<ArrayList<String>> response = eduTagRepository.getMainStatisticsWithTag(PageRequest.of(tagPage, tagSize));
+        List<ArrayList<String>> response = statisticsRepository.getMainStatisticsWithTag(PageRequest.of(tagPage, tagSize));
         ArrayList<String> names = new ArrayList<>();
         ArrayList<Long> totalCount = new ArrayList<>();
 

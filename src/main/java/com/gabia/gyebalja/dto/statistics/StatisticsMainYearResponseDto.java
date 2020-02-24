@@ -10,11 +10,11 @@ import java.util.ArrayList;
 @ToString
 @Getter
 public class StatisticsMainYearResponseDto {
-    private ArrayList<Long> years;
+    private ArrayList<String> years;
     private ArrayList<Long> totalEducationTime;
     private ArrayList<Long> totalEducationCount;
 
-    public StatisticsMainYearResponseDto(ArrayList<Long> years, ArrayList<Long> totalEducationTime, ArrayList<Long> totalEducationCount){
+    public StatisticsMainYearResponseDto(ArrayList<String> years, ArrayList<Long> totalEducationTime, ArrayList<Long> totalEducationCount){
         this.years = years;
         this.totalEducationTime = totalEducationTime;
         this.totalEducationCount = totalEducationCount;
