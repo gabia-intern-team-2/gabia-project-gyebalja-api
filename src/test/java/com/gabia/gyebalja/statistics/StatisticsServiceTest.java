@@ -1,28 +1,27 @@
-package com.gabia.gyebalja.service;
+package com.gabia.gyebalja.statistics;
 
-import com.gabia.gyebalja.dto.statistics.StatisticsMainCategoryResponseDto;
 import com.gabia.gyebalja.dto.statistics.StatisticsMainMonthResponseDto;
+import com.gabia.gyebalja.dto.statistics.StatisticsMainCategoryResponseDto;
 import com.gabia.gyebalja.dto.statistics.StatisticsMainTagResponseDto;
 import com.gabia.gyebalja.dto.statistics.StatisticsMainYearResponseDto;
-import com.gabia.gyebalja.repository.EduTagRepository;
-import com.gabia.gyebalja.repository.EducationRepository;
 import com.gabia.gyebalja.repository.StatisticsRepository;
-import lombok.RequiredArgsConstructor;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
-@RequiredArgsConstructor
 @Transactional
-@Service
-public class StatisticsService {
+@SpringBootTest
+public class StatisticsServiceTest {
 
-    private final StatisticsRepository statisticsRepository;
+    @Autowired private StatisticsRepository statisticsRepository;
 
-    public StatisticsMainYearResponseDto getMainStatisticsWithYear(){
+    @Test
+    public void getMainStatisticsWithYear(){
         int yearPage = 0;
         int yearSize = 5;
         List<ArrayList<String>> response = statisticsRepository.getMainStatisticsWithYear(PageRequest.of(yearPage, yearSize));
@@ -38,11 +37,11 @@ public class StatisticsService {
         }
 
         StatisticsMainYearResponseDto statisticsMainYearResponseDto = new StatisticsMainYearResponseDto(years, totalEducationHourOfEmployees, totalEducationNumberOfEmployees);
-
-        return statisticsMainYearResponseDto;
+        System.out.println(statisticsMainYearResponseDto.toString());
     }
 
-    public StatisticsMainMonthResponseDto getMainStatisticsWithMonth(){
+    @Test
+    public void getMainStatisticsWithMonth(){
         int monthPage = 0;
         int monthSize = 12;
         List<ArrayList<String>> response = statisticsRepository.getMainStatisticsWithMonth(PageRequest.of(monthPage, monthSize));
@@ -58,11 +57,11 @@ public class StatisticsService {
         }
 
         StatisticsMainMonthResponseDto statisticsMainMonthResponseDto = new StatisticsMainMonthResponseDto(months, totalEducationHourOfEmployees, totalEducationNumberOfEmployees);
-
-        return statisticsMainMonthResponseDto;
+        System.out.println(statisticsMainMonthResponseDto.toString());
     }
 
-    public StatisticsMainCategoryResponseDto getMainStatisticsWithCategory(){
+    @Test
+    public void getMainStatisticsWithCategory(){
         int categoryPage = 0;
         int categorySize = 3;
         List<ArrayList<String>> response = statisticsRepository.getMainStatisticsWithCategory(PageRequest.of(categoryPage, categorySize));
@@ -76,11 +75,11 @@ public class StatisticsService {
         }
 
         StatisticsMainCategoryResponseDto statisticsMainCategoryResponseDto = new StatisticsMainCategoryResponseDto(names, totalNumber);
-
-        return statisticsMainCategoryResponseDto;
+        System.out.println(statisticsMainCategoryResponseDto.toString());
     }
 
-    public StatisticsMainTagResponseDto getMainStatisticsWithTag(){
+    @Test
+    public void getMainStatisticsWithTag(){
         int tagPage = 0;
         int tagSize = 3;
         List<ArrayList<String>> response = statisticsRepository.getMainStatisticsWithTag(PageRequest.of(tagPage, tagSize));
@@ -94,7 +93,6 @@ public class StatisticsService {
         }
 
         StatisticsMainTagResponseDto statisticsMainTagResponseDto = new StatisticsMainTagResponseDto(names, totalCount);
-
-        return statisticsMainTagResponseDto;
+        System.out.println(statisticsMainTagResponseDto.toString());
     }
 }
