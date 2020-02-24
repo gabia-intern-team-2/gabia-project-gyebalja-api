@@ -4,19 +4,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.util.ArrayList;
-
 @NoArgsConstructor
 @ToString
 @Getter
 public class StatisticsMainResponseDto {
-    private ArrayList<String> years;
-    private ArrayList<Long> totalEducationHourOfEmployees;
-    private ArrayList<Long> totalEducationNumberOfEmployees;
+    private StatisticsMainYearResponseDto yearlyData;
+    private StatisticsMainMonthResponseDto monthlyData;
+    private StatisticsMainCategoryResponseDto categoryData;
+    private StatisticsMainTagResponseDto tagData;
 
-    public StatisticsMainResponseDto(ArrayList<String> years, ArrayList<Long> totalEducationHourOfEmployees, ArrayList<Long> totalEducationNumberOfEmployees){
-        this.years = years;
-        this.totalEducationHourOfEmployees = totalEducationHourOfEmployees;
-        this.totalEducationNumberOfEmployees = totalEducationNumberOfEmployees;
+    public StatisticsMainResponseDto(StatisticsMainYearResponseDto yearlyData, StatisticsMainMonthResponseDto monthlyData, StatisticsMainCategoryResponseDto categoryData, StatisticsMainTagResponseDto tagData) {
+        this.yearlyData = yearlyData;
+        this.monthlyData = monthlyData;
+        this.categoryData = categoryData;
+        this.tagData = tagData;
     }
 }

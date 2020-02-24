@@ -9,13 +9,13 @@ import java.util.ArrayList;
 @NoArgsConstructor
 @ToString
 @Getter
-public class StatisticsMainYearResponseDto {
-    private ArrayList<Long> years;
+public class StatisticsMainMonthResponseDto {
+    private ArrayList<String> months;
     private ArrayList<Long> totalEducationTime;
     private ArrayList<Long> totalEducationCount;
 
-    public StatisticsMainYearResponseDto(ArrayList<Long> years, ArrayList<Long> totalEducationTime, ArrayList<Long> totalEducationCount){
-        this.years = years;
+    public StatisticsMainMonthResponseDto(ArrayList<String> months, ArrayList<Long> totalEducationTime, ArrayList<Long> totalEducationCount){
+        this.months = months;
         this.totalEducationTime = totalEducationTime;
         this.totalEducationCount = totalEducationCount;
     }
