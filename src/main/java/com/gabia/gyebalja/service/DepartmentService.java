@@ -7,6 +7,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service
@@ -27,4 +30,12 @@ public class DepartmentService {
     /** 수정 - department (한 부서) */
 
     /** 삭제 - department (한 부서) */
+
+    /** 조회 - department (전체) */
+    public List<DepartmentResponseDto> getAllDepartment(){
+        List<DepartmentResponseDto> departmentResponseDtos = departmentRepository.findAll().stream().map(department -> new DepartmentResponseDto(department)).collect(Collectors.toList());
+
+        return departmentResponseDtos;
+    }
+
 }
