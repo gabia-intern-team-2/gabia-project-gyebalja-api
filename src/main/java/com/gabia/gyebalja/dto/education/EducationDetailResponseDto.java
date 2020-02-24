@@ -1,5 +1,6 @@
 package com.gabia.gyebalja.dto.education;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.gabia.gyebalja.domain.EducationType;
 import com.gabia.gyebalja.dto.category.CategoryResponseDto;
 import com.gabia.gyebalja.dto.edutag.EduTagResponseDto;
@@ -16,7 +17,9 @@ public class EducationDetailResponseDto {
     private Long id;
     private String title;
     private String content;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDate startDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDate endDate;
     private int totalHours;
     private EducationType type;
