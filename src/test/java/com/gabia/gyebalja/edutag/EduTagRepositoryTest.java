@@ -1,24 +1,35 @@
 package com.gabia.gyebalja.edutag;
 
-import com.gabia.gyebalja.domain.*;
-import com.gabia.gyebalja.repository.*;
+import com.gabia.gyebalja.domain.Category;
+import com.gabia.gyebalja.domain.Department;
+import com.gabia.gyebalja.domain.EduTag;
+import com.gabia.gyebalja.domain.Education;
+import com.gabia.gyebalja.domain.EducationType;
+import com.gabia.gyebalja.domain.GenderType;
+import com.gabia.gyebalja.domain.Tag;
+import com.gabia.gyebalja.domain.User;
+import com.gabia.gyebalja.repository.CategoryRepository;
+import com.gabia.gyebalja.repository.DepartmentRepository;
+import com.gabia.gyebalja.repository.EduTagRepository;
+import com.gabia.gyebalja.repository.EducationRepository;
+import com.gabia.gyebalja.repository.TagRepository;
+import com.gabia.gyebalja.repository.UserRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
-@SpringBootTest
+@DataJpaTest
 public class EduTagRepositoryTest {
 
     @PersistenceContext
@@ -83,7 +94,7 @@ public class EduTagRepositoryTest {
         educationRepository.save(education);
 
         Tag tag = Tag.builder()
-                .name("Spring")
+                .name("#Spring")
                 .build();
         tagRepository.save(tag);
 
@@ -148,7 +159,7 @@ public class EduTagRepositoryTest {
         educationRepository.save(education);
 
         Tag tag = Tag.builder()
-                .name("Spring")
+                .name("#Spring")
                 .build();
         tagRepository.save(tag);
 
@@ -211,7 +222,7 @@ public class EduTagRepositoryTest {
         educationRepository.save(education);
 
         Tag tag = Tag.builder()
-                .name("Spring")
+                .name("#Spring")
                 .build();
         tagRepository.save(tag);
 
@@ -275,7 +286,7 @@ public class EduTagRepositoryTest {
         educationRepository.save(education);
 
         Tag tag = Tag.builder()
-                .name("Spring")
+                .name("#Spring")
                 .build();
         tagRepository.save(tag);
 
@@ -334,7 +345,7 @@ public class EduTagRepositoryTest {
         educationRepository.save(education);
 
         Tag tag = Tag.builder()
-                .name("Spring")
+                .name("#Spring")
                 .build();
         tagRepository.save(tag);
 
@@ -396,7 +407,7 @@ public class EduTagRepositoryTest {
         educationRepository.save(education);
 
         Tag tag = Tag.builder()
-                .name("Spring")
+                .name("#Spring")
                 .build();
         tagRepository.save(tag);
 
@@ -429,6 +440,67 @@ public class EduTagRepositoryTest {
         assertThat(findEduTag.getId()).isEqualTo(eduTag.getId());
         assertThat(findEduTag.getEducation().getTitle()).isEqualTo(updateEducation.getTitle());
         assertThat(eduTagRepository.count()).isEqualTo(beforeUpdateCnt);
+    }
+
+    @Test
+    @DisplayName("EduTag 교육 ID로 삭제 테스트(deleteByEducationId)")
+    public void deleteByEducationId() throws Exception {
+        //given
+        Category category = Category.builder()
+                .name("개발자")
+                .build();
+        categoryRepository.save(category);
+
+        Department department = Department.builder()
+                .name("테스트팀")
+                .depth(2)
+                .parentDepartment(null)
+                .build();
+        departmentRepository.save(department);
+
+        User user = User.builder()
+                .email("test@gabia.com")
+                .password("1234")
+                .name("User1")
+                .gender(GenderType.MALE)
+                .phone("000-000-0000")
+                .tel("111-111-1111")
+                .positionId(123L)
+                .positionName("팀원")
+                .department(department)
+                .profileImg("src/img")
+                .build();
+        userRepository.save(user);
+
+        Education education = Education.builder()
+                .title("제목테스트")
+                .content("내용테스트")
+                .startDate(LocalDate.now())
+                .endDate(LocalDate.now())
+                .totalHours(3)
+                .type(EducationType.ONLINE)
+                .place("가비아 4층")
+                .category(category)
+                .user(user)
+                .build();
+        Education savedEducation = educationRepository.save(education);
+
+        Tag tag = Tag.builder()
+                .name("#Spring")
+                .build();
+        tagRepository.save(tag);
+
+        EduTag eduTag = EduTag.builder()
+                .tag(tag)
+                .education(education)
+                .build();
+        eduTagRepository.save(eduTag);
+        //when
+        long beforeDeleteCnt = eduTagRepository.count();
+        eduTagRepository.deleteByEducationId(savedEducation.getId());
+        //then
+        assertThat(eduTagRepository.count()).isEqualTo(beforeDeleteCnt-1);
+        assertThat(eduTagRepository.findById(savedEducation.getId())).isEqualTo(Optional.empty());
     }
 
 }
