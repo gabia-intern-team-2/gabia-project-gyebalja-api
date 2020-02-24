@@ -27,8 +27,8 @@ public class HashTagRegularExpression {
         return resultHashtag;
     }
     public String sepcialCharacter_replace(String str) {
-        str = StringUtils.replace(str, "-_+=!@#$%^&*()[]{}|\\;:'\"<>,.?/~`） ","");
-
+        str = StringUtils.replace(str, "-_+=!@#$%^&*()[]{}|\\;:'\"<>,.?/~`） ","").toLowerCase();
+        System.out.println("str = " + str);
         if(str.length() < 2) {
             return null;
         }
