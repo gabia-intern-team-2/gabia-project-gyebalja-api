@@ -3,8 +3,9 @@ package com.gabia.gyebalja.service;
 import com.gabia.gyebalja.domain.Board;
 import com.gabia.gyebalja.domain.Education;
 import com.gabia.gyebalja.domain.User;
+import com.gabia.gyebalja.dto.board.BoardAllResponseDto;
 import com.gabia.gyebalja.dto.board.BoardRequestDto;
-import com.gabia.gyebalja.dto.board.BoardResponseDto;
+import com.gabia.gyebalja.dto.board.BoardDetailResponseDto;
 import com.gabia.gyebalja.repository.BoardRepository;
 import com.gabia.gyebalja.repository.EducationRepository;
 import com.gabia.gyebalja.repository.LikesRepository;
@@ -48,17 +49,17 @@ public class BoardService {
     }
 
     /** 조회 - board 한 건 (상세페이지) */
-    public BoardResponseDto getOneBoard(Long boardId){
+    public BoardDetailResponseDto getOneBoard(Long boardId){
         Board board = boardRepository.findById(boardId).orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다."));
 
         board.upViews();
-        BoardResponseDto boardResponseDto = new BoardResponseDto(board);
+        BoardDetailResponseDto boardDetailResponseDto = new BoardDetailResponseDto(board);
 
         // 게시글 좋아요 조회 - boardDto 삽입
         int totalNumberOfLikes = likesRepository.countByBoardId(boardId);
-        boardResponseDto.changeLikes(totalNumberOfLikes);
+        boardDetailResponseDto.changeLikes(totalNumberOfLikes);
 
-        return boardResponseDto;
+        return boardDetailResponseDto;
     }
 
     /** 수정 - board 한 건 (상세페이지에서) */
@@ -85,15 +86,15 @@ public class BoardService {
     }
 
     /** 조회 - board 전체 (페이징) */
-    public Page<BoardResponseDto> getAllBoard(Pageable pageable){
+    public Page<BoardAllResponseDto> getAllBoard(Pageable pageable){
         /**
          * [ResponseDto]
          * 댓글 수, 좋아요 수 등 추가 가능
          * 댓글 배열 삭제 필요
          * */
         Page<Board> boardPage = boardRepository.findAll(pageable);
-        Page<BoardResponseDto> boardResponseDtoPage = boardPage.map(board -> new BoardResponseDto(board));
+        Page<BoardAllResponseDto> boardAllResponseDtos = boardPage.map(board -> new BoardAllResponseDto(board));
 
-        return boardResponseDtoPage;
+        return boardAllResponseDtos;
     }
 }

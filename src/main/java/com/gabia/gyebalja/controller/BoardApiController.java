@@ -2,8 +2,9 @@ package com.gabia.gyebalja.controller;
 
 import com.gabia.gyebalja.common.CommonJsonFormat;
 import com.gabia.gyebalja.common.StatusCode;
+import com.gabia.gyebalja.dto.board.BoardAllResponseDto;
 import com.gabia.gyebalja.dto.board.BoardRequestDto;
-import com.gabia.gyebalja.dto.board.BoardResponseDto;
+import com.gabia.gyebalja.dto.board.BoardDetailResponseDto;
 import com.gabia.gyebalja.service.BoardService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -35,7 +36,7 @@ public class BoardApiController {
     /** 조회 - board 한 건 (상세페이지) */
     @GetMapping("/api/v1/boards/{boardId}")
     public CommonJsonFormat getOneBoard(@PathVariable("boardId") Long boardId) {
-        BoardResponseDto response = boardService.getOneBoard(boardId);
+        BoardDetailResponseDto response = boardService.getOneBoard(boardId);
 
         return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), response);
     }
@@ -60,7 +61,7 @@ public class BoardApiController {
     @GetMapping("/api/v1/boards")
     public CommonJsonFormat getAllBoard(@PageableDefault(size=10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
         // Example - http://localhost:8080/api/v1/boards?page=0&size=4&sort=id,desc
-        Page<BoardResponseDto> response = boardService.getAllBoard(pageable);
+        Page<BoardAllResponseDto> response = boardService.getAllBoard(pageable);
 
         return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), response);
     }
