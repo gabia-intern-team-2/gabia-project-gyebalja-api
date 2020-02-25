@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.ArrayList;
 import java.util.List;
 
-//@Repository
 public interface StatisticsRepository extends JpaRepository<Education, Long>{
     /** 통계 - 메인 화면 */
     /** 연도별 교육 건수, 시간 */
