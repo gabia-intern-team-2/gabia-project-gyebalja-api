@@ -12,4 +12,5 @@ public interface EduTagRepository extends JpaRepository<EduTag, Long> {
     @Transactional
     @Query("delete from EduTag et where et.education.id = :eduId")
     void deleteByEduId(@Param("eduId") Long eduId);
+
 }
