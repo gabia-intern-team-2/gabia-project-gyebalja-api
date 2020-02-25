@@ -1,20 +1,30 @@
 package com.gabia.gyebalja.education;
 
-import com.gabia.gyebalja.domain.*;
-import com.gabia.gyebalja.repository.*;
+import com.gabia.gyebalja.domain.Category;
+import com.gabia.gyebalja.domain.Department;
+import com.gabia.gyebalja.domain.Education;
+import com.gabia.gyebalja.domain.EducationType;
+import com.gabia.gyebalja.domain.GenderType;
+import com.gabia.gyebalja.domain.User;
+import com.gabia.gyebalja.repository.CategoryRepository;
+import com.gabia.gyebalja.repository.DepartmentRepository;
+import com.gabia.gyebalja.repository.EducationRepository;
+import com.gabia.gyebalja.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 
 /**
@@ -24,7 +34,7 @@ import static org.assertj.core.api.Assertions.*;
  */
 
 @Transactional
-@SpringBootTest
+@DataJpaTest
 class EducationRepositoryTest {
 
     @PersistenceContext
@@ -90,12 +100,12 @@ class EducationRepositoryTest {
                 .build();
 
         //when
-        Education saveEducation = educationRepository.save(education);
-        Education findEducation = educationRepository.findById(saveEducation.getId()).get();
+        Education savedEducation = educationRepository.save(education);
+        Education findEducation = educationRepository.findById(savedEducation.getId()).get();
         
         //then
         assertThat(findEducation).isEqualTo(education); //jpa 엔티티 동일성 보장 검증
-        assertThat(findEducation.getId()).isEqualTo(saveEducation.getId());
+        assertThat(findEducation.getId()).isEqualTo(savedEducation.getId());
         assertThat(findEducation.getTitle()).isEqualTo("제목테스트");
         assertThat(findEducation.getContent()).isEqualTo("내용테스트");
         assertThat(beforeCnt+1).isEqualTo(educationRepository.count());
@@ -268,7 +278,7 @@ class EducationRepositoryTest {
 
     @Test
     @DisplayName("Education 삭제 테스트(delete)")
-    public void deleteTest() {
+    public void deleteTest() throws Exception {
         //given
         Category category = Category.builder()
                 .name("개발자")
@@ -365,25 +375,138 @@ class EducationRepositoryTest {
                 .user(user)
                 .build();
 
-        Education saveEducation = educationRepository.save(education);
+        Education savedEducation = educationRepository.save(education);
         //더티 체킹 발생
-        saveEducation.changeTitle(updateTitle);
-        saveEducation.changeContent(updateContent);
+        savedEducation.changeTitle(updateTitle);
+        savedEducation.changeContent(updateContent);
 
         //영속성 컨텍스트 초기화
         em.flush();
         em.clear();
 
         //when
-        Optional<Education> findUpdateEducation = educationRepository.findById(saveEducation.getId());
+        Optional<Education> findUpdateEducation = educationRepository.findById(savedEducation.getId());
         //then
 
-        assertThat(findUpdateEducation.get().getId()).isEqualTo(saveEducation.getId());
+        assertThat(findUpdateEducation.get().getId()).isEqualTo(savedEducation.getId());
         assertThat(findUpdateEducation.get().getTitle()).isEqualTo(updateTitle);
         assertThat(findUpdateEducation.get().getContent()).isEqualTo(updateContent);
 
     }
 
+    @Test
+    @DisplayName("Education UserId로 조회 테스트(findEducationByUserId)")
+    public void findEducationByUserId() throws Exception {
+        //given
+        int inputNum = 10;
+        Pageable pageable = PageRequest.of(0,10, Sort.Direction.DESC, "id");
+        Category category = Category.builder()
+                .name("개발자")
+                .build();
+        categoryRepository.save(category);
+
+        Department department = Department.builder()
+                .name("테스트팀")
+                .depth(2)
+                .parentDepartment(null)
+                .build();
+        departmentRepository.save(department);
+
+        User user = User.builder()
+                .email("test@gabia.com")
+                .password("1234")
+                .name("User")
+                .gender(GenderType.MALE)
+                .phone("000-000-0000")
+                .tel("111-111-1111")
+                .positionId(123L)
+                .positionName("팀원")
+                .department(department)
+                .profileImg("src/img")
+                .build();
+        User savedUser = userRepository.save(user);
+
+        for(int i=0 ; i<inputNum; i++) {
+            Education education = Education.builder()
+                    .title("제목테스트"+i)
+                    .content("내용테스트"+i)
+                    .startDate(LocalDate.now())
+                    .endDate(LocalDate.now())
+                    .totalHours(3)
+                    .type(EducationType.ONLINE)
+                    .place("가비아 4층"+i)
+                    .category(category)
+                    .user(user)
+                    .build();
+
+            educationRepository.save(education);
+
+        }
+        em.flush();
+        em.clear();
+        //when
+        List<Education> educationList = educationRepository.findEducationByUserId(savedUser.getId(), pageable);
+        //then
+        assertThat(educationList.size()).isEqualTo(inputNum);
+        assertThat(educationList.get(0).getUser().getId()).isEqualTo(savedUser.getId());
+    }
+
+    @Test
+    @DisplayName("Education 상세 조회 테스트(페치조인) (findEducationDetail)")
+    public void findEducationDetail() throws Exception {
+        //given
+        Category category = Category.builder()
+                .name("개발자")
+                .build();
+        categoryRepository.save(category);
+
+        Department department = Department.builder()
+                .name("테스트팀")
+                .depth(2)
+                .parentDepartment(null)
+                .build();
+        departmentRepository.save(department);
+
+        User user = User.builder()
+                .email("test@gabia.com")
+                .password("1234")
+                .name("User1")
+                .gender(GenderType.MALE)
+                .phone("000-000-0000")
+                .tel("111-111-1111")
+                .positionId(123L)
+                .positionName("팀원")
+                .department(department)
+                .profileImg("src/img")
+                .build();
+        userRepository.save(user);
+
+        Education education = Education.builder()
+                .title("제목테스트")
+                .content("내용테스트")
+                .startDate(LocalDate.now())
+                .endDate(LocalDate.now())
+                .totalHours(3)
+                .type(EducationType.ONLINE)
+                .place("가비아 4층")
+                .category(category)
+                .user(user)
+                .build();
+
+        Education savedEducation = educationRepository.save(education);
+
+        em.flush();
+        em.clear();
+
+        //when
+        Optional<Education> educationDetail = educationRepository.findEducationDetail(savedEducation.getId());
+        //then
+        assertThat(educationDetail.get().getId()).isEqualTo(savedEducation.getId());
+        assertThat(educationDetail.get().getTitle()).isEqualTo(savedEducation.getTitle());
+        assertThat(educationDetail.get().getContent()).isEqualTo(savedEducation.getContent());
+        assertThat(educationDetail.get().getCategory().getName()).isEqualTo(category.getName());
+
+    }
 }
 /**
  * 검토 사항 : given에 값을 생성해주는 코드가 반복적으로 사용됨 -> 모듈화 해줄 것

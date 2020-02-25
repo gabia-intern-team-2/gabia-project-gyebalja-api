@@ -77,14 +77,10 @@ public class EducationService {
             for (String s : extractHashTagList) {
                 Optional<Tag> findHashTag = tagRepository.findHashTagByName(s);
 
-                if (!findHashTag.isPresent()) {
-                    Tag tag = tagRepository.save(Tag.builder().name(s).build());
-                    EduTag eduTag = EduTag.builder().education(education).tag(tag).build();
-                    eduTagRepository.save(eduTag);
-                } else {
-                    EduTag eduTag = EduTag.builder().education(education).tag(findHashTag.get()).build();
-                    eduTagRepository.save(eduTag);
-                }
+                Tag tag = findHashTag.isPresent() ? findHashTag.get() : tagRepository.save( Tag.builder().name(s).build());
+
+                EduTag eduTag = EduTag.builder().education(education).tag(tag).build();
+                eduTagRepository.save(eduTag);
             }
         }
         return eduId;
@@ -93,29 +89,26 @@ public class EducationService {
     /** 조회 - education 한 건 (상세페이지) */
     public EducationDetailResponseDto getOneEducation(Long id) {
         //N+1 문제 해결을 위한 fetch join 사용 (성능 최적화)
-        Optional<Education> education = educationRepository.findEducationDetail(id);
-
-        if(!education.isPresent())
-            throw new NotExistCategoryException("존재하지 않는 교육입니다.");
+        Education education = educationRepository.findEducationDetail(id).orElseThrow(() -> new NotExistEducationException("존재하지 않는 교육입니다."));
 
         CategoryResponseDto categoryResponseDto = CategoryResponseDto.builder()
-                                                                        .id(education.get().getCategory().getId())
-                                                                        .name(education.get().getCategory().getName())
+                                                                        .id(education.getCategory().getId())
+                                                                        .name(education.getCategory().getName())
                                                                         .build();
 
 
-        List<EduTagResponseDto> tagList = education.get().getEduTags().stream().map(EduTagResponseDto::new)
+        List<EduTagResponseDto> tagList = education.getEduTags().stream().map(EduTagResponseDto::new)
                                                                         .collect(toList());
 
         return EducationDetailResponseDto.builder()
-                                        .id(education.get().getId())
-                                        .title(education.get().getTitle())
-                                        .content(education.get().getContent())
-                                        .startDate(education.get().getStartDate())
-                                        .endDate(education.get().getEndDate())
-                                        .totalHours(education.get().getTotalHours())
-                                        .type(education.get().getType())
-                                        .place(education.get().getPlace())
+                                        .id(education.getId())
+                                        .title(education.getTitle())
+                                        .content(education.getContent())
+                                        .startDate(education.getStartDate())
+                                        .endDate(education.getEndDate())
+                                        .totalHours(education.getTotalHours())
+                                        .type(education.getType())
+                                        .place(education.getPlace())
                                         .category(categoryResponseDto)
                                         .eduTag(tagList)
                                         .build();
@@ -124,20 +117,24 @@ public class EducationService {
     /** 수정 - education 한 건 (상세페이지) */
     @Transactional
     public Long putOneEducation(Long id, EducationRequestDto educationRequestDto) {
-        Optional<Education> findEducation = educationRepository.findById(id);
-
-        if(!findEducation.isPresent())
-            throw new NotExistEducationException("존재하지 않는 교육입니다.");
+        Education findEducation = educationRepository.findById(id).orElseThrow(() -> new NotExistEducationException("존재하지 않는 교육입니다."));;
 
         Optional<Category> findCategory = categoryRepository.findById(educationRequestDto.getCategoryId());
 
         if(!findCategory.isPresent())
             throw new NotExistCategoryException("존재하지 않는 카테고리입니다.");
 
-        findEducation.get().changeEducation(educationRequestDto.getTitle(),educationRequestDto.getContent(),educationRequestDto.getStartDate(),educationRequestDto.getEndDate(), educationRequestDto.getTotalHours(), educationRequestDto.getType(), educationRequestDto.getPlace(), findCategory.get());
+        findEducation.changeEducation(educationRequestDto.getTitle(),
+                                        educationRequestDto.getContent(),
+                                        educationRequestDto.getStartDate(),
+                                        educationRequestDto.getEndDate(),
+                                        educationRequestDto.getTotalHours(),
+                                        educationRequestDto.getType(),
+                                        educationRequestDto.getPlace(),
+                                        findCategory.get());
 
         //태그 업데이트 로직.
-        eduTagRepository.deleteByEduId(id);  //관계테이블의 데이터를 모두 삭제
+        eduTagRepository.deleteByEducationId(id);  //관계테이블의 데이터를 모두 삭제
         //등록과 동일하게 로직 수행
         if(educationRequestDto.getHashTag().length()>0) {
             HashTagRegularExpression hashTagRegularExpression = new HashTagRegularExpression();
@@ -146,14 +143,10 @@ public class EducationService {
             for (String s : extractHashTagList) {
                 Optional<Tag> findHashTag = tagRepository.findHashTagByName(s);
 
-                if (!findHashTag.isPresent()) {
-                    Tag tag = tagRepository.save(Tag.builder().name(s).build());
-                    EduTag eduTag = EduTag.builder().education(findEducation.get()).tag(tag).build();
-                    eduTagRepository.save(eduTag);
-                } else {
-                    EduTag eduTag = EduTag.builder().education(findEducation.get()).tag(findHashTag.get()).build();
-                    eduTagRepository.save(eduTag);
-                }
+                Tag tag = findHashTag.isPresent() ? findHashTag.get() : tagRepository.save( Tag.builder().name(s).build());
+
+                EduTag eduTag = EduTag.builder().education(findEducation).tag(tag).build();
+                eduTagRepository.save(eduTag);
             }
         }
         //태그 테이블의 튜플도(아무도 참조하고있지않을 경우) 삭제해 주는 로직을 추가해야하는 것인지
