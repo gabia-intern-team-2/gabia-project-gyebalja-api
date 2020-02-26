@@ -4,8 +4,6 @@ import com.gabia.gyebalja.dto.statistics.StatisticsMainCategoryResponseDto;
 import com.gabia.gyebalja.dto.statistics.StatisticsMainMonthResponseDto;
 import com.gabia.gyebalja.dto.statistics.StatisticsMainTagResponseDto;
 import com.gabia.gyebalja.dto.statistics.StatisticsMainYearResponseDto;
-import com.gabia.gyebalja.repository.EduTagRepository;
-import com.gabia.gyebalja.repository.EducationRepository;
 import com.gabia.gyebalja.repository.StatisticsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
