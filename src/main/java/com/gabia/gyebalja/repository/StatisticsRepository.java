@@ -11,14 +11,14 @@ import java.util.List;
 public interface StatisticsRepository extends JpaRepository<Education, Long>{
     /** 통계 - 메인 화면 */
     /** 연도별 교육 건수, 시간 */
-    @Query("select substring(e.startDate, 1, 4) as year, count(e) as totalEducationNumberOfEmployees, sum(e.totalHours) as totalEducationHourOfEmployees " +
+    @Query("select substring(e.startDate, 1, 4) as year, sum(e.totalHours) as totalEducationHourOfEmployees, count(e) as totalEducationNumberOfEmployees " +
             "from Education e " +
             "group by substring(e.startDate, 1, 4) " +
             "order by substring(e.startDate, 1, 4) desc")
     List<ArrayList<String>> getMainStatisticsWithYear(Pageable pageable);
 
     /** 월별 교육 건수, 시간 */
-    @Query("select substring(e.startDate, 1 ,7) as month, count(e) as totalEducationNumberOfEmployees, sum(e.totalHours) as totalEducationHourOfEmployees " +
+    @Query("select substring(e.startDate, 1 ,7) as month, sum(e.totalHours) as totalEducationHourOfEmployees, count(e) as totalEducationNumberOfEmployees " +
             "from Education e " +
             "group by substring(e.startDate, 1, 7) " +
             "order by substring(e.startDate, 1, 7) desc")
