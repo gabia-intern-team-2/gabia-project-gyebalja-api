@@ -26,10 +26,10 @@ public class StatisticsControllerTest {
         // given
         String url = "http://localhost:" + port + "/api/v1/statistics/main";
 
-        // then
+        // when
         ResponseEntity<CommonJsonFormat> responseEntity = restTemplate.getForEntity(url, CommonJsonFormat.class);
 
-        // when
+        // then
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody().getCode()).isEqualTo(StatusCode.OK.getCode());
         assertThat(responseEntity.getBody().getMessage()).isEqualTo(StatusCode.OK.getMessage());
