@@ -1,98 +1,221 @@
 package com.gabia.gyebalja.statistics;
 
+import com.gabia.gyebalja.domain.Category;
+import com.gabia.gyebalja.domain.Department;
+import com.gabia.gyebalja.domain.EduTag;
+import com.gabia.gyebalja.domain.Education;
+import com.gabia.gyebalja.domain.EducationType;
+import com.gabia.gyebalja.domain.GenderType;
+import com.gabia.gyebalja.domain.Tag;
+import com.gabia.gyebalja.domain.User;
 import com.gabia.gyebalja.dto.statistics.StatisticsMainMonthResponseDto;
 import com.gabia.gyebalja.dto.statistics.StatisticsMainCategoryResponseDto;
 import com.gabia.gyebalja.dto.statistics.StatisticsMainTagResponseDto;
 import com.gabia.gyebalja.dto.statistics.StatisticsMainYearResponseDto;
-import com.gabia.gyebalja.repository.StatisticsRepository;
+import com.gabia.gyebalja.repository.CategoryRepository;
+import com.gabia.gyebalja.repository.DepartmentRepository;
+import com.gabia.gyebalja.repository.EduTagRepository;
+import com.gabia.gyebalja.repository.EducationRepository;
+import com.gabia.gyebalja.repository.TagRepository;
+import com.gabia.gyebalja.repository.UserRepository;
+import com.gabia.gyebalja.service.StatisticsService;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.LocalDate;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
 @SpringBootTest
 public class StatisticsServiceTest {
 
-    @Autowired private StatisticsRepository statisticsRepository;
+    @Autowired private DepartmentRepository departmentRepository;
+    @Autowired private UserRepository userRepository;
+    @Autowired private CategoryRepository categoryRepository;
+    @Autowired private EducationRepository educationRepository;
+    @Autowired private EduTagRepository eduTagRepository;
+    @Autowired private TagRepository tagRepository;
+
+
+    @Autowired
+    private StatisticsService statisticsService;
+
+    private Department department;
+    private User user;
+    private Category category;
+    private Tag tag;
+
+    @BeforeEach
+    public void setUp(){
+        departmentRepository.save(this.department);
+        userRepository.save(this.user);
+        categoryRepository.save(this.category);
+        tagRepository.save(this.tag);
+    }
+
+    @Autowired
+    public StatisticsServiceTest() {
+        // Department
+        this.department = Department.builder()
+                .name("테스트팀")
+                .depth(0)
+                .parentDepartment(null)
+                .build();
+
+        // User
+        this.user = User.builder()
+                .email("gabiaUser@gabia.com")
+                .password("1234")
+                .name("가비아")
+                .gender(GenderType.MALE)
+                .phone("010-2345-5678")
+                .tel("02-2345-5678")
+                .positionId(5L)
+                .positionName("직원")
+                .department(this.department)
+                .profileImg(null)
+                .build();
+
+        // Category
+        this.category = Category.builder().name("개발").build();
+
+        // Tag
+        this.tag = Tag.builder().name("HTML").build();
+    }
 
     @Test
+    @DisplayName("통계(메인) - 연간 건수, 시간 테스트")
     public void getMainStatisticsWithYear(){
-        int yearPage = 0;
-        int yearSize = 5;
-        List<ArrayList<String>> response = statisticsRepository.getMainStatisticsWithYear(PageRequest.of(yearPage, yearSize));
-        ArrayList<String> years = new ArrayList<>();
-        ArrayList<Long> totalEducationHourOfEmployees = new ArrayList<>();
-        ArrayList<Long> totalEducationNumberOfEmployees = new ArrayList<>();
-
-        int yearIdx = 0, hourIdx = 1, numberIdx = 2;
-        for (ArrayList<String> row : response) {
-            years.add(row.get(yearIdx));
-            totalEducationHourOfEmployees.add(Long.parseLong(row.get(hourIdx)));
-            totalEducationNumberOfEmployees.add(Long.parseLong(row.get(numberIdx)));
+        // given
+        LocalDate date = LocalDate.now();
+        String year = Integer.toString(date.getYear());
+        int hours = 10;
+        int totalNumberOfData = 5;
+        for(int i = 0; i < totalNumberOfData; i++){
+            this.educationRepository.save(Education.builder()
+                    .title("테스트 - Mysql 초급 강좌 제목")
+                    .content("테스트 - Mysql 초급 강좌 본문")
+                    .startDate(date)
+                    .endDate(date.plusDays(1))
+                    .totalHours(hours)
+                    .type(EducationType.ONLINE)
+                    .place("테스트 - 인프런 온라인 교육 사이트")
+                    .user(this.user)
+                    .category(this.category)
+                    .build());
         }
 
-        StatisticsMainYearResponseDto statisticsMainYearResponseDto = new StatisticsMainYearResponseDto(years, totalEducationHourOfEmployees, totalEducationNumberOfEmployees);
-        System.out.println(statisticsMainYearResponseDto.toString());
+        // when
+        StatisticsMainYearResponseDto statisticsMainYearResponseDto = statisticsService.getMainStatisticsWithYear();
+
+        // then
+        int targetIndex = statisticsMainYearResponseDto.getYears().indexOf(year);
+        assertThat(statisticsMainYearResponseDto.getYears().get(targetIndex)).isEqualTo(year);
+        assertThat(statisticsMainYearResponseDto.getTotalEducationCount().get(targetIndex)).isEqualTo(totalNumberOfData);
+        assertThat(statisticsMainYearResponseDto.getTotalEducationTime().get(targetIndex)).isEqualTo(hours * totalNumberOfData);
     }
 
     @Test
+    @DisplayName("통계(메인) - 월간 건수, 시간 테스트")
     public void getMainStatisticsWithMonth(){
-        int monthPage = 0;
-        int monthSize = 12;
-        List<ArrayList<String>> response = statisticsRepository.getMainStatisticsWithMonth(PageRequest.of(monthPage, monthSize));
-        ArrayList<String> months = new ArrayList<>();
-        ArrayList<Long> totalEducationHourOfEmployees = new ArrayList<>();
-        ArrayList<Long> totalEducationNumberOfEmployees = new ArrayList<>();
-
-        int monthIdx = 0, hourIdx = 1, numberIdx = 2;
-        for (ArrayList<String> row : response) {
-            months.add(row.get(monthIdx));
-            totalEducationHourOfEmployees.add(Long.parseLong(row.get(hourIdx)));
-            totalEducationNumberOfEmployees.add(Long.parseLong(row.get(numberIdx)));
+        // given
+        LocalDate date = LocalDate.now();
+        int year = date.getYear();
+        String month = String.format("%02d", date.getMonthValue());
+        String yearAndMonth = year + "-" + month;
+        int hours = 10;
+        int totalNumberOfData = 5;
+        for (int i = 0; i < totalNumberOfData; i++) {
+            this.educationRepository.save(Education.builder()
+                    .title("테스트 - Mysql 초급 강좌 제목")
+                    .content("테스트 - Mysql 초급 강좌 본문")
+                    .startDate(date)
+                    .endDate(date.plusDays(1))
+                    .totalHours(hours)
+                    .type(EducationType.ONLINE)
+                    .place("테스트 - 인프런 온라인 교육 사이트")
+                    .user(this.user)
+                    .category(this.category)
+                    .build());
         }
 
-        StatisticsMainMonthResponseDto statisticsMainMonthResponseDto = new StatisticsMainMonthResponseDto(months, totalEducationHourOfEmployees, totalEducationNumberOfEmployees);
-        System.out.println(statisticsMainMonthResponseDto.toString());
+        // when
+        StatisticsMainMonthResponseDto statisticsMainMonthResponseDto = statisticsService.getMainStatisticsWithMonth();
+
+        // then
+        int targetIndex = statisticsMainMonthResponseDto.getMonths().indexOf(yearAndMonth);
+        assertThat(statisticsMainMonthResponseDto.getMonths().get(targetIndex)).isEqualTo(yearAndMonth);
+        assertThat(statisticsMainMonthResponseDto.getTotalEducationCount().get(targetIndex)).isEqualTo(totalNumberOfData);
+        assertThat(statisticsMainMonthResponseDto.getTotalEducationTime().get(targetIndex)).isEqualTo(hours * totalNumberOfData);
     }
 
     @Test
+    @DisplayName("통계(메인) - 카테고리 TOPn 테스트")
     public void getMainStatisticsWithCategory(){
-        int categoryPage = 0;
-        int categorySize = 3;
-        List<ArrayList<String>> response = statisticsRepository.getMainStatisticsWithCategory(PageRequest.of(categoryPage, categorySize));
-        ArrayList<String> names = new ArrayList<>();
-        ArrayList<Long> totalNumber = new ArrayList<>();
-
-        int nameIdx = 0, numberIdx = 1;
-        for (ArrayList<String> row : response) {
-            names.add(row.get(nameIdx));
-            totalNumber.add(Long.parseLong(row.get(numberIdx)));
+        // given
+        LocalDate date = LocalDate.now();
+        int hours = 10;
+        int totalNumberOfData = 5;
+        for (int i = 0; i < totalNumberOfData; i++) {
+            this.educationRepository.save(Education.builder()
+                    .title("테스트 - Mysql 초급 강좌 제목")
+                    .content("테스트 - Mysql 초급 강좌 본문")
+                    .startDate(date)
+                    .endDate(date.plusDays(1))
+                    .totalHours(hours)
+                    .type(EducationType.ONLINE)
+                    .place("테스트 - 인프런 온라인 교육 사이트")
+                    .user(this.user)
+                    .category(this.category)
+                    .build());
         }
 
-        StatisticsMainCategoryResponseDto statisticsMainCategoryResponseDto = new StatisticsMainCategoryResponseDto(names, totalNumber);
-        System.out.println(statisticsMainCategoryResponseDto.toString());
+        // when
+        StatisticsMainCategoryResponseDto statisticsMainCategoryResponseDto = statisticsService.getMainStatisticsWithCategory();
+        System.out.println(statisticsMainCategoryResponseDto);
+
+        // then
+        int targetIndex = statisticsMainCategoryResponseDto.getCategories().indexOf(this.category.getName());
+        assertThat(statisticsMainCategoryResponseDto.getCategories().get(targetIndex)).isEqualTo(this.category.getName());
+        assertThat(statisticsMainCategoryResponseDto.getTotalCategoryCount().get(targetIndex)).isEqualTo(totalNumberOfData);
     }
 
     @Test
+    @DisplayName("통계(메인) - 태그 TOPn 테스트")
     public void getMainStatisticsWithTag(){
-        int tagPage = 0;
-        int tagSize = 3;
-        List<ArrayList<String>> response = statisticsRepository.getMainStatisticsWithTag(PageRequest.of(tagPage, tagSize));
-        ArrayList<String> names = new ArrayList<>();
-        ArrayList<Long> totalCount = new ArrayList<>();
-
-        int nameIdx = 0, numberIdx = 1;
-        for (ArrayList<String> row : response) {
-            names.add(row.get(nameIdx));
-            totalCount.add(Long.parseLong(row.get(numberIdx)));
+        // given
+        LocalDate date = LocalDate.now();
+        int hours = 10;
+        int totalNumberOfData = 5;
+        Education education;
+        for (int i = 0; i < totalNumberOfData; i++) {
+            education = Education.builder()
+                    .title("테스트 - Mysql 초급 강좌 제목")
+                    .content("테스트 - Mysql 초급 강좌 본문")
+                    .startDate(date)
+                    .endDate(date.plusDays(1))
+                    .totalHours(hours)
+                    .type(EducationType.ONLINE)
+                    .place("테스트 - 인프런 온라인 교육 사이트")
+                    .user(this.user)
+                    .category(this.category)
+                    .build();
+            this.educationRepository.save(education);
+            this.eduTagRepository.save(EduTag.builder().education(education).tag(this.tag).build());
         }
 
-        StatisticsMainTagResponseDto statisticsMainTagResponseDto = new StatisticsMainTagResponseDto(names, totalCount);
-        System.out.println(statisticsMainTagResponseDto.toString());
+        // when
+        StatisticsMainTagResponseDto statisticsMainTagResponseDto = statisticsService.getMainStatisticsWithTag();
+        System.out.println(statisticsMainTagResponseDto);
+
+        // then
+        int targetIndex = statisticsMainTagResponseDto.getNames().indexOf(this.tag.getName());
+        assertThat(statisticsMainTagResponseDto.getNames().get(targetIndex)).isEqualTo(this.tag.getName());
+        assertThat(statisticsMainTagResponseDto.getTotalTagCount().get(targetIndex)).isEqualTo(totalNumberOfData);
     }
 }
