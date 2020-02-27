@@ -297,7 +297,6 @@ public class BoardControllerTest {
         assertThat(responseEntity.getBody().getMessage()).isEqualTo(StatusCode.OK.getMessage());
         assertThat(response.get("totalElements")).isEqualTo(totalNumberOfData);
         responseContentList.forEach(responseContent -> assertThat(((LinkedHashMap) responseContent).get("title")).isEqualTo(title));
-        responseContentList.forEach(responseContent -> assertThat(((LinkedHashMap) responseContent).get("content")).isEqualTo(content));
         // 참고 : totalElements=29, totalPages=3, last=false, size=10, number=0, sort={sorted=true, unsorted=false, empty=false}, numberOfElements=10, first=true, empty=false
     }
 }
