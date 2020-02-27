@@ -126,9 +126,9 @@ public class StatisticsService {
         int monthIdx = 0, hourIdx = 1, numberIdx = 2;
         for (ArrayList<String> row : response) {
             // 쿼리 결과 데이터가 있는 월만 값 대입
-            String idx = row.get(monthIdx);
-            EducationHoursOfUser[Integer.parseInt(idx)-1] = Long.parseLong(row.get(hourIdx));
-            EducationNumbersOfUser[Integer.parseInt(idx)-1] = Long.parseLong(row.get(numberIdx));
+            int idx = Integer.parseInt(row.get(monthIdx))-1;
+            EducationHoursOfUser[idx] = Long.parseLong(row.get(hourIdx));
+            EducationNumbersOfUser[idx] = Long.parseLong(row.get(numberIdx));
         }
 
         return new StatisticsEducationMonthResponseDto(currentYear, months, EducationHoursOfUser, EducationNumbersOfUser);
