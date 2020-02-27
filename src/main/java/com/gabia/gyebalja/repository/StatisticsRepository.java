@@ -47,7 +47,7 @@ public interface StatisticsRepository extends JpaRepository<Education, Long>{
     @Query(" select c.name as categoryName, count(e) as totalNumber from Education e join e.category c  where e.user.id = :userId group by c.id order by count(e) desc ")
     List<ArrayList<String>> getEducationStatisticsWithCategory(@Param("userId") Long userId, Pageable pageable);
 
-    /** 개인 TOP 3 태그 */
+    /** 개인 TOP 3 태그 (누적)*/
     @Query("select t.name, count(et) from Education e join e.eduTags et join et.tag t where e.user.id = :userId group by et.tag order by count(et) desc")
     List<ArrayList<String>> getEducationStatisticsWithTag(@Param("userId") Long userId, Pageable pageable);
 
@@ -62,10 +62,10 @@ public interface StatisticsRepository extends JpaRepository<Education, Long>{
 
     /** 개인 부서 내 등수 (당해년도) */
     // 부서원들의 시간 합계 조회
-    @Query("select u.id as userId, sum(e.totalHours) as totalHours " +
+    @Query("select sum(e.totalHours) as totalHours " +
             "from Education e join e.user u " +
             "where u.department.id = :deptId and substring(e.startDate, 1, 4) = :currentYear " +
             "group by u.id" +
             " order by sum(e.totalHours) desc")
-    List<ArrayList<String>> getEducationStatisticsWithRank(@Param("deptId") Long deptId, @Param("currentYear") String currentYear);
+    ArrayList<Long> getEducationStatisticsWithRank(@Param("deptId") Long deptId, @Param("currentYear") String currentYear);
 }

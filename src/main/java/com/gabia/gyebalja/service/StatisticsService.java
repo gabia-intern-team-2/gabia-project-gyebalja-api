@@ -119,29 +119,16 @@ public class StatisticsService {
 
         String currentYear = Integer.toString(LocalDate.now().getYear());
         List<ArrayList<String>> response = statisticsRepository.getEducationStatisticsWithMonth(userId, currentYear);
-        ArrayList<String> months = new ArrayList<>();
-        ArrayList<Long> EducationHoursOfUser = new ArrayList<>();
-        ArrayList<Long> EducationNumbersOfUser = new ArrayList<>();
+        String[] months = {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"}; // Month는 사이즈가 불변이기때문에 배열로 초기화
+        long[] EducationHoursOfUser = new long[12]; // Month는 사이즈가 불변이기때문에 배열로 초기화하여 0으로 세팅
+        long[] EducationNumbersOfUser = new long[12]; // Month는 사이즈가 불변이기때문에 배열로 초기화하여 0으로 세팅
 
         int monthIdx = 0, hourIdx = 1, numberIdx = 2;
-        exit: for(int i = 1; i <= 12; i++) {
-            String monthFormat;
-            if( i < 10 ) {
-                monthFormat = "0" + Integer.toString(i);
-            } else {
-                monthFormat = Integer.toString(i);
-            }
-            months.add(monthFormat);
-            for (ArrayList<String> row : response) {
-                if(monthFormat.equals(row.get(monthIdx))) {
-                    EducationHoursOfUser.add(Long.parseLong(row.get(hourIdx)));
-                    EducationNumbersOfUser.add(Long.parseLong(row.get(numberIdx)));
-                    continue exit;
-                }
-            }
-            EducationHoursOfUser.add(0L);
-            EducationNumbersOfUser.add(0L);
-
+        for (ArrayList<String> row : response) {
+            // 쿼리 결과 데이터가 있는 월만 값 대입
+            String idx = row.get(monthIdx);
+            EducationHoursOfUser[Integer.parseInt(idx)-1] = Long.parseLong(row.get(hourIdx));
+            EducationNumbersOfUser[Integer.parseInt(idx)-1] = Long.parseLong(row.get(numberIdx));
         }
 
         return new StatisticsEducationMonthResponseDto(currentYear, months, EducationHoursOfUser, EducationNumbersOfUser);
@@ -216,25 +203,19 @@ public class StatisticsService {
         Long totalUserOfDepartment = userRepository.getUserNumberInDepartment(deptId);
         // 사용자의 시간 조회
         Long userTotalHours = statisticsRepository.getEducationStatisticsWithIndividualTotalHours(userId, currentYear);
-        if( userTotalHours == null)
-            userTotalHours = 0L;
-        List<ArrayList<String>> response = statisticsRepository.getEducationStatisticsWithRank(deptId, currentYear);
+        ArrayList<Long> response = statisticsRepository.getEducationStatisticsWithRank(deptId, currentYear);
 
-        System.out.println("userTotalHours = " + userTotalHours);
-        System.out.println("response = " + response);
         // 등수 처리 로직 (동점자는 같은 등수 처리)
         int rank = 0;
-        if( userTotalHours == 0) {
+        if( userTotalHours == null) {
             return new StatisticsEducationRankResponseDto(response.size() + 1, totalUserOfDepartment);
         } else {
-            for(int i = 0; i < response.size(); i++) {
-                if (Long.parseLong(response.get(i).get(1)) == userTotalHours) {
-                    rank = i+1;
+            for (Long res : response) {
+                ++rank;
+                if (res == userTotalHours)
                     break;
-                }
             }
-            return new StatisticsEducationRankResponseDto(rank, totalUserOfDepartment);
         }
-
+        return new StatisticsEducationRankResponseDto(rank, totalUserOfDepartment);
     }
 }
