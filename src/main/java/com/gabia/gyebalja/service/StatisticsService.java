@@ -1,20 +1,26 @@
 package com.gabia.gyebalja.service;
 
 import com.gabia.gyebalja.domain.User;
-import com.gabia.gyebalja.dto.statistics.*;
-import com.gabia.gyebalja.repository.EduTagRepository;
-import com.gabia.gyebalja.repository.EducationRepository;
+import com.gabia.gyebalja.dto.statistics.StatisticsEducationCategoryResponseDto;
+import com.gabia.gyebalja.dto.statistics.StatisticsEducationHourResponseDto;
+import com.gabia.gyebalja.dto.statistics.StatisticsEducationMonthResponseDto;
+import com.gabia.gyebalja.dto.statistics.StatisticsEducationRankResponseDto;
+import com.gabia.gyebalja.dto.statistics.StatisticsEducationTagResponseDto;
+import com.gabia.gyebalja.dto.statistics.StatisticsMainCategoryResponseDto;
+import com.gabia.gyebalja.dto.statistics.StatisticsMainMonthResponseDto;
+import com.gabia.gyebalja.dto.statistics.StatisticsMainTagResponseDto;
+import com.gabia.gyebalja.dto.statistics.StatisticsMainYearResponseDto;
+import com.gabia.gyebalja.exception.NotExistUserException;
 import com.gabia.gyebalja.repository.StatisticsRepository;
 import com.gabia.gyebalja.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
+
 
 @RequiredArgsConstructor
 @Transactional
@@ -109,6 +115,8 @@ public class StatisticsService {
      */
     // 통계 - 당해년도의 월별 교육 건수, 시간
     public StatisticsEducationMonthResponseDto getEducationStatisticsWithMonth(Long userId) {
+        userRepository.findById(userId).orElseThrow(() -> new NotExistUserException("존재하지 않는 사용자입니다."));
+
         String currentYear = Integer.toString(LocalDate.now().getYear());
         List<ArrayList<String>> response = statisticsRepository.getEducationStatisticsWithMonth(userId, currentYear);
         ArrayList<String> months = new ArrayList<>();
@@ -141,6 +149,7 @@ public class StatisticsService {
 
     // 통계 - 누적 개인 최다 카테고리
     public StatisticsEducationCategoryResponseDto getEducationStatisticsWithCategory(Long userId) {
+        userRepository.findById(userId).orElseThrow(() -> new NotExistUserException("존재하지 않는 사용자입니다."));
         int categoryPage = 0;
         int categorySize = 1;
         List<ArrayList<String>> response = statisticsRepository.getEducationStatisticsWithCategory(userId, PageRequest.of(categoryPage, categorySize));
@@ -158,6 +167,7 @@ public class StatisticsService {
 
     // 통계 - 누적 개인 TOP 3 태그
     public StatisticsEducationTagResponseDto getEducationStatisticsWithTag(Long userId) {
+        userRepository.findById(userId).orElseThrow(() -> new NotExistUserException("존재하지 않는 사용자입니다."));
         int tagPage = 0;
         int tagSize = 3;
         List<ArrayList<String>> response = statisticsRepository.getEducationStatisticsWithTag(userId, PageRequest.of(tagPage, tagSize));
@@ -175,37 +185,56 @@ public class StatisticsService {
 
     // 통계 - 당해년도 사용자 vs 회사
     public StatisticsEducationHourResponseDto getEducationStatisticsWithHour(Long userId) {
+        userRepository.findById(userId).orElseThrow(() -> new NotExistUserException("존재하지 않는 사용자입니다."));
         String currentYear = Integer.toString(LocalDate.now().getYear());
         // 당해년도 개인 총 교육시간
-        Long individualTotalHours = statisticsRepository.getEducationStatisticsWithIndividualTotalHours(userId, currentYear);
-
+        Long userTotalHours = statisticsRepository.getEducationStatisticsWithIndividualTotalHours(userId, currentYear);
+        if( userTotalHours == null)
+            userTotalHours = 0L;
         // 사용자 수
-        long totalUsers = userRepository.count();
+        Long totalUsers = userRepository.count();
 
         // 당해년도 회사 총 교육시간
         Long companyTotalHours = statisticsRepository.getEducationStatisticsWithCompanyTotalHours(currentYear);
+        Long avgCompany = 0L;
+        try{
+            avgCompany = companyTotalHours/totalUsers;
+        } catch (ArithmeticException e) {
+            avgCompany = 0L;
+        } finally {
+            return new StatisticsEducationHourResponseDto(userTotalHours, avgCompany);
+        }
 
-        return new StatisticsEducationHourResponseDto(individualTotalHours, companyTotalHours/totalUsers);
     }
 
     // 통계 - 당해년도 부서 내 등수
     public StatisticsEducationRankResponseDto getEducationStatisticsWithRank(Long userId) {
         String currentYear = Integer.toString(LocalDate.now().getYear());
         // 사용자가 속한 부서 ID 조회
-        Optional<User> findUser = userRepository.findById(userId);
-        Long deptId = findUser.get().getDepartment().getId();
-
+        User findUser = userRepository.findById(userId).orElseThrow(() -> new NotExistUserException("존재하지 않는 사용자입니다."));
+        Long deptId = findUser.getDepartment().getId();
+        Long totalUserOfDepartment = userRepository.getUserNumberInDepartment(deptId);
+        // 사용자의 시간 조회
+        Long userTotalHours = statisticsRepository.getEducationStatisticsWithIndividualTotalHours(userId, currentYear);
+        if( userTotalHours == null)
+            userTotalHours = 0L;
         List<ArrayList<String>> response = statisticsRepository.getEducationStatisticsWithRank(deptId, currentYear);
-        // 아직 동 등수 미처리
-        int rank = 0;
-        for(int i = 0; i < response.size(); i++) {
 
-            if( response.get(i).get(0).equals(Long.toString(userId))) {
-                rank = i+1;
-                break;
+        System.out.println("userTotalHours = " + userTotalHours);
+        System.out.println("response = " + response);
+        // 등수 처리 로직 (동점자는 같은 등수 처리)
+        int rank = 0;
+        if( userTotalHours == 0) {
+            return new StatisticsEducationRankResponseDto(response.size() + 1, totalUserOfDepartment);
+        } else {
+            for(int i = 0; i < response.size(); i++) {
+                if (Long.parseLong(response.get(i).get(1)) == userTotalHours) {
+                    rank = i+1;
+                    break;
+                }
             }
+            return new StatisticsEducationRankResponseDto(rank, totalUserOfDepartment);
         }
 
-        return new StatisticsEducationRankResponseDto(rank, response.size());
     }
 }

@@ -10,7 +10,6 @@ import java.util.ArrayList;
 @ToString
 @Getter
 public class StatisticsEducationMonthResponseDto {
-
     private String year;
     private ArrayList<String> months;
     private ArrayList<Long> userEducationTimes;

@@ -4,17 +4,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.util.ArrayList;
-
 @NoArgsConstructor
 @ToString
 @Getter
 public class StatisticsEducationRankResponseDto {
-
     private int rank;
-    private int teamMemberNumber;
+    private Long teamMemberNumber;
 
-    public StatisticsEducationRankResponseDto(int rank, int teamMemberNumber) {
+    public StatisticsEducationRankResponseDto(int rank, Long teamMemberNumber) {
         this.rank = rank;
         this.teamMemberNumber = teamMemberNumber;
     }

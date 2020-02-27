@@ -2,8 +2,17 @@ package com.gabia.gyebalja.controller;
 
 import com.gabia.gyebalja.common.CommonJsonFormat;
 import com.gabia.gyebalja.common.StatusCode;
-import com.gabia.gyebalja.dto.education.EducationDetailResponseDto;
-import com.gabia.gyebalja.dto.statistics.*;
+import com.gabia.gyebalja.dto.statistics.StatisticsEducationCategoryResponseDto;
+import com.gabia.gyebalja.dto.statistics.StatisticsEducationHourResponseDto;
+import com.gabia.gyebalja.dto.statistics.StatisticsEducationMonthResponseDto;
+import com.gabia.gyebalja.dto.statistics.StatisticsEducationRankResponseDto;
+import com.gabia.gyebalja.dto.statistics.StatisticsEducationResponseDto;
+import com.gabia.gyebalja.dto.statistics.StatisticsEducationTagResponseDto;
+import com.gabia.gyebalja.dto.statistics.StatisticsMainCategoryResponseDto;
+import com.gabia.gyebalja.dto.statistics.StatisticsMainMonthResponseDto;
+import com.gabia.gyebalja.dto.statistics.StatisticsMainResponseDto;
+import com.gabia.gyebalja.dto.statistics.StatisticsMainTagResponseDto;
+import com.gabia.gyebalja.dto.statistics.StatisticsMainYearResponseDto;
 import com.gabia.gyebalja.service.StatisticsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,44 +41,14 @@ public class StatisticsApiController {
     /** 조회 - 교육 화면 */
     @GetMapping("/api/v1/statistics/education/users/{userId}")
     public CommonJsonFormat getEducationStatistics(@PathVariable("userId") Long id) {
-        StatisticsEducationMonthResponseDto statisticsEducationMonthResponseDto = statisticsService.getEducationStatisticsWithMonth(id);
-
-        return new CommonJsonFormat(StatusCode.OK.getCode(),StatusCode.OK.getMessage(),statisticsEducationMonthResponseDto);
-    }
-
-    /** 조회 - 교육 화면 */
-    @GetMapping("/api/v1/statistics/category/users/{userId}")
-    public CommonJsonFormat getCategoryStatistics(@PathVariable("userId") Long id) {
         StatisticsEducationCategoryResponseDto statisticsEducationCategoryResponseDto = statisticsService.getEducationStatisticsWithCategory(id);
-
-        return new CommonJsonFormat(StatusCode.OK.getCode(),StatusCode.OK.getMessage(),statisticsEducationCategoryResponseDto);
-
-    }
-
-    /** 조회 - 교육 화면 */
-    @GetMapping("/api/v1/statistics/tags/users/{userId}")
-    public CommonJsonFormat getTagStatistics(@PathVariable("userId") Long id) {
+        StatisticsEducationHourResponseDto statisticsEducationHourResponseDto = statisticsService.getEducationStatisticsWithHour(id);
+        StatisticsEducationMonthResponseDto statisticsEducationMonthResponseDto = statisticsService.getEducationStatisticsWithMonth(id);
+        StatisticsEducationRankResponseDto statisticsEducationRankResponseDto = statisticsService.getEducationStatisticsWithRank(id);
         StatisticsEducationTagResponseDto statisticsEducationTagResponseDto = statisticsService.getEducationStatisticsWithTag(id);
 
-        return new CommonJsonFormat(StatusCode.OK.getCode(),StatusCode.OK.getMessage(),statisticsEducationTagResponseDto);
-
+        StatisticsEducationResponseDto response = new StatisticsEducationResponseDto(statisticsEducationCategoryResponseDto, statisticsEducationHourResponseDto, statisticsEducationMonthResponseDto, statisticsEducationRankResponseDto, statisticsEducationTagResponseDto);
+        return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), response);
     }
 
-    /** 조회 - 교육 화면 */
-    @GetMapping("/api/v1/statistics/hours/users/{userId}")
-    public CommonJsonFormat getHoursStatistics(@PathVariable("userId") Long id) {
-        StatisticsEducationHourResponseDto statisticsEducationHourResponseDto = statisticsService.getEducationStatisticsWithHour(id);
-
-        return new CommonJsonFormat(StatusCode.OK.getCode(),StatusCode.OK.getMessage(),statisticsEducationHourResponseDto);
-
-    }
-
-    /** 조회 - 교육 화면 */
-    @GetMapping("/api/v1/statistics/rank/users/{userId}")
-    public CommonJsonFormat getRankStatistics(@PathVariable("userId") Long id) {
-        StatisticsEducationRankResponseDto statisticsEducationRankResponseDto = statisticsService.getEducationStatisticsWithRank(id);
-
-        return new CommonJsonFormat(StatusCode.OK.getCode(),StatusCode.OK.getMessage(),statisticsEducationRankResponseDto);
-
-    }
 }

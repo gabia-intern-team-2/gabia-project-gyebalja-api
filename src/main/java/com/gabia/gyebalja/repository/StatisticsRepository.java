@@ -60,7 +60,8 @@ public interface StatisticsRepository extends JpaRepository<Education, Long>{
     @Query("select sum(e.totalHours) from Education e where substring(e.startDate, 1, 4) = :currentYear")
     Long getEducationStatisticsWithCompanyTotalHours(@Param("currentYear") String currentYear);
 
-    /** 개인 부서 내 등수 */
+    /** 개인 부서 내 등수 (당해년도) */
+    // 부서원들의 시간 합계 조회
     @Query("select u.id as userId, sum(e.totalHours) as totalHours " +
             "from Education e join e.user u " +
             "where u.department.id = :deptId and substring(e.startDate, 1, 4) = :currentYear " +
