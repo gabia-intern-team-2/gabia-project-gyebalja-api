@@ -1,14 +1,10 @@
 package com.gabia.gyebalja.dto.education;
 
-import com.gabia.gyebalja.domain.Education;
 import com.gabia.gyebalja.domain.EducationType;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.validation.constraints.Min;
 import java.time.LocalDate;
-import java.util.ArrayList;
 
 @NoArgsConstructor
 @Data
@@ -23,11 +19,11 @@ public class EducationRequestDto {
     private String place;
     private Long userId;
     private Long categoryId;
-    private ArrayList<Long> tagId = new ArrayList<>();
+    private String hashTag;
 
 
     @Builder
-    public EducationRequestDto( String title, String content, LocalDate startDate, LocalDate endDate, int totalHours, EducationType type, String place, Long userId, Long categoryId, ArrayList<Long> tagId ) {
+    public EducationRequestDto( String title, String content, LocalDate startDate, LocalDate endDate, int totalHours, EducationType type, String place, Long userId, Long categoryId, String hashTag ) {
         this.title = title;
         this.content = content;
         this.startDate = startDate;
@@ -37,7 +33,7 @@ public class EducationRequestDto {
         this.place = place;
         this.userId = userId;
         this.categoryId = categoryId;
-        this.tagId = tagId;
+        this.hashTag = hashTag;
     }
 
 }

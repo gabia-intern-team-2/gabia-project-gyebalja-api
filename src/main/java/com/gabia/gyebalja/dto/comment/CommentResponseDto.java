@@ -1,7 +1,7 @@
 package com.gabia.gyebalja.dto.comment;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.gabia.gyebalja.domain.Comment;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -18,7 +18,9 @@ public class CommentResponseDto {
     private Long boardId;
     private Long userId;
     private String userName;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime createdDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss", timezone = "Asia/Seoul")
     private LocalDateTime modifiedDate;
 
     public CommentResponseDto(Comment comment){

@@ -4,6 +4,7 @@ import com.gabia.gyebalja.domain.Board;
 import com.gabia.gyebalja.domain.Likes;
 import com.gabia.gyebalja.domain.User;
 import com.gabia.gyebalja.dto.likes.LikesRequestDto;
+import com.gabia.gyebalja.dto.likes.LikesResponseDto;
 import com.gabia.gyebalja.repository.BoardRepository;
 import com.gabia.gyebalja.repository.LikesRepository;
 import com.gabia.gyebalja.repository.UserRepository;
@@ -31,9 +32,18 @@ public class LikesService {
         User user = userRepository.findById(likesRequestDto.getUserId()).orElseThrow(() -> new IllegalArgumentException("해당 데이터가 없습니다."));
         Board board = boardRepository.findById(likesRequestDto.getBoardId()).orElseThrow(() -> new IllegalArgumentException("해당 데이터가 없습니다."));
 
-        Long likesId = likesRepository.save(Likes.builder().user(user).board(board).build()).getId();
+        Long likesId = likesRepository.save(likesRequestDto.toEntity(user, board)).getId();
 
         return likesId;
+    }
+
+    /** 조회 - likes 한 개 */
+    public LikesResponseDto getOneLikes(Long userId, Long boardId) {
+        Likes likes = likesRepository.findByUserIdAndBoardId(userId, boardId).orElseThrow(() -> new IllegalArgumentException("해당 데이터가 없습니다."));
+
+        LikesResponseDto likesResponseDto = new LikesResponseDto(likes);
+
+        return likesResponseDto;
     }
 
     /** 삭제 - likes 한 개 */

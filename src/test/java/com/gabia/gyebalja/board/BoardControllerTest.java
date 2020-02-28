@@ -216,9 +216,21 @@ public class BoardControllerTest {
         Long updateId = saveId;
         String updateTitle = "테스트 - BoardRequestDto title 업데이트";
         String updateContent = "테스트 - BoardRequestDto content 업데이트";
+        Education updateEducation = Education.builder()
+                .title("테스트 - Mysql 초급 강좌 제목 업데이트")
+                .content("테스트 - Mysql 초급 강좌 본문 업데이트")
+                .startDate(LocalDate.now())
+                .endDate(LocalDate.now())
+                .totalHours(10)
+                .type(EducationType.ONLINE)
+                .place("테스트 - 인프런 온라인 교육 사이트 업데이트")
+                .user(this.user)
+                .category(this.category)
+                .build();
+        educationRepository.save(updateEducation);
         String url = "http://localhost:" + port + "/api/v1/boards/" + updateId;
 
-        BoardRequestDto boardRequestDto = BoardRequestDto.builder().title(updateTitle).content(updateContent).userId(user.getId()).educationId(education.getId()).build();
+        BoardRequestDto boardRequestDto = BoardRequestDto.builder().title(updateTitle).content(updateContent).userId(user.getId()).educationId(updateEducation.getId()).build();
         HttpEntity<BoardRequestDto> requestEntity = new HttpEntity<>(boardRequestDto);
 
         // when
@@ -285,7 +297,6 @@ public class BoardControllerTest {
         assertThat(responseEntity.getBody().getMessage()).isEqualTo(StatusCode.OK.getMessage());
         assertThat(response.get("totalElements")).isEqualTo(totalNumberOfData);
         responseContentList.forEach(responseContent -> assertThat(((LinkedHashMap) responseContent).get("title")).isEqualTo(title));
-        responseContentList.forEach(responseContent -> assertThat(((LinkedHashMap) responseContent).get("content")).isEqualTo(content));
         // 참고 : totalElements=29, totalPages=3, last=false, size=10, number=0, sort={sorted=true, unsorted=false, empty=false}, numberOfElements=10, first=true, empty=false
     }
 }

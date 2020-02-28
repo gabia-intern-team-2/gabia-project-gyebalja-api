@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
@@ -53,5 +55,27 @@ public class DepartmentServiceTest {
 
         // then
         assertThat(departmentResponseDto.getId()).isEqualTo(saveId);
+    }
+
+    @Test
+    @DisplayName("DepartmentService.getAllDepartment() 테스트 (전체 조회)")
+    public void getAllDepartmentTest() {
+        // given
+        int originalTotalNumberOfData = (int) departmentRepository.count();
+        int targetIndex = originalTotalNumberOfData;
+        int totalNumberOfData = 29;
+        String name = "테스트 - 부서";
+        for (int i = 0; i < totalNumberOfData; i++) {
+            departmentRepository.save(Department.builder().name(name).depth(0).parentDepartment(null).build());
+        }
+        em.clear();
+        em.flush();
+
+        // when
+        List<DepartmentResponseDto> departmentResponseDtos = departmentService.getAllDepartment();
+
+        // then
+        assertThat(departmentResponseDtos.size()).isEqualTo(totalNumberOfData);
+        assertThat(departmentResponseDtos.get(targetIndex).getName()).isEqualTo(name);
     }
 }

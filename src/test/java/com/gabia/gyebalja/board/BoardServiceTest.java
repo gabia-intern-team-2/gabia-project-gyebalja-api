@@ -9,8 +9,9 @@ import com.gabia.gyebalja.domain.EducationType;
 import com.gabia.gyebalja.domain.GenderType;
 import com.gabia.gyebalja.domain.Likes;
 import com.gabia.gyebalja.domain.User;
+import com.gabia.gyebalja.dto.board.BoardAllResponseDto;
 import com.gabia.gyebalja.dto.board.BoardRequestDto;
-import com.gabia.gyebalja.dto.board.BoardResponseDto;
+import com.gabia.gyebalja.dto.board.BoardDetailResponseDto;
 import com.gabia.gyebalja.repository.BoardRepository;
 import com.gabia.gyebalja.repository.CategoryRepository;
 import com.gabia.gyebalja.repository.CommentRepository;
@@ -124,8 +125,8 @@ public class BoardServiceTest {
         em.flush();
 
         // then
-        BoardResponseDto boardResponseDto = boardService.getOneBoard(saveId);
-        assertThat(boardResponseDto.getId()).isEqualTo(saveId);
+        BoardDetailResponseDto boardDetailResponseDto = boardService.getOneBoard(saveId);
+        assertThat(boardDetailResponseDto.getId()).isEqualTo(saveId);
     }
 
     @Test
@@ -141,12 +142,12 @@ public class BoardServiceTest {
         em.flush();
 
         // when
-        BoardResponseDto boardResponseDto = boardService.getOneBoard(saveId);
+        BoardDetailResponseDto boardDetailResponseDto = boardService.getOneBoard(saveId);
 
         // then
-        assertThat(boardResponseDto.getId()).isEqualTo(saveId);
-        assertThat(boardResponseDto.getTitle()).isEqualTo(title);
-        assertThat(boardResponseDto.getContent()).isEqualTo(content);
+        assertThat(boardDetailResponseDto.getId()).isEqualTo(saveId);
+        assertThat(boardDetailResponseDto.getTitle()).isEqualTo(title);
+        assertThat(boardDetailResponseDto.getContent()).isEqualTo(content);
     }
 
     @Test
@@ -158,8 +159,6 @@ public class BoardServiceTest {
         BoardRequestDto boardRequestDto = BoardRequestDto.builder().title(title).content(content).userId(user.getId()).educationId(education.getId()).build();
 
         Long saveId = boardService.postOneBoard(boardRequestDto);
-        em.clear();
-        em.flush();
 
         int totalNumberOfData = 29;
         Board board = boardRepository.findById(saveId).orElseThrow(() -> new IllegalArgumentException("해당 데이터가 없습니다."));
@@ -167,16 +166,18 @@ public class BoardServiceTest {
             commentRepository.save(Comment.builder().content("테스트 - 댓글").user(user).board(board).build());
             likesRepository.save(Likes.builder().board(board).user(user).build());
         }
+        em.flush();
+        em.clear();
 
         // when
-        BoardResponseDto boardResponseDto = boardService.getOneBoard(saveId);
+        BoardDetailResponseDto boardDetailResponseDto = boardService.getOneBoard(saveId);
 
         // then
-        assertThat(boardResponseDto.getId()).isEqualTo(saveId);
-        assertThat(boardResponseDto.getTitle()).isEqualTo(title);
-        assertThat(boardResponseDto.getContent()).isEqualTo(content);
-        assertThat(boardResponseDto.getCommentList().size()).isEqualTo(totalNumberOfData);
-        assertThat(boardResponseDto.getLikes()).isEqualTo(totalNumberOfData);
+        assertThat(boardDetailResponseDto.getId()).isEqualTo(saveId);
+        assertThat(boardDetailResponseDto.getTitle()).isEqualTo(title);
+        assertThat(boardDetailResponseDto.getContent()).isEqualTo(content);
+        assertThat(boardDetailResponseDto.getCommentList().size()).isEqualTo(totalNumberOfData);
+        assertThat(boardDetailResponseDto.getLikes()).isEqualTo(totalNumberOfData);
     }
 
     @Test
@@ -193,16 +194,16 @@ public class BoardServiceTest {
         em.flush();
 
         // when
-        BoardResponseDto boardResponseDto = boardService.getOneBoard(saveId);
+        BoardDetailResponseDto boardDetailResponseDto = boardService.getOneBoard(saveId);
         for (int i = 0; i < totalNumberOfData - 1; i++) {
-            boardResponseDto = boardService.getOneBoard(saveId);
+            boardDetailResponseDto = boardService.getOneBoard(saveId);
         }
 
         // then
-        assertThat(boardResponseDto.getId()).isEqualTo(saveId);
-        assertThat(boardResponseDto.getTitle()).isEqualTo(title);
-        assertThat(boardResponseDto.getContent()).isEqualTo(content);
-        assertThat(boardResponseDto.getViews()).isEqualTo(totalNumberOfData);
+        assertThat(boardDetailResponseDto.getId()).isEqualTo(saveId);
+        assertThat(boardDetailResponseDto.getTitle()).isEqualTo(title);
+        assertThat(boardDetailResponseDto.getContent()).isEqualTo(content);
+        assertThat(boardDetailResponseDto.getViews()).isEqualTo(totalNumberOfData);
     }
 
     @Test
@@ -214,7 +215,19 @@ public class BoardServiceTest {
         BoardRequestDto boardRequestDto = BoardRequestDto.builder().title(title).content(content).userId(user.getId()).educationId(education.getId()).build();
         String updateTitle = "테스트 - BoardRequestDto title 업데이트";
         String updateContent = "테스트 - BoardRequestDto content 업데이트";
-        BoardRequestDto updateBoardRequestDto = BoardRequestDto.builder().title(updateTitle).content(updateContent).userId(user.getId()).educationId(education.getId()).build();
+        Education updateEducation = Education.builder()
+                .title("테스트 - Mysql 초급 강좌 제목 업데이트")
+                .content("테스트 - Mysql 초급 강좌 본문 업데이트")
+                .startDate(LocalDate.now())
+                .endDate(LocalDate.now())
+                .totalHours(10)
+                .type(EducationType.ONLINE)
+                .place("테스트 - 인프런 온라인 교육 사이트 업데이트")
+                .user(this.user)
+                .category(this.category)
+                .build();
+        educationRepository.save(updateEducation);
+        BoardRequestDto updateBoardRequestDto = BoardRequestDto.builder().title(updateTitle).content(updateContent).userId(user.getId()).educationId(updateEducation.getId()).build();
 
         Long saveId = boardService.postOneBoard(boardRequestDto);
         em.flush();
@@ -224,10 +237,11 @@ public class BoardServiceTest {
         Long updateId = boardService.putOneBoard(saveId, updateBoardRequestDto);
 
         // then
-        BoardResponseDto boardResponseDto = boardService.getOneBoard(updateId);
+        BoardDetailResponseDto boardDetailResponseDto = boardService.getOneBoard(updateId);
         assertThat(updateId).isEqualTo(saveId);
-        assertThat(boardResponseDto.getTitle()).isEqualTo(updateTitle);
-        assertThat(boardResponseDto.getContent()).isEqualTo(updateContent);
+        assertThat(boardDetailResponseDto.getTitle()).isEqualTo(updateTitle);
+        assertThat(boardDetailResponseDto.getContent()).isEqualTo(updateContent);
+        assertThat(boardDetailResponseDto.getEducationId()).isEqualTo(updateEducation.getId());
     }
 
     @Test
@@ -269,11 +283,10 @@ public class BoardServiceTest {
         em.flush();
 
         // when
-        Page<BoardResponseDto> boardResponseDtos = boardService.getAllBoard(pageable);
+        Page<BoardAllResponseDto> boardAllResponseDtos = boardService.getAllBoard(pageable);
 
         // then
-        assertThat(boardResponseDtos.getTotalElements()).isEqualTo(totalNumberOfData);
-        assertThat(boardResponseDtos.getContent().get(targetIndex).getTitle()).isEqualTo(title);
-        assertThat(boardResponseDtos.getContent().get(targetIndex).getContent()).isEqualTo(content);
+        assertThat(boardAllResponseDtos.getTotalElements()).isEqualTo(totalNumberOfData);
+        assertThat(boardAllResponseDtos.getContent().get(targetIndex).getTitle()).isEqualTo(title);
     }
 }
