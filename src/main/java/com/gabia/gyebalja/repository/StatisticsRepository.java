@@ -14,23 +14,29 @@ public interface StatisticsRepository extends JpaRepository<Education, Long>{
     /** 연도별 교육 건수, 시간 */
     @Query("select substring(e.startDate, 1, 4) as year, sum(e.totalHours) as totalEducationHourOfEmployees, count(e) as totalEducationNumberOfEmployees " +
             "from Education e " +
-            "group by substring(e.startDate, 1, 4) " +
-            "order by substring(e.startDate, 1, 4) desc")
-    List<ArrayList<String>> getMainStatisticsWithYear(Pageable pageable);
+            "where substring(e.startDate, 1, 4) > :currentYear " +
+            "group by substring(e.startDate, 1, 4)")
+    List<ArrayList<String>> getMainStatisticsWithYear(@Param("currentYear") String currentYear);
 
     /** 월별 교육 건수, 시간 */
-    @Query("select substring(e.startDate, 1 ,7) as month, sum(e.totalHours) as totalEducationHourOfEmployees, count(e) as totalEducationNumberOfEmployees " +
+    @Query("select substring(e.startDate, 6 ,2) as month, sum(e.totalHours) as totalEducationHourOfEmployees, count(e) as totalEducationNumberOfEmployees " +
             "from Education e " +
-            "group by substring(e.startDate, 1, 7) " +
-            "order by substring(e.startDate, 1, 7) desc")
-    List<ArrayList<String>> getMainStatisticsWithMonth(Pageable pageable);
+            "where substring(e.startDate, 1, 4) = :currentYear " +
+            "group by substring(e.startDate, 6, 2)")
+    List<ArrayList<String>> getMainStatisticsWithMonth(@Param("currentYear") String currentYear);
 
     /** 카테고리 TOP n */
-    @Query(value = "select c.name, count(e) from Education e join e.category c group by c.id order by count(e) desc")
+    @Query("select c.name, count(e) " +
+            "from Education e join e.category c " +
+            "group by c.id " +
+            "order by count(e) desc")
     List<ArrayList<String>> getMainStatisticsWithCategory(Pageable pageable);
 
     /** 태그 TOP n*/
-    @Query("select t.name, count(et) from EduTag et join et.tag t group by et.tag order by count(et) desc")
+    @Query("select t.name, count(et) " +
+            "from EduTag et join et.tag t " +
+            "group by t " +
+            "order by count(et) desc")
     List<ArrayList<String>> getMainStatisticsWithTag(Pageable pageable);
 
 
