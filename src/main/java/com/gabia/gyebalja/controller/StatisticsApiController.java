@@ -50,5 +50,4 @@ public class StatisticsApiController {
         StatisticsEducationResponseDto response = new StatisticsEducationResponseDto(statisticsEducationCategoryResponseDto, statisticsEducationHourResponseDto, statisticsEducationMonthResponseDto, statisticsEducationRankResponseDto, statisticsEducationTagResponseDto);
         return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), response);
     }
-
 }
