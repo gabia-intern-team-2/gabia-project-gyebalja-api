@@ -92,16 +92,18 @@ public class StatisticsServiceTest {
     @DisplayName("통계(메인) - 연간 건수, 시간 테스트")
     public void getMainStatisticsWithYear(){
         // given
-        LocalDate date = LocalDate.now();
-        String year = Integer.toString(date.getYear());
+        LocalDate currentDate = LocalDate.now();
+        int yearRange = 5;
+        int currentYear = currentDate.getYear();
+        int baseYear = currentYear - yearRange;
         int hours = 10;
         int totalNumberOfData = 5;
         for(int i = 0; i < totalNumberOfData; i++){
             this.educationRepository.save(Education.builder()
                     .title("테스트 - Mysql 초급 강좌 제목")
                     .content("테스트 - Mysql 초급 강좌 본문")
-                    .startDate(date)
-                    .endDate(date.plusDays(1))
+                    .startDate(currentDate)
+                    .endDate(currentDate.plusDays(1))
                     .totalHours(hours)
                     .type(EducationType.ONLINE)
                     .place("테스트 - 인프런 온라인 교육 사이트")
@@ -114,28 +116,26 @@ public class StatisticsServiceTest {
         StatisticsMainYearResponseDto statisticsMainYearResponseDto = statisticsService.getMainStatisticsWithYear();
 
         // then
-        int targetIndex = statisticsMainYearResponseDto.getYears().indexOf(year);
-        assertThat(statisticsMainYearResponseDto.getYears().get(targetIndex)).isEqualTo(year);
-        assertThat(statisticsMainYearResponseDto.getTotalEducationCount().get(targetIndex)).isEqualTo(totalNumberOfData);
-        assertThat(statisticsMainYearResponseDto.getTotalEducationTime().get(targetIndex)).isEqualTo(hours * totalNumberOfData);
+        int targetIndex = currentYear - baseYear - 1;
+        assertThat(statisticsMainYearResponseDto.getYears()[targetIndex]).isEqualTo(Integer.toString(currentYear));
+        assertThat(statisticsMainYearResponseDto.getTotalEducationCount()[targetIndex]).isEqualTo(totalNumberOfData);
+        assertThat(statisticsMainYearResponseDto.getTotalEducationTime()[targetIndex]).isEqualTo(hours * totalNumberOfData);
     }
 
     @Test
     @DisplayName("통계(메인) - 월간 건수, 시간 테스트")
     public void getMainStatisticsWithMonth(){
         // given
-        LocalDate date = LocalDate.now();
-        int year = date.getYear();
-        String month = String.format("%02d", date.getMonthValue());
-        String yearAndMonth = year + "-" + month;
+        LocalDate currentDate = LocalDate.now();
+        int currentMonth = currentDate.getMonthValue();
         int hours = 10;
         int totalNumberOfData = 5;
         for (int i = 0; i < totalNumberOfData; i++) {
             this.educationRepository.save(Education.builder()
                     .title("테스트 - Mysql 초급 강좌 제목")
                     .content("테스트 - Mysql 초급 강좌 본문")
-                    .startDate(date)
-                    .endDate(date.plusDays(1))
+                    .startDate(currentDate)
+                    .endDate(currentDate.plusDays(1))
                     .totalHours(hours)
                     .type(EducationType.ONLINE)
                     .place("테스트 - 인프런 온라인 교육 사이트")
@@ -148,25 +148,25 @@ public class StatisticsServiceTest {
         StatisticsMainMonthResponseDto statisticsMainMonthResponseDto = statisticsService.getMainStatisticsWithMonth();
 
         // then
-        int targetIndex = statisticsMainMonthResponseDto.getMonths().indexOf(yearAndMonth);
-        assertThat(statisticsMainMonthResponseDto.getMonths().get(targetIndex)).isEqualTo(yearAndMonth);
-        assertThat(statisticsMainMonthResponseDto.getTotalEducationCount().get(targetIndex)).isEqualTo(totalNumberOfData);
-        assertThat(statisticsMainMonthResponseDto.getTotalEducationTime().get(targetIndex)).isEqualTo(hours * totalNumberOfData);
+        int targetIndex = currentMonth - 1;
+        assertThat(statisticsMainMonthResponseDto.getMonths()[targetIndex]).isEqualTo(String.format("%02d", currentMonth));
+        assertThat(statisticsMainMonthResponseDto.getTotalEducationCount()[targetIndex]).isEqualTo(totalNumberOfData);
+        assertThat(statisticsMainMonthResponseDto.getTotalEducationTime()[targetIndex]).isEqualTo(hours * totalNumberOfData);
     }
 
     @Test
-    @DisplayName("통계(메인) - 카테고리 TOPn 테스트")
+    @DisplayName("통계(메인) - 카테고리 Top n 테스트")
     public void getMainStatisticsWithCategory(){
         // given
-        LocalDate date = LocalDate.now();
+        LocalDate currentDate = LocalDate.now();
         int hours = 10;
         int totalNumberOfData = 5;
         for (int i = 0; i < totalNumberOfData; i++) {
             this.educationRepository.save(Education.builder()
                     .title("테스트 - Mysql 초급 강좌 제목")
                     .content("테스트 - Mysql 초급 강좌 본문")
-                    .startDate(date)
-                    .endDate(date.plusDays(1))
+                    .startDate(currentDate)
+                    .endDate(currentDate.plusDays(1))
                     .totalHours(hours)
                     .type(EducationType.ONLINE)
                     .place("테스트 - 인프런 온라인 교육 사이트")
@@ -186,10 +186,10 @@ public class StatisticsServiceTest {
     }
 
     @Test
-    @DisplayName("통계(메인) - 태그 TOPn 테스트")
+    @DisplayName("통계(메인) - 태그 Top n 테스트")
     public void getMainStatisticsWithTag(){
         // given
-        LocalDate date = LocalDate.now();
+        LocalDate currentDate = LocalDate.now();
         int hours = 10;
         int totalNumberOfData = 5;
         Education education;
@@ -197,8 +197,8 @@ public class StatisticsServiceTest {
             education = Education.builder()
                     .title("테스트 - Mysql 초급 강좌 제목")
                     .content("테스트 - Mysql 초급 강좌 본문")
-                    .startDate(date)
-                    .endDate(date.plusDays(1))
+                    .startDate(currentDate)
+                    .endDate(currentDate.plusDays(1))
                     .totalHours(hours)
                     .type(EducationType.ONLINE)
                     .place("테스트 - 인프런 온라인 교육 사이트")
