@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,23 +30,26 @@ public class StatisticsService {
 
     private final StatisticsRepository statisticsRepository;
     private final UserRepository userRepository;
+
     /**
-     *
      * 메인 페이지 통계 Service
      */
-    public StatisticsMainYearResponseDto getMainStatisticsWithYear(){
-        int yearPage = 0;
-        int yearSize = 5;
-        List<ArrayList<String>> response = statisticsRepository.getMainStatisticsWithYear(PageRequest.of(yearPage, yearSize));
-        ArrayList<String> years = new ArrayList<>();
-        ArrayList<Long> totalEducationHourOfEmployees = new ArrayList<>();
-        ArrayList<Long> totalEducationNumberOfEmployees = new ArrayList<>();
+    // 통계 - 당해년도의 연도별 교육 건수, 시간
+    public StatisticsMainYearResponseDto getMainStatisticsWithYear() {
+        int yearRange = 5;
+        int baseYear = LocalDate.now().getYear() - yearRange;
+        List<ArrayList<String>> response = statisticsRepository.getMainStatisticsWithYear(Integer.toString(baseYear));
+
+        String[] years = new String[yearRange];
+        long[] totalEducationHourOfEmployees = new long[yearRange];
+        long[] totalEducationNumberOfEmployees = new long[yearRange];
 
         int yearIdx = 0, hourIdx = 1, numberIdx = 2;
+        for (int i = 0; i < yearRange; i++) years[i] = Integer.toString(baseYear + i + 1);
         for (ArrayList<String> row : response) {
-            years.add(row.get(yearIdx));
-            totalEducationHourOfEmployees.add(Long.parseLong(row.get(hourIdx)));
-            totalEducationNumberOfEmployees.add(Long.parseLong(row.get(numberIdx)));
+            int idx = Integer.parseInt(row.get(yearIdx)) - baseYear - 1;
+            totalEducationHourOfEmployees[idx] = Long.parseLong(row.get(hourIdx));
+            totalEducationNumberOfEmployees[idx] = Long.parseLong(row.get(numberIdx));
         }
 
         StatisticsMainYearResponseDto statisticsMainYearResponseDto = new StatisticsMainYearResponseDto(years, totalEducationHourOfEmployees, totalEducationNumberOfEmployees);
@@ -53,27 +57,31 @@ public class StatisticsService {
         return statisticsMainYearResponseDto;
     }
 
-    public StatisticsMainMonthResponseDto getMainStatisticsWithMonth(){
-        int monthPage = 0;
-        int monthSize = 12;
-        List<ArrayList<String>> response = statisticsRepository.getMainStatisticsWithMonth(PageRequest.of(monthPage, monthSize));
-        ArrayList<String> months = new ArrayList<>();
-        ArrayList<Long> totalEducationHourOfEmployees = new ArrayList<>();
-        ArrayList<Long> totalEducationNumberOfEmployees = new ArrayList<>();
+    // 통계 - 당해년도의 월별 교육 건수, 시간
+    public StatisticsMainMonthResponseDto getMainStatisticsWithMonth() {
+        int monthRange = 12;
+        String currentYear = Integer.toString(LocalDate.now().getYear());
+
+        List<ArrayList<String>> response = statisticsRepository.getMainStatisticsWithMonth(currentYear);
+        String[] months = {"01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"};
+        ;
+        long[] totalEducationHourOfEmployees = new long[monthRange];
+        long[] totalEducationNumberOfEmployees = new long[monthRange];
 
         int monthIdx = 0, hourIdx = 1, numberIdx = 2;
         for (ArrayList<String> row : response) {
-            months.add(row.get(monthIdx));
-            totalEducationHourOfEmployees.add(Long.parseLong(row.get(hourIdx)));
-            totalEducationNumberOfEmployees.add(Long.parseLong(row.get(numberIdx)));
+            int idx = Integer.parseInt(row.get(monthIdx)) - 1;
+            totalEducationHourOfEmployees[idx] = Long.parseLong(row.get(hourIdx));
+            totalEducationNumberOfEmployees[idx] = Long.parseLong(row.get(numberIdx));
         }
 
-        StatisticsMainMonthResponseDto statisticsMainMonthResponseDto = new StatisticsMainMonthResponseDto(months, totalEducationHourOfEmployees, totalEducationNumberOfEmployees);
+        StatisticsMainMonthResponseDto statisticsMainMonthResponseDto = new StatisticsMainMonthResponseDto(currentYear, months, totalEducationHourOfEmployees, totalEducationNumberOfEmployees);
 
         return statisticsMainMonthResponseDto;
     }
 
-    public StatisticsMainCategoryResponseDto getMainStatisticsWithCategory(){
+    // 통계 - 누적 최다 카테고리
+    public StatisticsMainCategoryResponseDto getMainStatisticsWithCategory() {
         int categoryPage = 0;
         int categorySize = 3;
         List<ArrayList<String>> response = statisticsRepository.getMainStatisticsWithCategory(PageRequest.of(categoryPage, categorySize));
@@ -91,7 +99,8 @@ public class StatisticsService {
         return statisticsMainCategoryResponseDto;
     }
 
-    public StatisticsMainTagResponseDto getMainStatisticsWithTag(){
+    // 통계 - 누적 최다 태그
+    public StatisticsMainTagResponseDto getMainStatisticsWithTag() {
         int tagPage = 0;
         int tagSize = 3;
         List<ArrayList<String>> response = statisticsRepository.getMainStatisticsWithTag(PageRequest.of(tagPage, tagSize));
@@ -110,7 +119,6 @@ public class StatisticsService {
     }
 
     /**
-     *
      * 개인 교육 관리 페이지 통계 Service
      */
     // 통계 - 당해년도의 월별 교육 건수, 시간
@@ -126,7 +134,7 @@ public class StatisticsService {
         int monthIdx = 0, hourIdx = 1, numberIdx = 2;
         for (ArrayList<String> row : response) {
             // 쿼리 결과 데이터가 있는 월만 값 대입
-            int idx = Integer.parseInt(row.get(monthIdx))-1;
+            int idx = Integer.parseInt(row.get(monthIdx)) - 1;
             EducationHoursOfUser[idx] = Long.parseLong(row.get(hourIdx));
             EducationNumbersOfUser[idx] = Long.parseLong(row.get(numberIdx));
         }
@@ -176,7 +184,7 @@ public class StatisticsService {
         String currentYear = Integer.toString(LocalDate.now().getYear());
         // 당해년도 개인 총 교육시간
         Long userTotalHours = statisticsRepository.getEducationStatisticsWithIndividualTotalHours(userId, currentYear);
-        if( userTotalHours == null)
+        if (userTotalHours == null)
             userTotalHours = 0L;
         // 사용자 수
         Long totalUsers = userRepository.count();
@@ -184,8 +192,8 @@ public class StatisticsService {
         // 당해년도 회사 총 교육시간
         Long companyTotalHours = statisticsRepository.getEducationStatisticsWithCompanyTotalHours(currentYear);
         Long avgCompany = 0L;
-        try{
-            avgCompany = companyTotalHours/totalUsers;
+        try {
+            avgCompany = companyTotalHours / totalUsers;
         } catch (ArithmeticException e) {
             avgCompany = 0L;
         } finally {
@@ -207,7 +215,7 @@ public class StatisticsService {
 
         // 등수 처리 로직 (동점자는 같은 등수 처리)
         int rank = 0;
-        if( userTotalHours == null) {
+        if (userTotalHours == null) {
             return new StatisticsEducationRankResponseDto(response.size() + 1, totalUserOfDepartment);
         } else {
             for (Long res : response) {
