@@ -33,6 +33,8 @@ public class User extends BaseTime {
     @Column(length = 15, nullable = false)
     private String name;
 
+    @Column(name = "eng_name")
+    private String engName;
     /**
      * enum 사용 시 Default가 ORDINARY인데 이것을 사용시 확장성에서도 문제가 생기며 유연하지 않음
      * 꼭 EnumType.STRING 사용!
@@ -52,6 +54,8 @@ public class User extends BaseTime {
     private String positionName;
     @Column(name = "profile_img")
     private String profileImg;
+    @Column(name = "gabia_user_no", nullable = false)
+    private Long  gabiaUserNo;
 
     //Department와 연관관계
     @ManyToOne(fetch = FetchType.LAZY)
@@ -59,10 +63,12 @@ public class User extends BaseTime {
     private Department department;
 
     @Builder
-    public User(String email, String password, String name, GenderType gender, String phone, String tel, Long positionId, String positionName, String profileImg, Department department) {
+    public User(Long gabiaUserNo, String email, String password, String name, String engName,GenderType gender, String phone, String tel, Long positionId, String positionName, String profileImg, Department department) {
+        this.gabiaUserNo = gabiaUserNo;
         this.email = email;
         this.password = password;
         this.name = name;
+        this.engName = engName;
         this.gender = gender;
         this.phone = phone;
         this.tel = tel;
