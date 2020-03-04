@@ -4,23 +4,24 @@ import com.gabia.gyebalja.vo.GabiaTokenVo;
 import com.gabia.gyebalja.vo.GabiaUserInfoVo;
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
-import net.bytebuddy.dynamic.scaffold.MethodGraph;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
-import org.springframework.http.*;
-import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-
-import java.nio.charset.Charset;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 
 @RequiredArgsConstructor
 @Service
 public class GabiaService {
+
     private final RestTemplate restTemplate;
     private final Environment env;
     private final Gson gson;
@@ -69,4 +70,5 @@ public class GabiaService {
         }
         return null;
     }
+
 }
