@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.view.RedirectView;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -69,9 +68,10 @@ public class GabiaLoginController {
 
     /**
      * DB에 등록 된 사용자인지 판별 요청
+     * defaltvalue 필요 유무 : 없으면 500에러를 반환하기 때문에
      */
     @GetMapping("/api/v1/login/isRegister")
-    public CommonJsonFormat isRegister(@CookieValue(value = "jwt_token") String jwtToken) {
+    public CommonJsonFormat isRegister(@CookieValue(value = "jwt_token", defaultValue = "no_cookie") String jwtToken) {
         boolean isRegister = jwtService.isRegister(jwtToken);
 
         return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), isRegister);
@@ -81,7 +81,7 @@ public class GabiaLoginController {
      * 인증 된 사용자인지 판별 요청
      */
     @GetMapping("/api/v1/auth/user")
-    public CommonJsonFormat authUserCheck(@CookieValue(value = "jwt_token") String jwtToken) {
+    public CommonJsonFormat authUserCheck(@CookieValue(value = "jwt_token", defaultValue = "no_cookie") String jwtToken) {
         boolean authUser = jwtService.isUsable(jwtToken);
 
         return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), authUser);

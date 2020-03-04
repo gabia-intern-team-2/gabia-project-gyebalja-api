@@ -82,7 +82,7 @@ public class JwtServiceImpl implements JwtService {
             throw new UnauthorizedException();
         }
     }
-
+    // DB에 등록된 사용자인지 검증
     @Override
     public boolean isRegister(String jwt) {
         Map<String, Object> originData = this.get(jwt);
