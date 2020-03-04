@@ -272,4 +272,50 @@ public class UserRepositoryTest {
 
     }
 
+    @Test
+    @DisplayName("User 가비아 고유 넘버로 조회")
+    public void findUserByGabiaUserNo() throws Exception {
+        //given
+        Long gabiaUserNo = 12345L;
+
+        Department department = Department.builder()
+                .name("Team1")
+                .depth(2)
+                .parentDepartment(null)
+                .build();
+
+        Department saveDepartment = departmentRepository.save(department);
+
+        User user = User.builder()
+                .gabiaUserNo(gabiaUserNo)
+                .email("test@gabia.com")
+                .password("12345")
+                .name("User1")
+                .engName("Ted")
+                .gender(GenderType.MALE)
+                .phone("000-0000-0000")
+                .tel("111-1111-1111")
+                .positionId(23L)
+                .positionName("인턴")
+                .department(saveDepartment)
+                .profileImg("src/img")
+                .build();
+
+        User saveUser = userRepository.save(user);
+
+        /**
+         * 영속성 컨텍스트를 초기화해줘야 findById를 할때 직접 select 쿼리가 날라감
+         * 안해주면 그냥 존재하는 1차캐시에서 조회해오므로 디비에 select쿼리가 날라가지않음.
+         */
+        em.flush();
+        em.clear();
+
+        //when
+        Optional<User> findUserByGabiaUserNo = userRepository.findUserByGabiaUserNo(gabiaUserNo);
+
+        //then
+        assertThat(findUserByGabiaUserNo.get().getGabiaUserNo()).isEqualTo(gabiaUserNo);
+        assertThat(findUserByGabiaUserNo.get().getId()).isEqualTo(saveUser.getId());
+    }
+
 }

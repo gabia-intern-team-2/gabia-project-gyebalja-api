@@ -1,14 +1,28 @@
 package com.gabia.gyebalja;
 
+import com.gabia.gyebalja.interceptor.JwtInterceptor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.*;
 
 @Configuration
 @EnableWebMvc
 public class WebConfig implements WebMvcConfigurer {
+
+    private static final String [] EXCLUDE_PATHS = {
+            "/api/v1/login/**",
+            "/auth/callback/**"
+    };
+
+    @Autowired
+    private JwtInterceptor jwtInterceptor;
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(jwtInterceptor)
+                .addPathPatterns("/**")
+                .excludePathPatterns(EXCLUDE_PATHS);
+    }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -23,4 +37,5 @@ public class WebConfig implements WebMvcConfigurer {
                 .allowedOrigins("*")
                 .allowedMethods("*");
     }
+
 }
