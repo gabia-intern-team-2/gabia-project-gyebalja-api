@@ -1,6 +1,7 @@
 package com.gabia.gyebalja.controller;
 
 import com.gabia.gyebalja.common.CommonJsonFormat;
+import com.gabia.gyebalja.common.CookieBox;
 import com.gabia.gyebalja.common.StatusCode;
 import com.gabia.gyebalja.service.GabiaService;
 import com.gabia.gyebalja.service.jwt.JwtService;
@@ -14,7 +15,6 @@ import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.view.RedirectView;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -57,11 +57,8 @@ public class GabiaLoginController {
         //토큰 생성
         String jwtToken = jwtService.create(gabiaUserInfo);
         // 토큰 기반 쿠키생성
-        Cookie setCookie = new Cookie("jwt_token", jwtToken);
-        setCookie.setPath("/");
-        setCookie.setDomain("localhost");
-        setCookie.setHttpOnly(true);  // XSS 공격 방어를 위해 설정
-        setCookie.setMaxAge(60*60*24);
+        CookieBox cookieBox = new CookieBox();
+        Cookie setCookie = cookieBox.createCookie("jwt_token", jwtToken, "localhost", "/", 60*60*3);
         response.addCookie(setCookie);
 
         return new RedirectView("http://localhost:8085");
@@ -69,9 +66,10 @@ public class GabiaLoginController {
 
     /**
      * DB에 등록 된 사용자인지 판별 요청
+     * defaltvalue 필요 이유 : null이면 500에러를 반환하기 때문에
      */
     @GetMapping("/api/v1/login/isRegister")
-    public CommonJsonFormat isRegister(@CookieValue(value = "jwt_token") String jwtToken) {
+    public CommonJsonFormat isRegister(@CookieValue(value = "jwt_token", defaultValue = "no_cookie") String jwtToken) {
         boolean isRegister = jwtService.isRegister(jwtToken);
 
         return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), isRegister);
@@ -81,7 +79,7 @@ public class GabiaLoginController {
      * 인증 된 사용자인지 판별 요청
      */
     @GetMapping("/api/v1/auth/user")
-    public CommonJsonFormat authUserCheck(@CookieValue(value = "jwt_token") String jwtToken) {
+    public CommonJsonFormat authUserCheck(@CookieValue(value = "jwt_token", defaultValue = "no_cookie") String jwtToken) {
         boolean authUser = jwtService.isUsable(jwtToken);
 
         return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), authUser);
