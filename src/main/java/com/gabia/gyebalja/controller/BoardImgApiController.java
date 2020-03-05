@@ -11,7 +11,8 @@ import java.io.IOException;
 @RestController
 public class BoardImgApiController {
 
-    public static final String uploadingDir = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\images\\";
+//    public static final String uploadingDir = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\images\\";
+    public static final String uploadingDir = "/var/www/html/images/";
 
     /** 등록 - boardImg 한 건 (이미지 등록) */
     @PostMapping("/api/v1/boardImgs")
@@ -20,7 +21,7 @@ public class BoardImgApiController {
         File file = new File(uploadingDir + image.getOriginalFilename());
         image.transferTo(file);
 
-        String imageUrl = "/static/images/" + image.getOriginalFilename();
+        String imageUrl = "images/" + image.getOriginalFilename();
 
         return imageUrl;
     }
