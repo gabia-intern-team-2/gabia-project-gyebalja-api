@@ -8,6 +8,7 @@ import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -21,7 +22,9 @@ import java.util.Optional;
 public class JwtServiceImpl implements JwtService {
     @Autowired
     UserRepository userRepository;
-    private static final String SALT = "scretString";
+
+    @Value("${spring.jwt.secret_key}")
+    private String jwtSecretKey;
 
     //jwt 토큰 생성
     @Override
@@ -40,7 +43,7 @@ public class JwtServiceImpl implements JwtService {
     private byte[] generateKey() {
         byte[] key = null;
         try {
-            key = SALT.getBytes("UTF-8");
+            key = jwtSecretKey.getBytes("UTF-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }

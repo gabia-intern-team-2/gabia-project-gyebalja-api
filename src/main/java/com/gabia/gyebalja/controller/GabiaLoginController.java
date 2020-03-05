@@ -1,6 +1,7 @@
 package com.gabia.gyebalja.controller;
 
 import com.gabia.gyebalja.common.CommonJsonFormat;
+import com.gabia.gyebalja.common.CookieBox;
 import com.gabia.gyebalja.common.StatusCode;
 import com.gabia.gyebalja.service.GabiaService;
 import com.gabia.gyebalja.service.jwt.JwtService;
@@ -56,11 +57,8 @@ public class GabiaLoginController {
         //토큰 생성
         String jwtToken = jwtService.create(gabiaUserInfo);
         // 토큰 기반 쿠키생성
-        Cookie setCookie = new Cookie("jwt_token", jwtToken);
-        setCookie.setPath("/");
-        setCookie.setDomain("localhost");
-        setCookie.setHttpOnly(true);  // XSS 공격 방어를 위해 설정
-        setCookie.setMaxAge(60*60*24);
+        CookieBox cookieBox = new CookieBox();
+        Cookie setCookie = cookieBox.createCookie("jwt_token", jwtToken, "localhost", "/", 60*60*3);
         response.addCookie(setCookie);
 
         return new RedirectView("http://localhost:8085");
@@ -68,7 +66,7 @@ public class GabiaLoginController {
 
     /**
      * DB에 등록 된 사용자인지 판별 요청
-     * defaltvalue 필요 유무 : 없으면 500에러를 반환하기 때문에
+     * defaltvalue 필요 이유 : null이면 500에러를 반환하기 때문에
      */
     @GetMapping("/api/v1/login/isRegister")
     public CommonJsonFormat isRegister(@CookieValue(value = "jwt_token", defaultValue = "no_cookie") String jwtToken) {
