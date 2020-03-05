@@ -58,10 +58,10 @@ public class GabiaLoginController {
         String jwtToken = jwtService.create(gabiaUserInfo);
         // 토큰 기반 쿠키생성
         CookieBox cookieBox = new CookieBox();
-        Cookie setCookie = cookieBox.createCookie("jwt_token", jwtToken, "localhost", "/", 60*60*3);
+        Cookie setCookie = cookieBox.createCookie("jwt_token", jwtToken, "api.gyeblja.com", "/", 60*60*3);
         response.addCookie(setCookie);
 
-        return new RedirectView("http://localhost:8085");
+        return new RedirectView("http://api.gyeblja.com:8085");
     }
 
     /**
