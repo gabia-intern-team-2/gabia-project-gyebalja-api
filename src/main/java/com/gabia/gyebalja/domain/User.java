@@ -4,7 +4,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -78,9 +77,19 @@ public class User extends BaseTime {
         this.department = department;
     }
 
-    //비밀번호 변경 비즈니스 로직
-    public void changePassword(String password) {
-        this.password = password;
+    //사용자 정보 변경 메서드
+    public void changeUser(Long gabiaUserNo, String email, String name, String engName,GenderType gender, String phone, String tel, Long positionId, String positionName, String profileImg, Department department) {
+        this.gabiaUserNo = gabiaUserNo;
+        this.email = email;
+        this.name = name;
+        this.engName = engName;
+        this.gender = gender;
+        this.phone = phone;
+        this.tel = tel;
+        this.positionId = positionId;
+        this.positionName = positionName;
+        this.profileImg = profileImg;
+        this.department = department;
     }
 
 }

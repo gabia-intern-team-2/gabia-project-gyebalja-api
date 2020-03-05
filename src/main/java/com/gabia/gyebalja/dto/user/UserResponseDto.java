@@ -1,9 +1,8 @@
 package com.gabia.gyebalja.dto.user;
 
 import com.gabia.gyebalja.domain.GenderType;
-import com.gabia.gyebalja.domain.Likes;
 import com.gabia.gyebalja.domain.User;
-import lombok.Builder;
+import com.gabia.gyebalja.dto.department.DepartmentResponseDto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -20,7 +19,7 @@ public class UserResponseDto {
     private String tel;
     private Long positionId;
     private String positionName;
-    private Long deptId;
+    private DepartmentResponseDto department;
     private String profileImg;
 
     public UserResponseDto(User user){
@@ -34,7 +33,7 @@ public class UserResponseDto {
         this.tel = user.getTel();
         this.positionId = user.getPositionId();
         this.positionName = user.getPositionName();
-        this.deptId = user.getDepartment().getId();
+        this.department = new DepartmentResponseDto(user.getDepartment());
         this.profileImg = user.getProfileImg();
     }
 }

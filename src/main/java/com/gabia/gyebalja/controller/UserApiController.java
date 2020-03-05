@@ -1,26 +1,28 @@
 package com.gabia.gyebalja.controller;
 
 import com.gabia.gyebalja.common.CommonJsonFormat;
-import com.gabia.gyebalja.common.CookieBox;
 import com.gabia.gyebalja.common.StatusCode;
+import com.gabia.gyebalja.dto.user.UserRequestDto;
 import com.gabia.gyebalja.dto.user.UserResponseDto;
-
+import com.gabia.gyebalja.service.UserService;
 import com.gabia.gyebalja.service.jwt.JwtService;
 import com.gabia.gyebalja.vo.GabiaUserInfoVo;
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Map;
 
 @RequiredArgsConstructor
 @RestController
 public class UserApiController {
 
-    //private final UserService userService;
+    private final UserService userService;
     private final JwtService jwtService;
     private final Gson gson;
 
@@ -32,20 +34,28 @@ public class UserApiController {
         return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), gabiaProfile);
     }
 
-//    /** 조회 - 사용자 정보 한 건 */
-//    @GetMapping("/api/v1/users/{userId}")
-//    public CommonJsonFormat getOneUser(@PathVariable("userId") Long id) {
-//        UserResponseDto userResponseDto = userService.getOneUser(id);
-//
-//        return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), UserResponseDto);
-//    }
-//
-//    /** 수정 - tag 한 건 (태그 단건 수정) */
-//    @PutMapping("/api/v1/tags/{tagId}")
-//    public CommonJsonFormat putOneTag(@PathVariable("tagId") Long id, @RequestBody TagRequestDto tagRequestDto) {
-//        Long tagId = tagService.putOneTag(id, tagRequestDto);
-//
-//        return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), tagId);
-//    }
+    /** 조회 - 사용자 정보 한 건 */
+    @GetMapping("/api/v1/users/{userId}")
+    public CommonJsonFormat getOneUser(@PathVariable("userId") Long id) {
+        UserResponseDto userResponseDto = userService.getOneUser(id);
+
+        return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), userResponseDto);
+    }
+
+    /** 저장 - 사용자 정보 한 건 */
+    @PostMapping("/api/v1/users")
+    public CommonJsonFormat postOneUser(@RequestBody UserRequestDto userRequestDto) {
+        Long userId = userService.postOneUser(userRequestDto);
+
+        return new CommonJsonFormat(StatusCode.OK.getCode(),StatusCode.OK.getMessage(), userId);
+    }
+
+    /** 수정 - 사용자 정보 한 건 */
+    @PutMapping("/api/v1/users/{userId}")
+    public CommonJsonFormat putOneUser(@PathVariable("userId") Long id, @RequestBody UserRequestDto userRequestDto) {
+        Long userId = userService.putOneUser(id, userRequestDto);
+
+        return new CommonJsonFormat(StatusCode.OK.getCode(),StatusCode.OK.getMessage(), userId);
+    }
 
 }
