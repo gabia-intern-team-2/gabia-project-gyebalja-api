@@ -6,10 +6,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 public interface JwtService {
-    <T> String create(T data);
+    <T> String createToken(T data);
     Map<String, Object> get(String key);
     boolean isUsable(String jwt);
     boolean isRegister(String jwt);
     GabiaUserInfoVo getGabiaProfile(HttpServletRequest request) throws Exception;
-    String logout(HttpServletResponse response);
+    String destroyToken(HttpServletResponse response);
 }

@@ -39,7 +39,7 @@ public class JwtServiceImpl implements JwtService {
 
     //jwt 토큰 생성
     @Override
-    public <T> String create(T data) {
+    public <T> String createToken(T data) {
         String jwt = Jwts.builder()
                 .setHeaderParam("typ", "JWT")
                 .setHeaderParam("regDate", System.currentTimeMillis())
@@ -124,7 +124,7 @@ public class JwtServiceImpl implements JwtService {
     }
     // 로그아웃
     @Override
-    public String logout(HttpServletResponse response) {
+    public String destroyToken(HttpServletResponse response) {
         CookieBox cookieBox = new CookieBox();
         Cookie setCookie = cookieBox.createCookie("jwt_token", null, "api.gyeblja.com", "/", 0);
         response.addCookie(setCookie);

@@ -11,7 +11,6 @@ import com.gabia.gyebalja.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.Optional;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -23,21 +22,15 @@ public class UserService {
 
     /** 조회 - 사용자 한 건 */
     public UserResponseDto getOneUser(Long id) {
-        Optional<User> findUser = userRepository.findById(id);
+        User findUser = userRepository.findById(id).orElseThrow(() -> new NotExistUserException("존재하지 않는 회원입니다."));
 
-        if(!findUser.isPresent())
-            throw new NotExistUserException("존재하지 않는 회원입니다.");
-
-        return new UserResponseDto(findUser.get());
+        return new UserResponseDto(findUser);
     }
 
     /** 저장 - 사용자 한 건 */
     @Transactional
     public Long postOneUser(UserRequestDto userRequestDto) {
-        Optional<Department> findDept = departmentRepository.findById(userRequestDto.getDeptId());
-
-        if(!findDept.isPresent())
-            throw new NotExistDataException("존재하지 않는 부서입니다.");
+        Department findDept = departmentRepository.findById(userRequestDto.getDeptId()).orElseThrow(() -> new NotExistDataException("존재하지 않는 부서입니다."));
 
         User savedUser = userRepository.save(User.builder()
                                             .gabiaUserNo(userRequestDto.getGabiaUserNo())
@@ -50,7 +43,7 @@ public class UserService {
                                             .positionId(userRequestDto.getPositionId())
                                             .positionName(userRequestDto.getPositionName())
                                             .profileImg(userRequestDto.getProfileImg())
-                                            .department(findDept.get())
+                                            .department(findDept)
                                             .build());
         return savedUser.getId();
     }
@@ -59,10 +52,7 @@ public class UserService {
     @Transactional
     public Long putOneUser(Long id, UserRequestDto userRequestDto ) {
         User findUser = userRepository.findById(id).orElseThrow(() -> new NotExistUserException("존재하지 않는 사용자입니다."));
-
-        Optional<Department> findDept = departmentRepository.findById(userRequestDto.getDeptId());
-        if(!findDept.isPresent())
-            throw new NotExistDataException("존재하지 않는 부서입니다.");
+        Department findDept = departmentRepository.findById(userRequestDto.getDeptId()).orElseThrow(() -> new NotExistDataException("존재하지 않는 부서입니다."));
 
         // 하이웍스 Api에서 제공받는 값이 달라질수도있기때문에 password 제외 하고 모두 세팅
         findUser.changeUser(userRequestDto.getGabiaUserNo(),
@@ -75,7 +65,7 @@ public class UserService {
                             userRequestDto.getPositionId(),
                             userRequestDto.getPositionName(),
                             userRequestDto.getProfileImg(),
-                            findDept.get());
+                            findDept);
 
         return id;
     }
