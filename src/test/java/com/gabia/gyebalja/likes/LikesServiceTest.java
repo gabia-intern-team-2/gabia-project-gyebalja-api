@@ -142,7 +142,7 @@ public class LikesServiceTest {
         LikesResponseDto likesResponseDto = likesService.getOneLikes(user.getId(), board.getId());
 
         // then
-        assertThat(likesResponseDto.getId()).isEqualTo(saveId);
+        assertThat(likesResponseDto.isLikes()).isEqualTo(true);
     }
 
     @Test
