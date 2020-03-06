@@ -58,10 +58,10 @@ public class GabiaLoginController {
         String jwtToken = jwtService.create(gabiaUserInfo);
         // 토큰 기반 쿠키생성
         CookieBox cookieBox = new CookieBox();
-        Cookie setCookie = cookieBox.createCookie("jwt_token", jwtToken, "localhost", "/", 60*60*3);
+        Cookie setCookie = cookieBox.createCookie("jwt_token", jwtToken, "api.gyeblja.com", "/", 60*60*3);
         response.addCookie(setCookie);
 
-        return new RedirectView("http://localhost:8085");
+        return new RedirectView("http://api.gyeblja.com:8085");
     }
 
     /**
@@ -83,5 +83,15 @@ public class GabiaLoginController {
         boolean authUser = jwtService.isUsable(jwtToken);
 
         return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), authUser);
+    }
+
+    /**
+     * 로그아웃 요청
+     */
+    @GetMapping("/api/v1/logout")
+    public CommonJsonFormat logOut(HttpServletResponse response) {
+        String message = jwtService.logout(response);
+
+        return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), message);
     }
 }

@@ -1,25 +1,36 @@
 package com.gabia.gyebalja.service.jwt;
 
+import com.gabia.gyebalja.common.CookieBox;
 import com.gabia.gyebalja.domain.User;
 import com.gabia.gyebalja.exception.UnauthorizedException;
 import com.gabia.gyebalja.repository.UserRepository;
+import com.gabia.gyebalja.vo.GabiaUserInfoVo;
+import com.google.gson.Gson;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @Service("jwtService")
 public class JwtServiceImpl implements JwtService {
+
+    private final Gson gson;
+
     @Autowired
     UserRepository userRepository;
 
@@ -96,5 +107,28 @@ public class JwtServiceImpl implements JwtService {
             flag = true;
 
         return flag;
+    }
+    // 토큰 복호 후 VO 반환
+    @Override
+    public GabiaUserInfoVo getGabiaProfile(HttpServletRequest request) throws Exception {
+        CookieBox cookieBox = new CookieBox(request);
+        String token = null;
+        if( cookieBox.exists("jwt_token")) {
+            token = cookieBox.getValue("jwt_token");
+        }
+        Map<String, Object> decodeJwt = this.get(token);
+
+        GabiaUserInfoVo gabiaUserInfoVo = gson.fromJson(decodeJwt.toString(), GabiaUserInfoVo.class);
+
+        return gabiaUserInfoVo;
+    }
+    // 로그아웃
+    @Override
+    public String logout(HttpServletResponse response) {
+        CookieBox cookieBox = new CookieBox();
+        Cookie setCookie = cookieBox.createCookie("jwt_token", null, "api.gyeblja.com", "/", 0);
+        response.addCookie(setCookie);
+
+        return "success";
     }
 }
