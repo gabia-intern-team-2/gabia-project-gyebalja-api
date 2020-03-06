@@ -156,6 +156,7 @@ class EducationRepositoryTest {
 
         em.flush();  //영속성 컨텍스트 초기화
         em.clear();
+
         //when
         Education findEducation = educationRepository.findById(education.getId()).get();
 
@@ -168,54 +169,57 @@ class EducationRepositoryTest {
     @DisplayName("Education 전체 조회 테스트(findAll)")
     public void findAllTest() throws Exception {
         //given
-            for(int i=0 ; i<2 ; i++) {
-                Category category = Category.builder()
-                        .name("개발자"+i)
-                        .build();
-                categoryRepository.save(category);
+        for(int i=0 ; i<2 ; i++) {
+            Category category = Category.builder()
+                    .name("개발자"+i)
+                    .build();
+            categoryRepository.save(category);
 
-                Department department = Department.builder()
-                        .name("테스트팀"+i)
-                        .depth(2+i)
-                        .parentDepartment(null)
-                        .build();
-                departmentRepository.save(department);
+            Department department = Department.builder()
+                    .name("테스트팀"+i)
+                    .depth(2+i)
+                    .parentDepartment(null)
+                    .build();
+            departmentRepository.save(department);
 
-                User user = User.builder()
-                        .email("test"+i+"@gabia.com")
-                        .name("User"+i)
-                        .gender(GenderType.MALE)
-                        .phone("000-000-0000")
-                        .tel("111-111-1111")
-                        .positionId(123L)
-                        .positionName("팀원")
-                        .department(department)
-                        .profileImg("src/img")
-                        .build();
-                userRepository.save(user);
+            User user = User.builder()
+                    .email("test"+i+"@gabia.com")
+                    .name("User"+i)
+                    .gender(GenderType.MALE)
+                    .phone("000-000-0000")
+                    .tel("111-111-1111")
+                    .positionId(123L)
+                    .positionName("팀원")
+                    .department(department)
+                    .profileImg("src/img")
+                    .build();
+            userRepository.save(user);
 
-                Education education = Education.builder()
-                        .title("제목테스트"+i)
-                        .content("내용테스트"+i)
-                        .startDate(LocalDate.now())
-                        .endDate(LocalDate.now())
-                        .totalHours(3)
-                        .type(EducationType.ONLINE)
-                        .place("가비아 4층"+i)
-                        .category(category)
-                        .user(user)
-                        .build();
+            Education education = Education.builder()
+                    .title("제목테스트"+i)
+                    .content("내용테스트"+i)
+                    .startDate(LocalDate.now())
+                    .endDate(LocalDate.now())
+                    .totalHours(3)
+                    .type(EducationType.ONLINE)
+                    .place("가비아 4층"+i)
+                    .category(category)
+                    .user(user)
+                    .build();
 
-                educationRepository.save(education);
+            educationRepository.save(education);
 
-            }
+        }
 
-            em.flush();
-            em.clear();
+        em.flush();
+        em.clear();
+
         //when
-            List<Education> allEducation = educationRepository.findAll();
+        List<Education> allEducation = educationRepository.findAll();
+
         //then
-            assertThat(allEducation.size()).isEqualTo(2);
+        assertThat(allEducation.size()).isEqualTo(2);
+
     }
 
     @Test
@@ -261,11 +265,12 @@ class EducationRepositoryTest {
                     .build();
 
             educationRepository.save(education);
-
         }
+
         //when
             //count 함수 호출
             long count = educationRepository.count();
+
         //then
             //데이터를 두개 넣어줬으니 카운트 결과와 2가 같은지 검증
             assertThat(count).isEqualTo(2);
@@ -316,6 +321,7 @@ class EducationRepositoryTest {
         educationRepository.save(education);
 
         Long beforeDeleteNumOfData = educationRepository.count();
+
         //when
         educationRepository.delete(education);
 
@@ -380,8 +386,8 @@ class EducationRepositoryTest {
 
         //when
         Optional<Education> findUpdateEducation = educationRepository.findById(savedEducation.getId());
-        //then
 
+        //then
         assertThat(findUpdateEducation.get().getId()).isEqualTo(savedEducation.getId());
         assertThat(findUpdateEducation.get().getTitle()).isEqualTo(updateTitle);
         assertThat(findUpdateEducation.get().getContent()).isEqualTo(updateContent);
@@ -437,11 +443,14 @@ class EducationRepositoryTest {
         }
         em.flush();
         em.clear();
+
         //when
         List<Education> educationList = educationRepository.findEducationByUserId(savedUser.getId(), pageable);
+
         //then
         assertThat(educationList.size()).isEqualTo(inputNum);
         assertThat(educationList.get(0).getUser().getId()).isEqualTo(savedUser.getId());
+
     }
 
     @Test
@@ -492,6 +501,7 @@ class EducationRepositoryTest {
 
         //when
         Optional<Education> educationDetail = educationRepository.findEducationDetail(savedEducation.getId());
+
         //then
         assertThat(educationDetail.get().getId()).isEqualTo(savedEducation.getId());
         assertThat(educationDetail.get().getTitle()).isEqualTo(savedEducation.getTitle());

@@ -85,6 +85,9 @@ public class BoardControllerTest {
 
     @Autowired
     public BoardControllerTest() {
+        // Interceptor 해제
+        System.setProperty("spring.profiles.active.test", "true");
+
         // Department
         this.department = Department.builder()
                 .name("테스트팀")

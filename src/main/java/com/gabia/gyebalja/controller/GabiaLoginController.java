@@ -61,6 +61,7 @@ public class GabiaLoginController {
         String jwtToken = jwtService.createToken(gabiaUserInfo);
         // 토큰 기반 쿠키생성
         CookieBox cookieBox = new CookieBox();
+
         Cookie setCookie = cookieBox.createCookie("jwt_token", jwtToken, frontHost, "/", 60*60*3);
         response.addCookie(setCookie);
 

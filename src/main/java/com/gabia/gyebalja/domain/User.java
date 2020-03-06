@@ -51,7 +51,7 @@ public class User extends BaseTime {
     private String positionName;
     @Column(name = "profile_img")
     private String profileImg;
-    @Column(name = "gabia_user_no", nullable = false)
+    @Column(name = "gabia_user_no")
     private Long  gabiaUserNo;
 
     //Department와 연관관계

@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Transactional
@@ -39,9 +40,9 @@ public class LikesService {
 
     /** 조회 - likes 한 개 */
     public LikesResponseDto getOneLikes(Long userId, Long boardId) {
-        Likes likes = likesRepository.findByUserIdAndBoardId(userId, boardId).orElseThrow(() -> new IllegalArgumentException("해당 데이터가 없습니다."));
+        Optional<Likes> likes = likesRepository.findByUserIdAndBoardId(userId, boardId);
 
-        LikesResponseDto likesResponseDto = new LikesResponseDto(likes);
+        LikesResponseDto likesResponseDto = likes.isPresent() ? new LikesResponseDto(true) : new LikesResponseDto(false);
 
         return likesResponseDto;
     }

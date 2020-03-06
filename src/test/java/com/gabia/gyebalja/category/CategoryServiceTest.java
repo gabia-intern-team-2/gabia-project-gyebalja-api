@@ -5,7 +5,6 @@ import com.gabia.gyebalja.dto.category.CategoryRequestDto;
 import com.gabia.gyebalja.dto.category.CategoryResponseDto;
 import com.gabia.gyebalja.repository.CategoryRepository;
 import com.gabia.gyebalja.service.CategoryService;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +42,7 @@ public class CategoryServiceTest {
         Long categoryId = categoryService.postOneCategory(categoryRequestDto);
         em.clear();
         Category findCategory = categoryRepository.findById(categoryId).get();
+
         //then
         assertThat(categoryId).isEqualTo(findCategory.getId());
         assertThat(categoryRequestDto.getName()).isEqualTo(findCategory.getName());
@@ -60,8 +60,10 @@ public class CategoryServiceTest {
                                                                 .build();
         Long categoryId = categoryService.postOneCategory(categoryRequestDto);
         em.clear();
+
         //when
         CategoryResponseDto findCategory = categoryService.getOneCategory(categoryId);
+
         //then
         assertThat(findCategory.getId()).isEqualTo(categoryId);
         assertThat(findCategory.getName()).isEqualTo(categoryRequestDto.getName());
@@ -79,11 +81,13 @@ public class CategoryServiceTest {
                 .name("개발")
                 .build();
         Long categoryId = categoryService.postOneCategory(categoryRequestDto);
+
         //when
         categoryRequestDto.setName(updateName);
         Long updateId = categoryService.putOneCategory(categoryId, categoryRequestDto);
         em.flush(); //업데이트 쿼리를 보기위함.
         Category findUpdateCategory = categoryRepository.findById(updateId).get();
+
         //then
         assertThat(findUpdateCategory.getId()).isEqualTo(categoryId);
         assertThat(findUpdateCategory.getName()).isEqualTo(updateName);
@@ -101,8 +105,10 @@ public class CategoryServiceTest {
                 .build();
         Long categoryId = categoryService.postOneCategory(categoryRequestDto);
         long beforeDeleteCnt = categoryRepository.count();
+
         //when
         Long deleteId = categoryService.deleteOneCategory(categoryId);
+
         //then
         assertThat(categoryRepository.count()).isEqualTo(beforeDeleteCnt-1);
         assertThat(categoryRepository.findById(deleteId)).isEqualTo(Optional.empty());
@@ -122,8 +128,10 @@ public class CategoryServiceTest {
         categoryRepository.save(category1);
         categoryRepository.save(category2);
         categoryRepository.save(category3);
+
         //when
         List<CategoryResponseDto> allCategory = categoryService.getAllCategory();
+
         //then
         assertThat(allCategory.size()).isEqualTo(3);
         assertThat(allCategory.get(0).getId()).isEqualTo(category1.getId());

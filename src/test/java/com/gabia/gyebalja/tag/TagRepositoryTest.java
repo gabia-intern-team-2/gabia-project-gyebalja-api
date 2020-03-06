@@ -2,7 +2,6 @@ package com.gabia.gyebalja.tag;
 
 import com.gabia.gyebalja.domain.Tag;
 import com.gabia.gyebalja.repository.TagRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,10 +39,12 @@ public class TagRepositoryTest {
         em.clear();
 
         Tag findTag = tagRepository.findById(tag.getId()).get();
+
         //then
         assertThat(findTag.getId()).isEqualTo(tag.getId());
         assertThat(findTag.getName()).isEqualTo(tag.getName());
         assertThat(tagRepository.count()).isEqualTo(beforeCnt+1);
+
     }
 
     @Test
@@ -61,12 +62,14 @@ public class TagRepositoryTest {
         tagRepository.save(tag2);
 
         em.clear();
+
         //when
         Tag findTag = tagRepository.findById(tag2.getId()).get();
 
         //then
         assertThat(findTag.getId()).isEqualTo(tag2.getId());
         assertThat(findTag.getName()).isEqualTo(tag2.getName());
+
     }
 
     @Test
@@ -84,6 +87,7 @@ public class TagRepositoryTest {
         tagRepository.save(tag2);
 
         em.clear();
+
         //when
         List<Tag> allTag = tagRepository.findAll();
 
@@ -91,6 +95,7 @@ public class TagRepositoryTest {
         assertThat(allTag.size()).isEqualTo(2);
         assertThat(allTag.get(0).getId()).isEqualTo(tag1.getId());
         assertThat(allTag.get(0).getName()).isEqualTo(tag1.getName());
+
     }
 
     @Test
@@ -106,8 +111,10 @@ public class TagRepositoryTest {
                 .name("#JPA")
                 .build();
         tagRepository.save(tag2);
+
         //when
         long count = tagRepository.count();
+
         //then
         assertThat(count).isEqualTo(2);
 
@@ -128,8 +135,10 @@ public class TagRepositoryTest {
         tagRepository.save(tag2);
 
         long beforeDeleteCnt = tagRepository.count();
+
         //when
         tagRepository.delete(tag1);
+
         //then
         assertThat(tagRepository.count()).isEqualTo(beforeDeleteCnt-1);
         assertThat(tagRepository.findById(tag1.getId())).isEqualTo(Optional.empty());
@@ -147,6 +156,7 @@ public class TagRepositoryTest {
                     .build();
         tagRepository.save(tag);
         long beforeUpdateCnt = tagRepository.count();
+
         //when
         tag.changeTagName(updateName);
         Tag findTag = tagRepository.findById(tag.getId()).get();
@@ -167,11 +177,13 @@ public class TagRepositoryTest {
                 .name(hashTagName)
                 .build();
         Tag savedTag = tagRepository.save(tag);
+
         //when
         Tag findTagByName = tagRepository.findHashTagByName(hashTagName).get();
+
         //then
         assertThat(savedTag.getId()).isEqualTo(findTagByName.getId());
-        
+
     }
 
 }
