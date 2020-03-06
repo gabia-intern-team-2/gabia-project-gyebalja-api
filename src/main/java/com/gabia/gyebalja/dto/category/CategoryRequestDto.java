@@ -13,4 +13,5 @@ public class CategoryRequestDto {
     public CategoryRequestDto(String name) {
         this.name = name;
     }
+
 }

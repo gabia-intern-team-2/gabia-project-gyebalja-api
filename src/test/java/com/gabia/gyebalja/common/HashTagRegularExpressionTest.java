@@ -1,13 +1,12 @@
 package com.gabia.gyebalja.common;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
 @DataJpaTest
@@ -38,6 +37,5 @@ public class HashTagRegularExpressionTest {
         assertThat(extractHashTag.size()).isEqualTo(4);  //#spring, #Vue, #안녕, #HTML 만 추출됨.
         assertThat(extractHashTag.get(0)).isEqualTo("#spring");
     }
-
 
 }
