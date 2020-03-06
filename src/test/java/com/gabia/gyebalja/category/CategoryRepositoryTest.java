@@ -2,7 +2,6 @@ package com.gabia.gyebalja.category;
 
 import com.gabia.gyebalja.domain.Category;
 import com.gabia.gyebalja.repository.CategoryRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,6 +62,7 @@ public class CategoryRepositoryTest {
         categoryRepository.save(category2);
 
         em.clear();
+
         //when
         Category findCategory = categoryRepository.findById(category2.getId()).get();
 
@@ -86,6 +86,7 @@ public class CategoryRepositoryTest {
         categoryRepository.save(category2);
 
         em.clear();
+
         //when
         List<Category> allCategory = categoryRepository.findAll();
 
@@ -108,8 +109,10 @@ public class CategoryRepositoryTest {
                 .name("기획자")
                 .build();
         categoryRepository.save(category2);
+
         //when
         long count = categoryRepository.count();
+
         //then
         assertThat(count).isEqualTo(2);
 
@@ -130,8 +133,10 @@ public class CategoryRepositoryTest {
         categoryRepository.save(category2);
 
         long beforeDeleteCnt = categoryRepository.count();
+
         //when
         categoryRepository.delete(category1);
+
         //then
         assertThat(categoryRepository.count()).isEqualTo(beforeDeleteCnt-1);
         assertThat(categoryRepository.findById(category1.getId())).isEqualTo(Optional.empty());
@@ -149,6 +154,7 @@ public class CategoryRepositoryTest {
                                     .build();
         categoryRepository.save(category);
         long beforeUpdateCnt = categoryRepository.count();
+
         //when
         category.changeCategoryName(updateName);
         em.flush();
@@ -159,9 +165,5 @@ public class CategoryRepositoryTest {
         assertThat(findCategory.getName()).isEqualTo(updateName);
         assertThat(categoryRepository.count()).isEqualTo(beforeUpdateCnt);
 
-        
     }
-        
-
-
 }

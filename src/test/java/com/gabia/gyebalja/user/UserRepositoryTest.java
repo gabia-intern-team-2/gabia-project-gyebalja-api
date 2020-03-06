@@ -6,7 +6,6 @@ import com.gabia.gyebalja.domain.User;
 
 import com.gabia.gyebalja.repository.DepartmentRepository;
 import com.gabia.gyebalja.repository.UserRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +17,7 @@ import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @Transactional
 @SpringBootTest
@@ -149,8 +148,10 @@ public class UserRepositoryTest {
 
         //when
         List<User> userList = userRepository.findAll();
+
         //then
         assertThat(userList.size()).isEqualTo(2);
+
     }
 
     @Test
@@ -188,6 +189,7 @@ public class UserRepositoryTest {
 
         //when
         long count = userRepository.count();
+
         //then
         assertThat(count).isEqualTo(3);
 
@@ -226,6 +228,7 @@ public class UserRepositoryTest {
 
         //when
         userRepository.delete(user);
+
         //then
         assertThat(userRepository.count()).isEqualTo(beforeDeleteNum-1);
 
@@ -266,6 +269,7 @@ public class UserRepositoryTest {
         em.flush(); //영속성컨텍스트 초기화함으로써 더티체킹 -> Update 쿼리 발생
         em.clear();
         Optional<User> findUserById = userRepository.findById(user.getId());
+
         //then
         assertThat(findUserById.get().getId()).isEqualTo(saveUser.getId());
         assertThat(findUserById.get().getPassword()).isEqualTo(saveUser.getPassword());
@@ -316,6 +320,7 @@ public class UserRepositoryTest {
         //then
         assertThat(findUserByGabiaUserNo.get().getGabiaUserNo()).isEqualTo(gabiaUserNo);
         assertThat(findUserByGabiaUserNo.get().getId()).isEqualTo(saveUser.getId());
+
     }
 
 }
