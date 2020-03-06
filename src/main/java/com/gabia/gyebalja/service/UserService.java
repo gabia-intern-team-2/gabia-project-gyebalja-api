@@ -38,11 +38,10 @@ public class UserService {
 
         if(!findDept.isPresent())
             throw new NotExistDataException("존재하지 않는 부서입니다.");
-        //password는 임시 값 (추후 삭제될수도있음)
+
         User savedUser = userRepository.save(User.builder()
                                             .gabiaUserNo(userRequestDto.getGabiaUserNo())
                                             .email(userRequestDto.getEmail())
-                                            .password("1234")
                                             .name(userRequestDto.getName())
                                             .engName(userRequestDto.getEngName())
                                             .gender(userRequestDto.getGender())

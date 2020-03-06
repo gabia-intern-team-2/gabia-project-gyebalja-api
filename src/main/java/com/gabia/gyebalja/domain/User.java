@@ -26,8 +26,6 @@ public class User extends BaseTime {
 
     @Column(nullable = false)
     private String email;
-    @Column(nullable = false)
-    private String password;
 
     @Column(length = 15, nullable = false)
     private String name;
@@ -62,10 +60,9 @@ public class User extends BaseTime {
     private Department department;
 
     @Builder
-    public User(Long gabiaUserNo, String email, String password, String name, String engName,GenderType gender, String phone, String tel, Long positionId, String positionName, String profileImg, Department department) {
+    public User(Long gabiaUserNo, String email, String name, String engName,GenderType gender, String phone, String tel, Long positionId, String positionName, String profileImg, Department department) {
         this.gabiaUserNo = gabiaUserNo;
         this.email = email;
-        this.password = password;
         this.name = name;
         this.engName = engName;
         this.gender = gender;

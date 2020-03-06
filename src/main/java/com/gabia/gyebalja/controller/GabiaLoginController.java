@@ -84,4 +84,14 @@ public class GabiaLoginController {
 
         return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), authUser);
     }
+
+    /**
+     * 로그아웃 요청
+     */
+    @GetMapping("/api/v1/logout")
+    public CommonJsonFormat logOut(HttpServletResponse response) {
+        String message = jwtService.logout(response);
+
+        return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), message);
+    }
 }

@@ -1,8 +1,8 @@
 package com.gabia.gyebalja.service.jwt;
 
 import com.gabia.gyebalja.vo.GabiaUserInfoVo;
-
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 public interface JwtService {
@@ -11,4 +11,5 @@ public interface JwtService {
     boolean isUsable(String jwt);
     boolean isRegister(String jwt);
     GabiaUserInfoVo getGabiaProfile(HttpServletRequest request) throws Exception;
+    String logout(HttpServletResponse response);
 }

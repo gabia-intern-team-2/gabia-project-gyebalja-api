@@ -16,7 +16,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -105,7 +108,7 @@ public class JwtServiceImpl implements JwtService {
 
         return flag;
     }
-    // 토큰 복호 후 Vo 반환
+    // 토큰 복호 후 VO 반환
     @Override
     public GabiaUserInfoVo getGabiaProfile(HttpServletRequest request) throws Exception {
         CookieBox cookieBox = new CookieBox(request);
@@ -118,5 +121,14 @@ public class JwtServiceImpl implements JwtService {
         GabiaUserInfoVo gabiaUserInfoVo = gson.fromJson(decodeJwt.toString(), GabiaUserInfoVo.class);
 
         return gabiaUserInfoVo;
+    }
+    // 로그아웃
+    @Override
+    public String logout(HttpServletResponse response) {
+        CookieBox cookieBox = new CookieBox();
+        Cookie setCookie = cookieBox.createCookie("jwt_token", null, "api.gyeblja.com", "/", 0);
+        response.addCookie(setCookie);
+
+        return "success";
     }
 }
