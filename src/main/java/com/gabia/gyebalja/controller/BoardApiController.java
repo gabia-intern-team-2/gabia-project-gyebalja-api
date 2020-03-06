@@ -59,7 +59,7 @@ public class BoardApiController {
 
     /** 조회 - board 전체 (페이징) */
     @GetMapping("/api/v1/boards")
-    public CommonJsonFormat getAllBoard(@PageableDefault(size=10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
+    public CommonJsonFormat getAllBoard(@PageableDefault(size=100, sort = "id", direction = Sort.Direction.DESC) Pageable pageable){
         // Example - http://localhost:8080/api/v1/boards?page=0&size=4&sort=id,desc
         Page<BoardAllResponseDto> response = boardService.getAllBoard(pageable);
 
