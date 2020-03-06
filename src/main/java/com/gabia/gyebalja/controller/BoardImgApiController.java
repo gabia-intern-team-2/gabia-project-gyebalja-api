@@ -11,7 +11,6 @@ import java.io.IOException;
 @RestController
 public class BoardImgApiController {
 
-    //    public static final String uploadingDir = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\images\\";
     public static final String uploadingDir = "/var/www/html/images/";
 
     /** 등록 - boardImg 한 건 (이미지 등록) */
