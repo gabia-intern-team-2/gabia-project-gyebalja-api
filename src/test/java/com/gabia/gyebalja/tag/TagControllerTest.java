@@ -7,7 +7,6 @@ import com.gabia.gyebalja.dto.tag.TagRequestDto;
 import com.gabia.gyebalja.dto.tag.TagResponseDto;
 import com.gabia.gyebalja.repository.TagRepository;
 import com.gabia.gyebalja.service.TagService;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,8 +18,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -31,6 +28,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class TagControllerTest {
+
     @Autowired
     private TagService tagService;
     @Autowired
@@ -42,12 +40,13 @@ public class TagControllerTest {
     @LocalServerPort
     private int port;
 
-    @PersistenceContext
-    EntityManager em;
+    public TagControllerTest() {
+        // Interceptor 해제
+        System.setProperty("spring.profiles.active.test", "true");
+    }
 
     @AfterEach
     public void cleanUp() {
-        System.out.println("============================ cleanUp()");
         this.tagRepository.deleteAll();
     }
 
@@ -63,9 +62,11 @@ public class TagControllerTest {
         TagRequestDto tagRequestDto = TagRequestDto.builder()
                 .name("Spring")
                 .build();
+
         //when
         ResponseEntity<CommonJsonFormat> responseEntity = restTemplate.postForEntity(url, tagRequestDto, CommonJsonFormat.class);
         TagResponseDto findTagDto = tagService.getOneTag(Long.parseLong(responseEntity.getBody().getResponse().toString()));
+
         //then
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody().getCode()).isEqualTo(StatusCode.OK.getCode());
@@ -85,9 +86,11 @@ public class TagControllerTest {
                 .build();
         Long savedId = tagService.postOneTag(tagRequestDto);
         String url = "http://localhost:" + port + "/api/v1/tags/" + savedId;
+
         //when
         ResponseEntity<CommonJsonFormat> responseEntity = restTemplate.getForEntity(url, CommonJsonFormat.class);
         LinkedHashMap response = (LinkedHashMap) responseEntity.getBody().getResponse();
+
         //then
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody().getCode()).isEqualTo(StatusCode.OK.getCode());
@@ -109,6 +112,7 @@ public class TagControllerTest {
         Long savedId = tagService.postOneTag(tagRequestDto);
         String url = "http://localhost:" + port + "/api/v1/tags/" + savedId;
         String updateName = "HTML";
+
         //when
         TagRequestDto updateRequestDto = TagRequestDto.builder()
                 .name(updateName)
@@ -116,6 +120,7 @@ public class TagControllerTest {
         HttpEntity<TagRequestDto> requestEntity = new HttpEntity<>(updateRequestDto);
         ResponseEntity<CommonJsonFormat> responseEntity = restTemplate.exchange(url, HttpMethod.PUT, requestEntity, CommonJsonFormat.class);
         Tag findTag = tagRepository.findById(savedId).orElseThrow(() -> new IllegalArgumentException("해당 데이터가 없습니다."));
+
         //then
         assertThat(responseEntity.getBody().getCode()).isEqualTo(StatusCode.OK.getCode());
         assertThat(responseEntity.getBody().getMessage()).isEqualTo(StatusCode.OK.getMessage());
@@ -137,8 +142,10 @@ public class TagControllerTest {
         long beforeDeleteCnt = tagRepository.count();
 
         String url = "http://localhost:" + port + "/api/v1/tags/" + savedId;
+
         //when
         restTemplate.delete(url);
+
         //then
         assertThat(tagRepository.findById(savedId)).isEqualTo(Optional.empty());
         assertThat(tagRepository.count()).isEqualTo(beforeDeleteCnt-1);
@@ -159,9 +166,11 @@ public class TagControllerTest {
                     .build();
             tagRepository.save(tag);
         }
+
         //when
         ResponseEntity<CommonJsonFormat> responseEntity = restTemplate.getForEntity(url, CommonJsonFormat.class);
         ArrayList response = (ArrayList) responseEntity.getBody().getResponse();
+
         //then
         assertThat(response.size()).isEqualTo(totalNum);
     }

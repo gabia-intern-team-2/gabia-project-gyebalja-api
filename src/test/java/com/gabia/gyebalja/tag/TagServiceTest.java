@@ -5,7 +5,6 @@ import com.gabia.gyebalja.dto.tag.TagRequestDto;
 import com.gabia.gyebalja.dto.tag.TagResponseDto;
 import com.gabia.gyebalja.repository.TagRepository;
 import com.gabia.gyebalja.service.TagService;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,10 +38,12 @@ public class TagServiceTest {
         TagRequestDto tagRequestDto = TagRequestDto.builder()
                 .name("Spring")
                 .build();
+
         //when
         Long tagId = tagService.postOneTag(tagRequestDto);
         em.clear();
         Tag findTag = tagRepository.findById(tagId).get();
+
         //then
         assertThat(tagId).isEqualTo(findTag.getId());
         assertThat(tagRequestDto.getName()).isEqualTo(findTag.getName());
@@ -60,8 +61,10 @@ public class TagServiceTest {
                 .build();
         Long tagId = tagService.postOneTag(tagRequestDto);
         em.clear();
+
         //when
         TagResponseDto findTag = tagService.getOneTag(tagId);
+
         //then
         assertThat(findTag.getId()).isEqualTo(tagId);
         assertThat(findTag.getName()).isEqualTo(tagRequestDto.getName());
@@ -79,11 +82,13 @@ public class TagServiceTest {
                 .name("Spring")
                 .build();
         Long tagId = tagService.postOneTag(tagRequestDto);
+
         //when
         tagRequestDto.setName(updateName);
         Long updateId = tagService.putOneTag(tagId, tagRequestDto);
         em.flush(); //업데이트 쿼리를 보기위함.
         Tag findUpdateTag = tagRepository.findById(updateId).get();
+
         //then
         assertThat(findUpdateTag.getId()).isEqualTo(tagId);
         assertThat(findUpdateTag.getName()).isEqualTo(updateName);
@@ -101,8 +106,10 @@ public class TagServiceTest {
                 .build();
         Long tagId = tagService.postOneTag(tagRequestDto);
         long beforeDeleteCnt = tagRepository.count();
+
         //when
         Long deleteId = tagService.deleteOneTag(tagId);
+
         //then
         assertThat(tagRepository.count()).isEqualTo(beforeDeleteCnt-1);
         assertThat(tagRepository.findById(deleteId)).isEqualTo(Optional.empty());
@@ -125,8 +132,10 @@ public class TagServiceTest {
         tagRepository.save(tag1);
         tagRepository.save(tag2);
         tagRepository.save(tag3);
+
         //when
         List<TagResponseDto> allTag = tagService.getAllTag();
+
         //then
         assertThat(allTag.size()).isEqualTo(beforeTestCnt+3);  //데이터베이스에 값이 있을경우를 대비
         assertThat(allTag.get(targetIdx).getId()).isEqualTo(tag1.getId());

@@ -17,7 +17,6 @@ import com.gabia.gyebalja.repository.EducationRepository;
 import com.gabia.gyebalja.repository.TagRepository;
 import com.gabia.gyebalja.repository.UserRepository;
 import com.gabia.gyebalja.service.EducationService;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,8 +28,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -42,6 +39,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class EducationControllerTest {
+
     @Autowired
     private EducationService educationService;
     @Autowired
@@ -61,12 +59,13 @@ public class EducationControllerTest {
     @LocalServerPort
     private int port;
 
-    @PersistenceContext
-    EntityManager em;
+    public EducationControllerTest() {
+        // Interceptor 해제
+        System.setProperty("spring.profiles.active.test", "true");
+    }
 
     @AfterEach
     public void cleanUp() {
-        System.out.println("============================ cleanUp()");
         //TestRestTemplate은 Transaction을 못 걸어주므로 테스트 종료 후 수동으로 디비 초기화
         this.educationRepository.deleteAll();
         this.userRepository.deleteAll();
@@ -139,6 +138,7 @@ public class EducationControllerTest {
         //when
         ResponseEntity<CommonJsonFormat> responseEntity = restTemplate.postForEntity(url, educationRequestDto, CommonJsonFormat.class);
         EducationDetailResponseDto findEducation = educationService.getOneEducation(Long.parseLong(responseEntity.getBody().getResponse().toString()));
+
         //then
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody().getCode()).isEqualTo(StatusCode.OK.getCode());
@@ -208,9 +208,11 @@ public class EducationControllerTest {
 
          Long saveId = educationService.postOneEducation(educationRequestDto);
          String url = "http://localhost:" + port + "/api/v1/educations/" + saveId;
+
          //when
          ResponseEntity<CommonJsonFormat> responseEntity = restTemplate.getForEntity(url, CommonJsonFormat.class); //response 부분이 LinkedHashMap -> 제네릭은 런타임에 타입정보가 사라짐
          LinkedHashMap response = (LinkedHashMap) responseEntity.getBody().getResponse();
+
          //then
          assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
          assertThat(responseEntity.getBody().getCode()).isEqualTo(StatusCode.OK.getCode());
@@ -297,8 +299,10 @@ public class EducationControllerTest {
                 .build();
 
         HttpEntity<EducationRequestDto> requestEntity = new HttpEntity<>(updateRequestDto);
+
         // when
         ResponseEntity<CommonJsonFormat> responseEntity = restTemplate.exchange(url, HttpMethod.PUT, requestEntity, CommonJsonFormat.class);
+
         // then
         Education education = educationRepository.findById(saveId).orElseThrow(() -> new IllegalArgumentException("해당 데이터 없음"));
         assertThat(responseEntity.getBody().getCode()).isEqualTo(StatusCode.OK.getCode());
@@ -370,8 +374,10 @@ public class EducationControllerTest {
         Long saveId = educationService.postOneEducation(educationRequestDto);
 
         String url = "http://localhost:" + port + "/api/v1/educations/" + saveId;
+
         // when
         restTemplate.delete(url);
+
         // then
         assertThat(educationRepository.findById(saveId)).isEqualTo(Optional.empty());
     }
@@ -443,6 +449,7 @@ public class EducationControllerTest {
 
         // when
         CommonJsonFormat responseEntity = restTemplate.getForObject(url, CommonJsonFormat.class);
+
         // then
         ArrayList result = (ArrayList) responseEntity.getResponse();
         assertThat(result.size()).isEqualTo(10); //추후 검증로직 추가 예정
