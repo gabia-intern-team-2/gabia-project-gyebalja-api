@@ -71,7 +71,6 @@ public class EducationServiceTest {
 
         User user = User.builder()
                 .email("test@gabia.com")
-                .password("1234")
                 .name("User1")
                 .gender(GenderType.MALE)
                 .phone("000-000-0000")
@@ -128,7 +127,6 @@ public class EducationServiceTest {
 
         User user = User.builder()
                 .email("test@gabia.com")
-                .password("1234")
                 .name("User1")
                 .gender(GenderType.MALE)
                 .phone("000-000-0000")
@@ -192,7 +190,6 @@ public class EducationServiceTest {
 
         User user = User.builder()
                 .email("test@gabia.com")
-                .password("1234")
                 .name("User1")
                 .gender(GenderType.MALE)
                 .phone("000-000-0000")
@@ -251,7 +248,6 @@ public class EducationServiceTest {
 
         User user = User.builder()
                 .email("test@gabia.com")
-                .password("1234")
                 .name("User1")
                 .gender(GenderType.MALE)
                 .phone("000-000-0000")
@@ -314,7 +310,6 @@ public class EducationServiceTest {
 
         User user = User.builder()
                 .email("test@gabia.com")
-                .password("1234")
                 .name("User1")
                 .gender(GenderType.MALE)
                 .phone("000-000-0000")

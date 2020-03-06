@@ -32,8 +32,11 @@ public class GabiaLoginController {
     @Value("${spring.social.gabia.client_id}")
     private String gabiaClientId;
 
-    @Value("${spring.social.gabia.client_secret}")
-    private String gabiaClientSecret;
+    @Value("${spring.domain.host}")
+    private String frontHost;
+
+    @Value("${spring.domain.port}")
+    private String frontPort;
 
     /**
      * 하이웍스 로그인 클릭 시
@@ -55,13 +58,14 @@ public class GabiaLoginController {
         GabiaTokenVo accessToken = gabiaService.getAccessToken(authCode);
         GabiaUserInfoVo gabiaUserInfo = gabiaService.getGabiaProfile(accessToken.getAccess_token());
         //토큰 생성
-        String jwtToken = jwtService.create(gabiaUserInfo);
+        String jwtToken = jwtService.createToken(gabiaUserInfo);
         // 토큰 기반 쿠키생성
         CookieBox cookieBox = new CookieBox();
-        Cookie setCookie = cookieBox.createCookie("jwt_token", jwtToken, "api.gyeblja.com", "/", 60*60*3);
+
+        Cookie setCookie = cookieBox.createCookie("jwt_token", jwtToken, frontHost, "/", 60*60*3);
         response.addCookie(setCookie);
 
-        return new RedirectView("http://api.gyeblja.com:6379");
+        return new RedirectView(frontHost+":"+frontPort);
     }
 
     /**
@@ -83,5 +87,15 @@ public class GabiaLoginController {
         boolean authUser = jwtService.isUsable(jwtToken);
 
         return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), authUser);
+    }
+
+    /**
+     * 로그아웃 요청
+     */
+    @GetMapping("/api/v1/logout")
+    public CommonJsonFormat logOut(HttpServletResponse response) {
+        String message = jwtService.destroyToken(response);
+
+        return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), message);
     }
 }

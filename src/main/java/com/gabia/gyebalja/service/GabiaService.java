@@ -22,6 +22,8 @@ import java.util.HashMap;
 @Service
 public class GabiaService {
 
+    private static final String emailFormat = "@gabia.com";
+
     private final RestTemplate restTemplate;
     private final Environment env;
     private final Gson gson;
@@ -63,8 +65,11 @@ public class GabiaService {
         try {
             // Request profile
             ResponseEntity<HashMap> response = restTemplate.exchange(env.getProperty("spring.social.gabia.url.profile"),HttpMethod.GET, request, HashMap.class);
-            if (response.getStatusCode() == HttpStatus.OK)
-                return gson.fromJson(response.getBody().toString(), GabiaUserInfoVo.class);
+            if (response.getStatusCode() == HttpStatus.OK) {
+                GabiaUserInfoVo gabiaUserInfoVo = gson.fromJson(response.getBody().toString(), GabiaUserInfoVo.class);
+                gabiaUserInfoVo.setUser_id(gabiaUserInfoVo.getUser_id() + emailFormat);  // 하이웍스 Api는 @gabia.com 의 내용을 보내주므로 이메일 형식을 붙여서 저장
+                return gabiaUserInfoVo;
+            }
         } catch (Exception e) {
             // 추후 추가 예정
         }

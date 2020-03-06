@@ -66,7 +66,6 @@ public class BoardImgRepositoryTest {
         // User
         this.user = User.builder()
                 .email("gabiaUser@gabia.com")
-                .password("1234")
                 .name("가비아")
                 .gender(GenderType.MALE)
                 .phone("010-2345-5678")

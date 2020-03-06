@@ -117,7 +117,7 @@ public class EducationService {
     /** 수정 - education 한 건 (상세페이지) */
     @Transactional
     public Long putOneEducation(Long id, EducationRequestDto educationRequestDto) {
-        Education findEducation = educationRepository.findById(id).orElseThrow(() -> new NotExistEducationException("존재하지 않는 교육입니다."));;
+        Education findEducation = educationRepository.findById(id).orElseThrow(() -> new NotExistEducationException("존재하지 않는 교육입니다."));
 
         Optional<Category> findCategory = categoryRepository.findById(educationRequestDto.getCategoryId());
 

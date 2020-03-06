@@ -75,7 +75,6 @@ class EducationRepositoryTest {
 
         User user = User.builder()
                 .email("test@gabia.com")
-                .password("1234")
                 .name("User1")
                 .gender(GenderType.MALE)
                 .phone("000-000-0000")
@@ -130,7 +129,6 @@ class EducationRepositoryTest {
 
         User user = User.builder()
                 .email("test@gabia.com")
-                .password("1234")
                 .name("User1")
                 .gender(GenderType.MALE)
                 .phone("000-000-0000")
@@ -186,7 +184,6 @@ class EducationRepositoryTest {
 
             User user = User.builder()
                     .email("test"+i+"@gabia.com")
-                    .password("1234"+i)
                     .name("User"+i)
                     .gender(GenderType.MALE)
                     .phone("000-000-0000")
@@ -244,7 +241,6 @@ class EducationRepositoryTest {
 
             User user = User.builder()
                     .email("test"+i+"@gabia.com")
-                    .password("1234"+i)
                     .name("User"+i)
                     .gender(GenderType.MALE)
                     .phone("000-000-0000")
@@ -299,7 +295,6 @@ class EducationRepositoryTest {
 
         User user = User.builder()
                 .email("test@gabia.com")
-                .password("1234")
                 .name("User1")
                 .gender(GenderType.MALE)
                 .phone("000-000-0000")
@@ -357,7 +352,6 @@ class EducationRepositoryTest {
 
         User user = User.builder()
                 .email("test@gabia.com")
-                .password("1234")
                 .name("User1")
                 .gender(GenderType.MALE)
                 .phone("000-000-0000")
@@ -420,7 +414,6 @@ class EducationRepositoryTest {
 
         User user = User.builder()
                 .email("test@gabia.com")
-                .password("1234")
                 .name("User")
                 .gender(GenderType.MALE)
                 .phone("000-000-0000")
@@ -478,7 +471,6 @@ class EducationRepositoryTest {
 
         User user = User.builder()
                 .email("test@gabia.com")
-                .password("1234")
                 .name("User1")
                 .gender(GenderType.MALE)
                 .phone("000-000-0000")

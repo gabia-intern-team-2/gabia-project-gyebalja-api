@@ -3,7 +3,6 @@ package com.gabia.gyebalja.user;
 import com.gabia.gyebalja.domain.Department;
 import com.gabia.gyebalja.domain.GenderType;
 import com.gabia.gyebalja.domain.User;
-
 import com.gabia.gyebalja.repository.DepartmentRepository;
 import com.gabia.gyebalja.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -11,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
@@ -46,7 +44,6 @@ public class UserRepositoryTest {
 
         User user = User.builder()
                     .email("test@gabia.com")
-                    .password("12345")
                     .name("User1")
                     .gender(GenderType.MALE)
                     .phone("000-0000-0000")
@@ -83,7 +80,6 @@ public class UserRepositoryTest {
 
         User user = User.builder()
                 .email("test@gabia.com")
-                .password("12345")
                 .name("User1")
                 .gender(GenderType.MALE)
                 .phone("000-0000-0000")
@@ -129,7 +125,6 @@ public class UserRepositoryTest {
 
             User user = User.builder()
                     .email("test@gabia.com")
-                    .password("12345")
                     .name("User"+i)
                     .gender(GenderType.MALE)
                     .phone("000-0000-0000")
@@ -170,7 +165,6 @@ public class UserRepositoryTest {
 
             User user = User.builder()
                     .email("test@gabia.com")
-                    .password("12345")
                     .name("User"+i)
                     .gender(GenderType.MALE)
                     .phone("000-0000-0000")
@@ -209,7 +203,6 @@ public class UserRepositoryTest {
 
         User user = User.builder()
                 .email("test@gabia.com")
-                .password("12345")
                 .name("User1")
                 .gender(GenderType.MALE)
                 .phone("000-0000-0000")
@@ -235,7 +228,7 @@ public class UserRepositoryTest {
     }
 
     @Test
-    @DisplayName("User 비밀번호 변경 테스트(update)")
+    @DisplayName("User 정보 변경 테스트(update)")
     public void updateTest() throws Exception {
         //given
         String updatePass = "1212";
@@ -250,7 +243,6 @@ public class UserRepositoryTest {
 
         User user = User.builder()
                 .email("test@gabia.com")
-                .password("12345")
                 .name("User1")
                 .gender(GenderType.MALE)
                 .phone("000-0000-0000")
@@ -264,15 +256,8 @@ public class UserRepositoryTest {
         User saveUser = userRepository.save(user);
 
         //when
-        saveUser.changePassword(updatePass);
-
-        em.flush(); //영속성컨텍스트 초기화함으로써 더티체킹 -> Update 쿼리 발생
-        em.clear();
-        Optional<User> findUserById = userRepository.findById(user.getId());
 
         //then
-        assertThat(findUserById.get().getId()).isEqualTo(saveUser.getId());
-        assertThat(findUserById.get().getPassword()).isEqualTo(saveUser.getPassword());
 
     }
 
@@ -293,7 +278,6 @@ public class UserRepositoryTest {
         User user = User.builder()
                 .gabiaUserNo(gabiaUserNo)
                 .email("test@gabia.com")
-                .password("12345")
                 .name("User1")
                 .engName("Ted")
                 .gender(GenderType.MALE)

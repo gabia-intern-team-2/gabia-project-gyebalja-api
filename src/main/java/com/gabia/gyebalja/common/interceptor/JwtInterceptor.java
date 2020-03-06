@@ -1,4 +1,4 @@
-package com.gabia.gyebalja.interceptor;
+package com.gabia.gyebalja.common.interceptor;
 
 import com.gabia.gyebalja.common.CookieBox;
 import com.gabia.gyebalja.exception.UnauthorizedException;
