@@ -85,6 +85,9 @@ public class BoardControllerTest {
 
     @Autowired
     public BoardControllerTest() {
+        // Interceptor 해제
+        System.setProperty("spring.profiles.active.test", "true");
+
         // Department
         this.department = Department.builder()
                 .name("테스트팀")
@@ -95,7 +98,6 @@ public class BoardControllerTest {
         // User
         this.user = User.builder()
                 .email("gabiaUser@gabia.com")
-                .password("1234")
                 .name("가비아")
                 .gender(GenderType.MALE)
                 .phone("010-2345-5678")

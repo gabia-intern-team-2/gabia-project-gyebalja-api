@@ -14,7 +14,6 @@ import com.gabia.gyebalja.repository.EduTagRepository;
 import com.gabia.gyebalja.repository.EducationRepository;
 import com.gabia.gyebalja.repository.TagRepository;
 import com.gabia.gyebalja.repository.UserRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,7 +67,6 @@ public class EduTagRepositoryTest {
 
         User user = User.builder()
                 .email("test@gabia.com")
-                .password("1234")
                 .name("User1")
                 .gender(GenderType.MALE)
                 .phone("000-000-0000")
@@ -133,7 +131,6 @@ public class EduTagRepositoryTest {
 
         User user = User.builder()
                 .email("test@gabia.com")
-                .password("1234")
                 .name("User1")
                 .gender(GenderType.MALE)
                 .phone("000-000-0000")
@@ -170,8 +167,10 @@ public class EduTagRepositoryTest {
         eduTagRepository.save(eduTag);
 
         em.clear();
+
         //when
         EduTag findEduTag = eduTagRepository.findById(eduTag.getId()).get();
+
         //then
         assertThat(findEduTag.getId()).isEqualTo(eduTag.getId());
         assertThat(findEduTag.getTag().getId()).isEqualTo(eduTag.getTag().getId());
@@ -196,7 +195,6 @@ public class EduTagRepositoryTest {
 
         User user = User.builder()
                 .email("test@gabia.com")
-                .password("1234")
                 .name("User1")
                 .gender(GenderType.MALE)
                 .phone("000-000-0000")
@@ -233,8 +231,10 @@ public class EduTagRepositoryTest {
         eduTagRepository.save(eduTag);
 
         em.clear();
+
         //when
         List<EduTag> allEduTag = eduTagRepository.findAll();
+
         //then
         assertThat(allEduTag.size()).isEqualTo(1);
         assertThat(allEduTag.get(0).getId()).isEqualTo(eduTag.getId());
@@ -260,7 +260,6 @@ public class EduTagRepositoryTest {
 
         User user = User.builder()
                 .email("test@gabia.com")
-                .password("1234")
                 .name("User1")
                 .gender(GenderType.MALE)
                 .phone("000-000-0000")
@@ -295,8 +294,10 @@ public class EduTagRepositoryTest {
                 .education(education)
                 .build();
         eduTagRepository.save(eduTag);
+
         //when
         long count = eduTagRepository.count();
+
         //then
         assertThat(count).isEqualTo(1);
     }
@@ -319,7 +320,6 @@ public class EduTagRepositoryTest {
 
         User user = User.builder()
                 .email("test@gabia.com")
-                .password("1234")
                 .name("User1")
                 .gender(GenderType.MALE)
                 .phone("000-000-0000")
@@ -356,8 +356,10 @@ public class EduTagRepositoryTest {
         eduTagRepository.save(eduTag);
 
         long beforeDeleteCnt = eduTagRepository.count();
+
         //when
         eduTagRepository.delete(eduTag);
+
         //then
         assertThat(eduTagRepository.count()).isEqualTo(beforeDeleteCnt-1);
         assertThat(eduTagRepository.findById(eduTag.getId())).isEqualTo(Optional.empty());
@@ -381,7 +383,6 @@ public class EduTagRepositoryTest {
 
         User user = User.builder()
                 .email("test@gabia.com")
-                .password("1234")
                 .name("User1")
                 .gender(GenderType.MALE)
                 .phone("000-000-0000")
@@ -431,10 +432,12 @@ public class EduTagRepositoryTest {
         educationRepository.save(updateEducation);
 
         long beforeUpdateCnt = eduTagRepository.count();
+
         //when
         eduTag.changeEducation(updateEducation);
 
         EduTag findEduTag = eduTagRepository.findById(eduTag.getId()).get();
+
         //then
         assertThat(findEduTag.getId()).isEqualTo(eduTag.getId());
         assertThat(findEduTag.getId()).isEqualTo(eduTag.getId());
@@ -460,7 +463,6 @@ public class EduTagRepositoryTest {
 
         User user = User.builder()
                 .email("test@gabia.com")
-                .password("1234")
                 .name("User1")
                 .gender(GenderType.MALE)
                 .phone("000-000-0000")
@@ -495,9 +497,11 @@ public class EduTagRepositoryTest {
                 .education(education)
                 .build();
         eduTagRepository.save(eduTag);
+
         //when
         long beforeDeleteCnt = eduTagRepository.count();
         eduTagRepository.deleteByEducationId(savedEducation.getId());
+
         //then
         assertThat(eduTagRepository.count()).isEqualTo(beforeDeleteCnt-1);
         assertThat(eduTagRepository.findById(savedEducation.getId())).isEqualTo(Optional.empty());

@@ -1,9 +1,10 @@
-package com.gabia.gyebalja.interceptor;
+package com.gabia.gyebalja.common.interceptor;
 
 import com.gabia.gyebalja.common.CookieBox;
 import com.gabia.gyebalja.exception.UnauthorizedException;
 import com.gabia.gyebalja.service.jwt.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -16,10 +17,14 @@ public class JwtInterceptor implements HandlerInterceptor {
     @Autowired
     private JwtService jwtService;
 
+    @Autowired
+    private Environment env;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        if(request.getMethod().equals(HttpMethod.OPTIONS.name()))
-            return true;
+        if (env.getProperty("spring.profiles.active.test").equals("true")) return true;
+
+        if(request.getMethod().equals(HttpMethod.OPTIONS.name())) return true;
 
         CookieBox cookieBox = new CookieBox(request);
         String token = null;

@@ -7,7 +7,6 @@ import com.gabia.gyebalja.dto.category.CategoryRequestDto;
 import com.gabia.gyebalja.dto.category.CategoryResponseDto;
 import com.gabia.gyebalja.repository.CategoryRepository;
 import com.gabia.gyebalja.service.CategoryService;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,8 +18,6 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Optional;
@@ -30,6 +27,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class CategoryControllerTest {
+
     @Autowired
     private CategoryService categoryService;
     @Autowired
@@ -41,12 +39,13 @@ public class CategoryControllerTest {
     @LocalServerPort
     private int port;
 
-    @PersistenceContext
-    EntityManager em;
+    public CategoryControllerTest() {
+        // Interceptor 해제
+        System.setProperty("spring.profiles.active.test", "true");
+    }
 
     @AfterEach
     public void cleanUp() {
-        System.out.println("============================ cleanUp()");
         this.categoryRepository.deleteAll();
     }
 
@@ -62,9 +61,11 @@ public class CategoryControllerTest {
         CategoryRequestDto categoryRequestDto = CategoryRequestDto.builder()
                                                                     .name("개발")
                                                                     .build();
+
         //when
         ResponseEntity<CommonJsonFormat> responseEntity = restTemplate.postForEntity(url, categoryRequestDto, CommonJsonFormat.class);
         CategoryResponseDto findCategoryDto = categoryService.getOneCategory(Long.parseLong(responseEntity.getBody().getResponse().toString()));
+
         //then
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody().getCode()).isEqualTo(StatusCode.OK.getCode());
@@ -84,9 +85,11 @@ public class CategoryControllerTest {
                                                 .build();
         Long savedId = categoryService.postOneCategory(categoryRequestDto);
         String url = "http://localhost:" + port + "/api/v1/categories/" + savedId;
+
         //when
         ResponseEntity<CommonJsonFormat> responseEntity = restTemplate.getForEntity(url, CommonJsonFormat.class);
         LinkedHashMap response = (LinkedHashMap) responseEntity.getBody().getResponse();
+
         //then
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody().getCode()).isEqualTo(StatusCode.OK.getCode());
@@ -108,6 +111,7 @@ public class CategoryControllerTest {
         Long savedId = categoryService.postOneCategory(categoryRequestDto);
         String url = "http://localhost:" + port + "/api/v1/categories/" + savedId;
         String updateName = "기획";
+
         //when
         CategoryRequestDto updateRequestDto = CategoryRequestDto.builder()
                                                                 .name(updateName)
@@ -115,6 +119,7 @@ public class CategoryControllerTest {
         HttpEntity<CategoryRequestDto> requestEntity = new HttpEntity<>(updateRequestDto);
         ResponseEntity<CommonJsonFormat> responseEntity = restTemplate.exchange(url, HttpMethod.PUT, requestEntity, CommonJsonFormat.class);
         Category findCategory = categoryRepository.findById(savedId).orElseThrow(() -> new IllegalArgumentException("해당 데이터가 없습니다."));
+
         //then
         assertThat(responseEntity.getBody().getCode()).isEqualTo(StatusCode.OK.getCode());
         assertThat(responseEntity.getBody().getMessage()).isEqualTo(StatusCode.OK.getMessage());
@@ -136,8 +141,10 @@ public class CategoryControllerTest {
         long beforeDeleteCnt = categoryRepository.count();
 
         String url = "http://localhost:" + port + "/api/v1/categories/" + savedId;
+
         //when
         restTemplate.delete(url);
+
         //then
         assertThat(categoryRepository.findById(savedId)).isEqualTo(Optional.empty());
         assertThat(categoryRepository.count()).isEqualTo(beforeDeleteCnt-1);
@@ -158,9 +165,11 @@ public class CategoryControllerTest {
                                         .build();
             categoryRepository.save(category);
         }
+
         //when
         ResponseEntity<CommonJsonFormat> responseEntity = restTemplate.getForEntity(url, CommonJsonFormat.class);
         ArrayList response = (ArrayList) responseEntity.getBody().getResponse();
+
         //then
         assertThat(response.size()).isEqualTo(totalNum);
     }

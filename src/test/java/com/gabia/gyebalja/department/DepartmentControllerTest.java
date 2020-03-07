@@ -41,6 +41,9 @@ public class DepartmentControllerTest {
     }
 
     public DepartmentControllerTest(){
+        // Interceptor 해제
+        System.setProperty("spring.profiles.active.test", "true");
+
         // Department
         this.department = Department.builder()
                 .name("테스트 - 부서")
