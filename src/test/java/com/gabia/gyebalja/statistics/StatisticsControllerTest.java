@@ -21,6 +21,11 @@ public class StatisticsControllerTest {
     @LocalServerPort
     private int port;
 
+    public StatisticsControllerTest() {
+        // Interceptor 해제
+        System.setProperty("spring.profiles.active.test", "true");
+    }
+
     @Test
     public void getMainStatistics() {
         // given

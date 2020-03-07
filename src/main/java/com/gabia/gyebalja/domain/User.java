@@ -4,7 +4,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -27,8 +26,6 @@ public class User extends BaseTime {
 
     @Column(nullable = false)
     private String email;
-    @Column(nullable = false)
-    private String password;
 
     @Column(length = 15, nullable = false)
     private String name;
@@ -54,7 +51,7 @@ public class User extends BaseTime {
     private String positionName;
     @Column(name = "profile_img")
     private String profileImg;
-    @Column(name = "gabia_user_no", nullable = false)
+    @Column(name = "gabia_user_no")
     private Long  gabiaUserNo;
 
     //Department와 연관관계
@@ -63,10 +60,9 @@ public class User extends BaseTime {
     private Department department;
 
     @Builder
-    public User(Long gabiaUserNo, String email, String password, String name, String engName,GenderType gender, String phone, String tel, Long positionId, String positionName, String profileImg, Department department) {
+    public User(Long gabiaUserNo, String email, String name, String engName,GenderType gender, String phone, String tel, Long positionId, String positionName, String profileImg, Department department) {
         this.gabiaUserNo = gabiaUserNo;
         this.email = email;
-        this.password = password;
         this.name = name;
         this.engName = engName;
         this.gender = gender;
@@ -78,9 +74,19 @@ public class User extends BaseTime {
         this.department = department;
     }
 
-    //비밀번호 변경 비즈니스 로직
-    public void changePassword(String password) {
-        this.password = password;
+    //사용자 정보 변경 메서드
+    public void changeUser(Long gabiaUserNo, String email, String name, String engName,GenderType gender, String phone, String tel, Long positionId, String positionName, String profileImg, Department department) {
+        this.gabiaUserNo = gabiaUserNo;
+        this.email = email;
+        this.name = name;
+        this.engName = engName;
+        this.gender = gender;
+        this.phone = phone;
+        this.tel = tel;
+        this.positionId = positionId;
+        this.positionName = positionName;
+        this.profileImg = profileImg;
+        this.department = department;
     }
 
 }

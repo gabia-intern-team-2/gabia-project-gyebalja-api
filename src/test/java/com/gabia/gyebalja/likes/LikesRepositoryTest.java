@@ -18,7 +18,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -71,7 +70,6 @@ class LikesRepositoryTest {
         // User
         this.user = User.builder()
                 .email("gabiaUser@gabia.com")
-                .password("1234")
                 .name("가비아")
                 .gender(GenderType.MALE)
                 .phone("010-2345-5678")
@@ -176,6 +174,6 @@ class LikesRepositoryTest {
 
         // then
         assertThat(likesRepository.count()).isEqualTo(totalNumberOfData);
-        assertThat(likesRepository.findById(saveLikes.getId())).isEqualTo(Optional.empty());    // 빈 객체인지 확인
+        assertThat(likesRepository.findById(saveLikes.getId())).isEqualTo(Optional.empty());
     }
 }

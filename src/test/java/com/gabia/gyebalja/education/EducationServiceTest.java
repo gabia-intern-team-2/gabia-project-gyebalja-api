@@ -16,7 +16,6 @@ import com.gabia.gyebalja.repository.EducationRepository;
 import com.gabia.gyebalja.repository.TagRepository;
 import com.gabia.gyebalja.repository.UserRepository;
 import com.gabia.gyebalja.service.EducationService;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,7 +71,6 @@ public class EducationServiceTest {
 
         User user = User.builder()
                 .email("test@gabia.com")
-                .password("1234")
                 .name("User1")
                 .gender(GenderType.MALE)
                 .phone("000-000-0000")
@@ -96,10 +94,12 @@ public class EducationServiceTest {
                 .userId(user.getId())
                 .hashTag("#Spring #CSS #HTML")
                 .build();
+
         //when
         Long saveId = educationService.postOneEducation(educationRequestDto);
         em.clear();
         Education findEducation = educationRepository.findById(saveId).get();
+
         //then
         assertThat(saveId).isEqualTo(findEducation.getId());
         assertThat(educationRequestDto.getTitle()).isEqualTo(findEducation.getTitle());
@@ -127,7 +127,6 @@ public class EducationServiceTest {
 
         User user = User.builder()
                 .email("test@gabia.com")
-                .password("1234")
                 .name("User1")
                 .gender(GenderType.MALE)
                 .phone("000-000-0000")
@@ -153,8 +152,10 @@ public class EducationServiceTest {
 
         educationRepository.save(education);
         em.clear();
+
         //when
         EducationDetailResponseDto findEducation = educationService.getOneEducation(education.getId());
+
         //then
         assertThat(findEducation.getId()).isEqualTo(education.getId());
         assertThat(findEducation.getTitle()).isEqualTo(education.getTitle());
@@ -189,7 +190,6 @@ public class EducationServiceTest {
 
         User user = User.builder()
                 .email("test@gabia.com")
-                .password("1234")
                 .name("User1")
                 .gender(GenderType.MALE)
                 .phone("000-000-0000")
@@ -214,11 +214,13 @@ public class EducationServiceTest {
                 .hashTag(tag.getName().toString())
                 .build();
         Long saveId = educationService.postOneEducation(educationRequestDto);
+
         //when
         educationRequestDto.setTitle(updateTitle);
         educationRequestDto.setContent(updateContent);
         Long updateId = educationService.putOneEducation(saveId, educationRequestDto);
         Education findUpdateEducation = educationRepository.findById(updateId).get();
+
         //then
         assertThat(updateId).isEqualTo(saveId);
         assertThat(findUpdateEducation.getTitle()).isEqualTo(updateTitle);
@@ -246,7 +248,6 @@ public class EducationServiceTest {
 
         User user = User.builder()
                 .email("test@gabia.com")
-                .password("1234")
                 .name("User1")
                 .gender(GenderType.MALE)
                 .phone("000-000-0000")
@@ -272,8 +273,10 @@ public class EducationServiceTest {
 
         educationRepository.save(education);
         long beforeDeleteCnt = educationRepository.count();
+
         //when
         Long deleteId = educationService.deleteOneEducation(education.getId());
+
         //then
         assertThat(educationRepository.count()).isEqualTo(beforeDeleteCnt-1);
         assertThat(educationRepository.findById(deleteId)).isEqualTo(Optional.empty());
@@ -307,7 +310,6 @@ public class EducationServiceTest {
 
         User user = User.builder()
                 .email("test@gabia.com")
-                .password("1234")
                 .name("User1")
                 .gender(GenderType.MALE)
                 .phone("000-000-0000")
@@ -343,8 +345,10 @@ public class EducationServiceTest {
         for(int i =0; i<totalNum; i++) {
             educationService.postOneEducation(educationRequestDto);
         }
+
         //when
         List<EducationAllResponseDto> allEducationByUserId = educationService.getAllEducationByUserId(user.getId(), pageable);
+
         //then
         assertThat(allEducationByUserId.size()).isEqualTo(10); //한 페이지당 데이터 10개
     }

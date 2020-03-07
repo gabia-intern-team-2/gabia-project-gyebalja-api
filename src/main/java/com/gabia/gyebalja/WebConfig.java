@@ -1,6 +1,6 @@
 package com.gabia.gyebalja;
 
-import com.gabia.gyebalja.interceptor.JwtInterceptor;
+import com.gabia.gyebalja.common.interceptor.JwtInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -40,8 +40,9 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addMapping("/api/v1/**")
                 .allowedOrigins("*")
                 .allowedMethods("*")
-                .allowCredentials(true)
-                .maxAge(3600);
+                .maxAge(3600)
+                .allowCredentials(true);
+
     }
 
 }
