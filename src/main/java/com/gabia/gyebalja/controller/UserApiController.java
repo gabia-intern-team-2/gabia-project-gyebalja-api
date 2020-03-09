@@ -7,7 +7,6 @@ import com.gabia.gyebalja.dto.user.UserResponseDto;
 import com.gabia.gyebalja.service.UserService;
 import com.gabia.gyebalja.service.jwt.JwtService;
 import com.gabia.gyebalja.vo.GabiaUserInfoVo;
-import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,7 +22,6 @@ public class UserApiController {
 
     private final UserService userService;
     private final JwtService jwtService;
-    private final Gson gson;
 
     /** 로그인 후 가비아 프로필 요청 */
     @GetMapping("/api/v1/gabia-user")
@@ -31,6 +29,14 @@ public class UserApiController {
         GabiaUserInfoVo gabiaProfile = jwtService.getGabiaProfile(request);
 
         return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), gabiaProfile);
+    }
+
+    /** 조회 - 사용자 정보 한 건 (토큰 사용)*/
+    @GetMapping("/api/v1/users")
+    public CommonJsonFormat getUserProfileDetail(HttpServletRequest request) throws Exception {
+        UserResponseDto userProfileDetail = jwtService.getUserProfileDetail(request);
+
+        return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), userProfileDetail);
     }
 
     /** 조회 - 사용자 정보 한 건 */

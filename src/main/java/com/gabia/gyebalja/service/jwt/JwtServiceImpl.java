@@ -2,6 +2,8 @@ package com.gabia.gyebalja.service.jwt;
 
 import com.gabia.gyebalja.common.CookieBox;
 import com.gabia.gyebalja.domain.User;
+import com.gabia.gyebalja.dto.user.UserResponseDto;
+import com.gabia.gyebalja.exception.NotExistUserException;
 import com.gabia.gyebalja.exception.UnauthorizedException;
 import com.gabia.gyebalja.repository.UserRepository;
 import com.gabia.gyebalja.vo.GabiaUserInfoVo;
@@ -16,7 +18,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -122,6 +123,25 @@ public class JwtServiceImpl implements JwtService {
 
         return gabiaUserInfoVo;
     }
+    // 토큰으로 유저 정보 조회
+
+    @Override
+    public UserResponseDto getUserProfileDetail(HttpServletRequest request) throws Exception {
+        CookieBox cookieBox = new CookieBox(request);
+        String token = null;
+        if( cookieBox.exists("jwt_token")) {
+            token = cookieBox.getValue("jwt_token");
+        }
+        Map<String, Object> decodeJwt = this.get(token);
+
+        GabiaUserInfoVo gabiaUserInfoVo = gson.fromJson(decodeJwt.toString(), GabiaUserInfoVo.class);
+        User findUser = userRepository.findUserByGabiaUserNo(gabiaUserInfoVo.getNo()).orElseThrow(() -> new NotExistUserException("해당 사용자가 없습니다."));
+
+        UserResponseDto userResponseDto = new UserResponseDto(findUser);
+
+        return userResponseDto;
+    }
+
     // 로그아웃
     @Override
     public String destroyToken(HttpServletResponse response) {
