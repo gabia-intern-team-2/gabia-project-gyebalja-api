@@ -11,7 +11,7 @@ import java.io.IOException;
 @Service
 public class ImageService {
 
-    public static final String uploadingDir = "/var/www/html/images/";
+    public static final String boardImgDir = "/var/www/html/images/boards/";
     public static final String userImgDir = "/var/www/html/images/users/";
 
     public String postOneBoardImg(MultipartFile image) throws IOException {
@@ -20,15 +20,15 @@ public class ImageService {
         int randomNumberRange = 10;
 
         String fileName = System.currentTimeMillis() + ((int) Math.random() * randomNumberRange) + image.getOriginalFilename();
-        File file = new File(uploadingDir + fileName);
+        File file = new File(boardImgDir + fileName);
         for(; file.exists() && tryCount < tryThreshold; tryCount++){
             fileName = System.currentTimeMillis() + ((int) Math.random() * randomNumberRange) + image.getOriginalFilename();
-            file = new File(uploadingDir + fileName);
+            file = new File(boardImgDir + fileName);
         }
-        if(tryCount >= tryThreshold) return "images/uploadfailed.jpg";
+        if(tryCount >= tryThreshold) return "http://api.gyeblja.com/images/boards/uploadfailed.jpg";
 
         image.transferTo(file);
-        String imageUrl = "images/" + fileName;
+        String imageUrl = "http://api.gyeblja.com/images/boards/" + fileName;
 
         return imageUrl;
     }
@@ -44,7 +44,7 @@ public class ImageService {
             fileName = System.currentTimeMillis() + ((int) Math.random() * randomNumberRange) + image.getOriginalFilename();
             file = new File(userImgDir + fileName);
         }
-        if(tryCount >= tryThreshold) return "images/uploadfailed.jpg";
+        if(tryCount >= tryThreshold) return "http://api.gyeblja.com/images/users/basic.jpg";
 
         image.transferTo(file);
         String imageUrl = "http://api.gyeblja.com/images/users/" + fileName;
