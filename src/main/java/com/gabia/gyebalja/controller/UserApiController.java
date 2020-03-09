@@ -63,4 +63,7 @@ public class UserApiController {
         return new CommonJsonFormat(StatusCode.OK.getCode(),StatusCode.OK.getMessage(), userId);
     }
 
+    /** 저장 - user 프로필 이미지 */
+
+
 }
