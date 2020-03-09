@@ -1,7 +1,6 @@
 package com.gabia.gyebalja.common;
 
 import org.springframework.util.StringUtils;
-
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

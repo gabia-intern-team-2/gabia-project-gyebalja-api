@@ -18,4 +18,5 @@ public class EduTagResponseDto {
         this.tagId = eduTag.getTag().getId();
         this.tagName = eduTag.getTag().getName();
     }
+
 }

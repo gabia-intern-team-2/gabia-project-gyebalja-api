@@ -33,4 +33,5 @@ public class EducationAllResponseDto {
         this.place = place;
         this.category = category;
     }
+
 }

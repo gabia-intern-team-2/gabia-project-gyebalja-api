@@ -1,5 +1,6 @@
 package com.gabia.gyebalja.service.jwt;
 
+import com.gabia.gyebalja.dto.user.UserResponseDto;
 import com.gabia.gyebalja.vo.GabiaUserInfoVo;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,5 +12,6 @@ public interface JwtService {
     boolean isUsable(String jwt);
     boolean isRegister(String jwt);
     GabiaUserInfoVo getGabiaProfile(HttpServletRequest request) throws Exception;
+    UserResponseDto getUserProfileDetail(HttpServletRequest request) throws Exception;
     String destroyToken(HttpServletResponse response);
 }
