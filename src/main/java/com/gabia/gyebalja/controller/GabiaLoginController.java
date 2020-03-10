@@ -4,7 +4,7 @@ import com.gabia.gyebalja.common.CommonJsonFormat;
 import com.gabia.gyebalja.common.CookieBox;
 import com.gabia.gyebalja.common.StatusCode;
 import com.gabia.gyebalja.service.GabiaService;
-import com.gabia.gyebalja.service.jwt.JwtService;
+import com.gabia.gyebalja.service.JwtService;
 import com.gabia.gyebalja.vo.GabiaTokenVo;
 import com.gabia.gyebalja.vo.GabiaUserInfoVo;
 import lombok.RequiredArgsConstructor;

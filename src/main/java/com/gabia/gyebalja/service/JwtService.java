@@ -1,4 +1,4 @@
-package com.gabia.gyebalja.service.jwt;
+package com.gabia.gyebalja.service;
 
 import com.gabia.gyebalja.common.CookieBox;
 import com.gabia.gyebalja.domain.User;
@@ -16,8 +16,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,8 +29,9 @@ import java.util.Map;
 import java.util.Optional;
 
 @RequiredArgsConstructor
-@Service("jwtService")
-public class JwtServiceImpl implements JwtService {
+@Transactional
+@Service
+public class JwtService {
 
     private final Gson gson;
 
@@ -39,7 +42,6 @@ public class JwtServiceImpl implements JwtService {
     private String jwtSecretKey;
 
     //jwt 토큰 생성
-    @Override
     public <T> String createToken(T data) {
         String jwt = Jwts.builder()
                 .setHeaderParam("typ", "JWT")
@@ -64,7 +66,6 @@ public class JwtServiceImpl implements JwtService {
     }
 
     // jwt 토큰 복호
-    @Override
     public Map<String, Object> get(String jwt) {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest();
 
@@ -84,7 +85,6 @@ public class JwtServiceImpl implements JwtService {
     }
 
     // 유효한 토큰인지 검증
-    @Override
     public boolean isUsable(String jwt) {
         try {
             Jws<Claims> claims = Jwts.parser()
@@ -98,7 +98,6 @@ public class JwtServiceImpl implements JwtService {
         }
     }
     // DB에 등록된 사용자인지 검증
-    @Override
     public boolean isRegister(String jwt) {
         Map<String, Object> originData = this.get(jwt);
         Optional<User> findUser = userRepository.findUserByGabiaUserNo(Long.parseLong(originData.get("no").toString()));
@@ -110,7 +109,6 @@ public class JwtServiceImpl implements JwtService {
         return flag;
     }
     // 토큰 복호 후 VO 반환
-    @Override
     public GabiaUserInfoVo getGabiaProfile(HttpServletRequest request) throws Exception {
         CookieBox cookieBox = new CookieBox(request);
         String token = null;
@@ -124,8 +122,6 @@ public class JwtServiceImpl implements JwtService {
         return gabiaUserInfoVo;
     }
     // 토큰으로 유저 정보 조회
-
-    @Override
     public UserResponseDto getUserProfileDetail(HttpServletRequest request) throws Exception {
         CookieBox cookieBox = new CookieBox(request);
         String token = null;
@@ -143,7 +139,6 @@ public class JwtServiceImpl implements JwtService {
     }
 
     // 로그아웃
-    @Override
     public String destroyToken(HttpServletResponse response) {
         CookieBox cookieBox = new CookieBox();
         Cookie setCookie = cookieBox.createCookie("jwt_token", null, "api.gyeblja.com", "/", 0);
