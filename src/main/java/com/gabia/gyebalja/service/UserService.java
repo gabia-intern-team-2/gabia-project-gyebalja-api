@@ -12,6 +12,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+/**
+ * Author : 정태균
+ * Part : All
+ */
+
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service

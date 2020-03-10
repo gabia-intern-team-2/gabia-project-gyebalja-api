@@ -28,6 +28,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -36,6 +37,10 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 
+/**
+ * Author : 정태균
+ * Part : All
+ */
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class EducationControllerTest {
@@ -449,7 +454,6 @@ public class EducationControllerTest {
         ArrayList result = (ArrayList) responseEntity.getResponse();
         assertThat(result.size()).isEqualTo(10); //추후 검증로직 추가 예정
     }
-
 }
 
 

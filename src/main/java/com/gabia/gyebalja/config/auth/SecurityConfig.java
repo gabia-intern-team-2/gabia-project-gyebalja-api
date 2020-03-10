@@ -9,7 +9,12 @@
 //import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 //import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 //import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
-//
+
+/**
+ * Author : 정태균
+ * Part : All
+ */
+
 //@Configuration
 //@EnableWebSecurity
 //public class SecurityConfig extends WebSecurityConfigurerAdapter {

@@ -7,8 +7,14 @@ import com.gabia.gyebalja.dto.edutag.EduTagResponseDto;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
 import java.util.List;
+
+/**
+ * Author : 정태균
+ * Part : All
+ */
 
 @NoArgsConstructor
 @Data
@@ -40,5 +46,4 @@ public class EducationDetailResponseDto {
         this.category = category;
         this.eduTags = eduTag;
     }
-
 }

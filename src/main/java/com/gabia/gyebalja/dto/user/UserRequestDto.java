@@ -5,6 +5,11 @@ import com.gabia.gyebalja.domain.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Author : 정태균
+ * Part : All
+ */
+
 @NoArgsConstructor
 @Data
 public class UserRequestDto {

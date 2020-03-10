@@ -17,7 +17,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
 import java.util.List;
+
+/**
+ * Author : 정태균
+ * Part : All
+ */
 
 @RequiredArgsConstructor  //생성자 주입방식을 사용하기 위해 사용
 @RestController

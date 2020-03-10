@@ -2,6 +2,11 @@ package com.gabia.gyebalja.vo;
 
 import lombok.Data;
 
+/**
+ * Author : 정태균
+ * Part : All
+ */
+
 @Data
 public class GabiaTokenVo {
     private String access_token;

@@ -7,6 +7,11 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
+/**
+ * Author : 이현재
+ * Part : All
+ */
+
 public interface BoardRepository extends JpaRepository<Board, Long> {
 
     @Query("select b from Board b left join fetch b.comments where b.id = :boardId")

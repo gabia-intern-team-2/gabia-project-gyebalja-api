@@ -7,6 +7,13 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Author : 이현재
+ * Part : postOneBoardImg()
+ * Author : 정태균
+ * Part : postOneUserImg()
+ */
+
 @Transactional
 @Service
 public class ImageService {

@@ -16,8 +16,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+
+/**
+ * Author : 정태균
+ * Part : All
+ */
 
 @RequiredArgsConstructor  //생성자 주입방식을 사용하기 위해 사용
 @RestController

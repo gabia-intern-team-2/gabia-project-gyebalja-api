@@ -6,7 +6,13 @@ import com.gabia.gyebalja.dto.category.CategoryResponseDto;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
+
+/**
+ * Author : 정태균
+ * Part : All
+ */
 
 @NoArgsConstructor
 @Data
@@ -33,5 +39,4 @@ public class EducationAllResponseDto {
         this.place = place;
         this.category = category;
     }
-
 }

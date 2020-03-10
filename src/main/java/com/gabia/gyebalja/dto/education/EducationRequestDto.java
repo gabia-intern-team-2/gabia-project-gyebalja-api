@@ -4,7 +4,13 @@ import com.gabia.gyebalja.domain.EducationType;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
+
+/**
+ * Author : 정태균
+ * Part : All
+ */
 
 @NoArgsConstructor
 @Data
@@ -35,5 +41,4 @@ public class EducationRequestDto {
         this.categoryId = categoryId;
         this.hashTag = hashTag;
     }
-
 }

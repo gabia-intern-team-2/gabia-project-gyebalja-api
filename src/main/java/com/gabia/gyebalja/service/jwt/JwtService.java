@@ -2,9 +2,15 @@ package com.gabia.gyebalja.service.jwt;
 
 import com.gabia.gyebalja.dto.user.UserResponseDto;
 import com.gabia.gyebalja.vo.GabiaUserInfoVo;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
+
+/**
+ * Author : 정태균
+ * Part : All
+ */
 
 public interface JwtService {
     <T> String createToken(T data);
