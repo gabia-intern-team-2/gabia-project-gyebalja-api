@@ -19,6 +19,11 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+/**
+ * Author : 이현재
+ * Part : All
+ */
+
 @RequiredArgsConstructor
 @Transactional
 @Service

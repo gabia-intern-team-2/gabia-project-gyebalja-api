@@ -20,6 +20,11 @@ import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Author : 이현재
+ * Part : All
+ */
+
 @ToString(of = {"id", "title", "content", "views"})
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

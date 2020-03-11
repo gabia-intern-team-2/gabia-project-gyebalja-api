@@ -15,6 +15,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+/**
+ * Author : 이현재
+ * Part : All
+ */
+
 @ToString(of = {"id", "content"})
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

@@ -6,6 +6,11 @@ import com.gabia.gyebalja.dto.department.DepartmentResponseDto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Author : 정태균
+ * Part : All
+ */
+
 @NoArgsConstructor
 @Data
 public class UserResponseDto {

@@ -16,6 +16,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+/**
+ * Author : 이현재
+ * Part : All
+ */
+
 @ToString(of = {"id", "imgPath"})
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

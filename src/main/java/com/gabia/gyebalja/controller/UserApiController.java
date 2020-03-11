@@ -14,7 +14,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
 import javax.servlet.http.HttpServletRequest;
+
+/**
+ * Author : 정태균
+ * Part : All
+ */
 
 @RequiredArgsConstructor
 @RestController
@@ -62,8 +68,4 @@ public class UserApiController {
 
         return new CommonJsonFormat(StatusCode.OK.getCode(),StatusCode.OK.getMessage(), userId);
     }
-
-    /** 저장 - user 프로필 이미지 */
-
-
 }

@@ -5,6 +5,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Author : 정태균
+ * Part : All
+ */
+
 @NoArgsConstructor
 @Data
 public class EduTagResponseDto {
@@ -18,5 +23,4 @@ public class EduTagResponseDto {
         this.tagId = eduTag.getTag().getId();
         this.tagName = eduTag.getTag().getName();
     }
-
 }

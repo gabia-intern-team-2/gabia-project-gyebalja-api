@@ -19,6 +19,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Author : 이현재
+ * Part : getMainStatistics()
+ * Author : 정태균
+ * Part : getEducationStatistics()
+ */
+
 @RequiredArgsConstructor
 @RestController
 public class StatisticsApiController {
@@ -48,6 +55,7 @@ public class StatisticsApiController {
         StatisticsEducationTagResponseDto statisticsEducationTagResponseDto = statisticsService.getEducationStatisticsWithTag(id);
 
         StatisticsEducationResponseDto response = new StatisticsEducationResponseDto(statisticsEducationCategoryResponseDto, statisticsEducationHourResponseDto, statisticsEducationMonthResponseDto, statisticsEducationRankResponseDto, statisticsEducationTagResponseDto);
+
         return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), response);
     }
 }

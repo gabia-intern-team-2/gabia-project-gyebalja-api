@@ -5,6 +5,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;
 
+/**
+ * Author : 이현재
+ * Part : All
+ */
+
 public interface LikesRepository extends JpaRepository<Likes, Long> {
 
     int countByBoardId(Long boardId);

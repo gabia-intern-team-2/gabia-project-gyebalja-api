@@ -1,9 +1,15 @@
 package com.gabia.gyebalja.common;
 
 import org.springframework.util.StringUtils;
+
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+/**
+ * Author : 정태균
+ * Part : All
+ */
 
 public class HashTagRegularExpression {
 

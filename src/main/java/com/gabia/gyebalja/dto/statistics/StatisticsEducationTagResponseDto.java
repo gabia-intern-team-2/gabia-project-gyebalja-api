@@ -5,6 +5,11 @@ import lombok.ToString;
 
 import java.util.ArrayList;
 
+/**
+ * Author : 정태균
+ * Part : All
+ */
+
 @ToString
 @Getter
 public class StatisticsEducationTagResponseDto {

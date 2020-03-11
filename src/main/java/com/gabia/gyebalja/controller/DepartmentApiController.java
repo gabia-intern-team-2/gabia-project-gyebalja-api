@@ -11,6 +11,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * Author : 이현재
+ * Part : All
+ */
+
 @RequiredArgsConstructor
 @RestController
 public class DepartmentApiController {
