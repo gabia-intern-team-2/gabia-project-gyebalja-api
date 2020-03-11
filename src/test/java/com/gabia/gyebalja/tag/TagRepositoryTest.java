@@ -7,12 +7,18 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.transaction.annotation.Transactional;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
+/**
+ * Author : 정태균
+ * Part : All
+ */
 
 @Transactional
 @DataJpaTest
@@ -31,8 +37,8 @@ public class TagRepositoryTest {
         long beforeCnt = tagRepository.count();
 
         Tag tag = Tag.builder()
-                    .name("#Spring")
-                    .build();
+                .name("#Spring")
+                .build();
 
         //when
         tagRepository.save(tag);
@@ -43,7 +49,7 @@ public class TagRepositoryTest {
         //then
         assertThat(findTag.getId()).isEqualTo(tag.getId());
         assertThat(findTag.getName()).isEqualTo(tag.getName());
-        assertThat(tagRepository.count()).isEqualTo(beforeCnt+1);
+        assertThat(tagRepository.count()).isEqualTo(beforeCnt + 1);
 
     }
 
@@ -140,7 +146,7 @@ public class TagRepositoryTest {
         tagRepository.delete(tag1);
 
         //then
-        assertThat(tagRepository.count()).isEqualTo(beforeDeleteCnt-1);
+        assertThat(tagRepository.count()).isEqualTo(beforeDeleteCnt - 1);
         assertThat(tagRepository.findById(tag1.getId())).isEqualTo(Optional.empty());
 
     }
@@ -152,8 +158,8 @@ public class TagRepositoryTest {
         String updateName = "이름 업데이트";
 
         Tag tag = Tag.builder()
-                    .name("#Spring")
-                    .build();
+                .name("#Spring")
+                .build();
         tagRepository.save(tag);
         long beforeUpdateCnt = tagRepository.count();
 
@@ -172,7 +178,7 @@ public class TagRepositoryTest {
     @DisplayName("Tag 이름으로 조회 테스트(findHashTagByName)")
     public void findHashTagByName() throws Exception {
         //given
-        String hashTagName  = "#Spring";
+        String hashTagName = "#Spring";
         Tag tag = Tag.builder()
                 .name(hashTagName)
                 .build();
@@ -183,7 +189,5 @@ public class TagRepositoryTest {
 
         //then
         assertThat(savedTag.getId()).isEqualTo(findTagByName.getId());
-
     }
-
 }

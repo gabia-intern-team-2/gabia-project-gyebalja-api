@@ -9,6 +9,13 @@ import org.springframework.data.repository.query.Param;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Author : 이현재
+ * Part : getMainStatisticsWithYear(), getMainStatisticsWithMonth(), getMainStatisticsWithCategory(), getMainStatisticsWithTag()
+ * Author : 정태균
+ * Part : getEducationStatisticsWithMonth(), getEducationStatisticsWithCategory(), getEducationStatisticsWithTag(), getEducationStatisticsWithIndividualTotalHours(), getEducationStatisticsWithCompanyTotalHours(), getEducationStatisticsWithRank()
+ */
+
 public interface StatisticsRepository extends JpaRepository<Education, Long>{
     /** 통계 - 메인 화면 */
     /** 연도별 교육 건수, 시간 */

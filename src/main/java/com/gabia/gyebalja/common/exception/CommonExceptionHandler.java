@@ -11,6 +11,13 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+/**
+ * Author : 이현재
+ * Part : All
+ * Assistant : 정태균
+ * Part : handleEmptyResultDataAccessException()
+ */
+
 /** 참조 : https://cheese10yun.github.io/spring-guide-exception/ */
 
 @ControllerAdvice

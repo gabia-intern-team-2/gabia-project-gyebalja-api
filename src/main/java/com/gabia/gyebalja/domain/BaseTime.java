@@ -11,6 +11,11 @@ import javax.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
 
 /**
+ * Author : 이현재
+ * Part : All
+ */
+
+/**
  * @MappedSuperclass
  * :JPA Entity 클래스들이 BaseTime 을 상속할 경우 createdDate, modifiedDate 등의 필드들도 컬럼으로 인식하도록 함
  *

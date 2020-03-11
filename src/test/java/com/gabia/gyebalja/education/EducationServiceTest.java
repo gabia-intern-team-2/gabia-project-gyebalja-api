@@ -24,6 +24,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
@@ -31,6 +32,11 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
+/**
+ * Author : 정태균
+ * Part : All
+ */
 
 @Transactional
 @SpringBootTest
@@ -353,5 +359,4 @@ public class EducationServiceTest {
         //then
         assertThat(allEducationByUserId.size()).isEqualTo(10); //한 페이지당 데이터 10개
     }
-
 }

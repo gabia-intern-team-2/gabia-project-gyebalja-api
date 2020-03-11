@@ -6,6 +6,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+/**
+ * Author : 이현재
+ * Part : All
+ */
+
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString
 @Getter
@@ -29,5 +34,4 @@ public class DepartmentResponseDto {
             this.parentDepartmentName = "NULL";
         }
     }
-
 }
