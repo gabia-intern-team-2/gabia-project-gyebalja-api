@@ -33,6 +33,7 @@ public class BoardDetailResponseDto {
     private Long userId;
     private String userName;
     private String userPositionName;
+    private String userProfileImg;
     private Long educationId;
     private String educationTitle;
     private List<CommentResponseDto> commentList;
@@ -48,6 +49,7 @@ public class BoardDetailResponseDto {
         this.userId = board.getUser().getId();
         this.userName = board.getUser().getName();
         this.userPositionName = board.getUser().getPositionName();
+        this.userProfileImg = board.getUser().getProfileImg();
         this.educationId = board.getEducation().getId();
         this.educationTitle = board.getEducation().getTitle();
         this.commentList = board.getComments().stream().map(comment -> new CommentResponseDto(comment)).collect(Collectors.toList());
