@@ -26,7 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Part : All
  */
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = "spring.config.location=classpath:application-test.yml")
 public class DepartmentControllerTest {
 
     @Autowired
