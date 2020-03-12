@@ -39,5 +39,15 @@ public class HashTagRegularExpression {
 
         return str;
     }
+    // 문자열 중복 제거 메서드
+    public ArrayList<String> removeDuplication(ArrayList<String> extractedHashTag) {
+        ArrayList<String> result = new ArrayList<String>();
 
+        for (int i = 0; i < extractedHashTag.size(); i++) {
+            if (!result.contains(extractedHashTag.get(i))) {
+                result.add(extractedHashTag.get(i));
+            }
+        }
+        return result;
+    }
 }
