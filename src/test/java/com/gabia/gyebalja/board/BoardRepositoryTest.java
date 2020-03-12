@@ -16,6 +16,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -30,8 +31,9 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Part : All
  */
 
+@ActiveProfiles("test")
 @Transactional
-@DataJpaTest
+@DataJpaTest(properties = "spring.config.location=classpath:application-test.yml")
 public class BoardRepositoryTest {
 
     @Autowired private BoardRepository boardRepository;

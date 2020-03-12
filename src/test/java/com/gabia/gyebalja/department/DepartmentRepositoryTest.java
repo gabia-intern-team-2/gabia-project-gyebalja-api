@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 
 @Transactional
-@DataJpaTest
+@DataJpaTest(properties = "spring.config.location=classpath:application-test.yml")
 public class DepartmentRepositoryTest {
 
     @Autowired

@@ -18,6 +18,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -31,7 +32,8 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
  * Part : All
  */
 
-@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@ActiveProfiles("test")
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, properties = "spring.config.location=classpath:application-test.yml")
 public class CategoryControllerTest {
 
     @Autowired
