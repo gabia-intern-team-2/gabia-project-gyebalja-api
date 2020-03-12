@@ -26,8 +26,10 @@ public class HashTagRegularExpressionTest {
         String hashTagString = "#SPRING";
         String toLower = hashTagString.toLowerCase();
         HashTagRegularExpression hashTagRegularExpression = new HashTagRegularExpression();
+
         //when
         ArrayList<String> extractHashTag = hashTagRegularExpression.getExtractHashTag(hashTagString);
+
         //then
         assertThat(extractHashTag.get(0)).isEqualTo("#spring");
     }
@@ -38,8 +40,10 @@ public class HashTagRegularExpressionTest {
         //given
         String hashTagString = "#spring #Vue # #안녕 하세요 #HTML $Test";
         HashTagRegularExpression hashTagRegularExpression = new HashTagRegularExpression();
+
         //when
         ArrayList<String> extractHashTag = hashTagRegularExpression.getExtractHashTag(hashTagString);
+
         //then
         assertThat(extractHashTag.size()).isEqualTo(4);  //#spring, #Vue, #안녕, #HTML 만 추출됨.
         assertThat(extractHashTag.get(0)).isEqualTo("#spring");
@@ -56,9 +60,11 @@ public class HashTagRegularExpressionTest {
         extractedHashTag.add("#html");
         extractedHashTag.add("#html");
         extractedHashTag.add("#vue");
+
         //when
         HashTagRegularExpression hashTagRegularExpression = new HashTagRegularExpression();
         ArrayList<String> removeDuplicationHashTag = hashTagRegularExpression.removeDuplication(extractedHashTag);
+
         //then
         assertThat(removeDuplicationHashTag.size()).isEqualTo(3);
     }
