@@ -79,7 +79,9 @@ public class EducationService {
             HashTagRegularExpression hashTagRegularExpression = new HashTagRegularExpression();
             ArrayList<String> extractHashTagList = hashTagRegularExpression.getExtractHashTag(educationRequestDto.getHashTag());
 
-            for (String s : extractHashTagList) {
+            ArrayList<String> removeDuplicationHashTag = hashTagRegularExpression.removeDuplication(extractHashTagList);
+
+            for (String s : removeDuplicationHashTag) {
                 Optional<Tag> findHashTag = tagRepository.findHashTagByName(s);
 
                 Tag tag = findHashTag.isPresent() ? findHashTag.get() : tagRepository.save( Tag.builder().name(s).build());
@@ -145,7 +147,9 @@ public class EducationService {
             HashTagRegularExpression hashTagRegularExpression = new HashTagRegularExpression();
             ArrayList<String> extractHashTagList = hashTagRegularExpression.getExtractHashTag(educationRequestDto.getHashTag());
 
-            for (String s : extractHashTagList) {
+            ArrayList<String> removeDuplicationHashTag = hashTagRegularExpression.removeDuplication(extractHashTagList);
+
+            for (String s : removeDuplicationHashTag) {
                 Optional<Tag> findHashTag = tagRepository.findHashTagByName(s);
 
                 Tag tag = findHashTag.isPresent() ? findHashTag.get() : tagRepository.save( Tag.builder().name(s).build());
