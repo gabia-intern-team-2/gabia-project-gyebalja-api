@@ -7,6 +7,8 @@ import com.gabia.gyebalja.domain.Education;
 import com.gabia.gyebalja.domain.EducationType;
 import com.gabia.gyebalja.domain.GenderType;
 import com.gabia.gyebalja.domain.User;
+import com.gabia.gyebalja.dto.board.BoardAllResponseDto;
+import com.gabia.gyebalja.dto.board.BoardRequestDto;
 import com.gabia.gyebalja.dto.comment.CommentRequestDto;
 import com.gabia.gyebalja.dto.comment.CommentResponseDto;
 import com.gabia.gyebalja.repository.BoardRepository;
@@ -21,11 +23,16 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -191,5 +198,29 @@ public class CommentServiceTest {
         // then
         assertThat(deleteId).isEqualTo(saveId);
         assertThat(commentRepository.findById(deleteId)).isEqualTo(Optional.empty());
+    }
+
+    @Test
+    @DisplayName("commentService.getAllComment() 테스트 (전체 조회)")
+    public void getAllComment() {
+        // given
+        int originalTotalNumberOfData = (int) commentRepository.count();
+        int targetIndex = originalTotalNumberOfData;
+        int totalNumberOfData = 29;
+        String content = "테스트 - 댓글 본문";
+        CommentRequestDto commentRequestDto = CommentRequestDto.builder().content(content).userId(user.getId()).boardId(board.getId()).build();
+
+        for (int i = 0; i < totalNumberOfData; i++) {
+            commentService.postOneComment(commentRequestDto);
+        }
+        em.clear();
+        em.flush();
+
+        // when
+        List<CommentResponseDto> commentResponseDtos = commentService.getAllComment(board.getId());
+
+        // then
+        assertThat(commentResponseDtos.size()).isEqualTo(totalNumberOfData);
+        assertThat(commentResponseDtos.get(targetIndex).getContent()).isEqualTo(content);
     }
 }
