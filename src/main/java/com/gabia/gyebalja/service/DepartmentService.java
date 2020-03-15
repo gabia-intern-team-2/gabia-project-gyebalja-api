@@ -10,6 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Author : 이현재
+ * Part : All
+ */
+
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 @Service

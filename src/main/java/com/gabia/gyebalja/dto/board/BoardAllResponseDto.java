@@ -8,6 +8,11 @@ import lombok.ToString;
 
 import java.time.LocalDateTime;
 
+/**
+ * Author : 이현재
+ * Part : All
+ */
+
 @NoArgsConstructor
 @ToString
 @Getter

@@ -2,14 +2,20 @@ package com.gabia.gyebalja.common.interceptor;
 
 import com.gabia.gyebalja.common.CookieBox;
 import com.gabia.gyebalja.exception.UnauthorizedException;
-import com.gabia.gyebalja.service.jwt.JwtService;
+import com.gabia.gyebalja.service.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+/**
+ * Author : 정태균
+ * Part : All
+ */
 
 @Component
 public class JwtInterceptor implements HandlerInterceptor {

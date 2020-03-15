@@ -2,7 +2,10 @@ package com.gabia.gyebalja.common;
 
 import lombok.Getter;
 
-import org.springframework.http.HttpStatus;
+/**
+ * Author : 이현재
+ * Part : All
+ */
 
 @Getter
 public enum StatusCode {

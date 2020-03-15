@@ -14,6 +14,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * Author : 이현재
+ * Part : All
+ */
+
 @RequiredArgsConstructor
 @RestController
 public class CommentApiController {
@@ -32,7 +37,6 @@ public class CommentApiController {
     @GetMapping("/api/v1/comments/{commentId}")
     public CommonJsonFormat getOneComment(@PathVariable("commentId") Long commentId){
         CommentResponseDto response = commentService.getOneComment(commentId);
-
         return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), response);
     }
 

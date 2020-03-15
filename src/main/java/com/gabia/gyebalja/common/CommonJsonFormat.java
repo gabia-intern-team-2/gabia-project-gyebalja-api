@@ -6,6 +6,11 @@ import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 
+/**
+ * Author : 이현재
+ * Part : All
+ */
+
 @Data
 @NoArgsConstructor
 public class CommonJsonFormat<T> {

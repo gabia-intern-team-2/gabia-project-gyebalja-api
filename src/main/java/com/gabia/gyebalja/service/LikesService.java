@@ -16,6 +16,11 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.Optional;
 
+/**
+ * Author : 이현재
+ * Part : All
+ */
+
 @RequiredArgsConstructor
 @Transactional
 @Service

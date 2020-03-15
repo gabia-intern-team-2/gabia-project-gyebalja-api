@@ -1,11 +1,17 @@
 package com.gabia.gyebalja.common;
 
 import lombok.NoArgsConstructor;
+
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+
+/**
+ * Author : 정태균
+ * Part : All
+ */
 
 @NoArgsConstructor
 public class CookieBox {

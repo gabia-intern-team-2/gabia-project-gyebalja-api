@@ -9,6 +9,11 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Author : 정태균
+ * Part : All
+ */
+
 public interface EducationRepository extends JpaRepository<Education,Long> {
     //사용자의 교육목록을 가져오기 위한 메서드
     //Page<Education> findByUserId(Long id, Pageable pageble);
@@ -20,5 +25,4 @@ public interface EducationRepository extends JpaRepository<Education,Long> {
     //사용자의 교육목록을 가져오기 위한 메서드
     @Query("select e from Education e join fetch e.category c where e.user.id = :userId")
     List<Education> findEducationByUserId(@Param("userId") Long userId, Pageable pageable);
-
 }

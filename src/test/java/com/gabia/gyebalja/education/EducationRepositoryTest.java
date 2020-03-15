@@ -18,6 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
@@ -26,6 +27,10 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+/**
+ * Author : 정태균
+ * Part : All
+ */
 
 /**
  * @DisplayName : Junit 5부터 사용할 수 있는 어노테이션
@@ -507,7 +512,6 @@ class EducationRepositoryTest {
         assertThat(educationDetail.get().getTitle()).isEqualTo(savedEducation.getTitle());
         assertThat(educationDetail.get().getContent()).isEqualTo(savedEducation.getContent());
         assertThat(educationDetail.get().getCategory().getName()).isEqualTo(category.getName());
-
     }
 }
 /**

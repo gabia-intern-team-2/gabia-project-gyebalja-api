@@ -31,6 +31,11 @@ import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
+/**
+ * Author : 정태균
+ * Part : All
+ */
+
 @RequiredArgsConstructor //final의 필드만 가지고 생성자를 만들어줌
 @Transactional(readOnly = true)
 @Service
@@ -74,7 +79,9 @@ public class EducationService {
             HashTagRegularExpression hashTagRegularExpression = new HashTagRegularExpression();
             ArrayList<String> extractHashTagList = hashTagRegularExpression.getExtractHashTag(educationRequestDto.getHashTag());
 
-            for (String s : extractHashTagList) {
+            ArrayList<String> removeDuplicationHashTag = hashTagRegularExpression.removeDuplication(extractHashTagList);
+
+            for (String s : removeDuplicationHashTag) {
                 Optional<Tag> findHashTag = tagRepository.findHashTagByName(s);
 
                 Tag tag = findHashTag.isPresent() ? findHashTag.get() : tagRepository.save( Tag.builder().name(s).build());
@@ -140,7 +147,9 @@ public class EducationService {
             HashTagRegularExpression hashTagRegularExpression = new HashTagRegularExpression();
             ArrayList<String> extractHashTagList = hashTagRegularExpression.getExtractHashTag(educationRequestDto.getHashTag());
 
-            for (String s : extractHashTagList) {
+            ArrayList<String> removeDuplicationHashTag = hashTagRegularExpression.removeDuplication(extractHashTagList);
+
+            for (String s : removeDuplicationHashTag) {
                 Optional<Tag> findHashTag = tagRepository.findHashTagByName(s);
 
                 Tag tag = findHashTag.isPresent() ? findHashTag.get() : tagRepository.save( Tag.builder().name(s).build());

@@ -4,6 +4,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -14,6 +15,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+
+/**
+ * Author : 정태균
+ * Part : All
+ */
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -88,5 +94,4 @@ public class User extends BaseTime {
         this.profileImg = profileImg;
         this.department = department;
     }
-
 }

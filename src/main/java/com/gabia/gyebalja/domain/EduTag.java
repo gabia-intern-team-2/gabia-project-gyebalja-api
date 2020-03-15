@@ -14,6 +14,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+/**
+ * Author : 정태균
+ * Part : All
+ */
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity

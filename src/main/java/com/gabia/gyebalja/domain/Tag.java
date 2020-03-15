@@ -11,6 +11,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+/**
+ * Author : 정태균
+ * Part : All
+ */
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
@@ -31,7 +36,4 @@ public class Tag extends BaseTime {
     public void changeTagName(String name) {
         this.name = name;
     }
-
-
-
 }

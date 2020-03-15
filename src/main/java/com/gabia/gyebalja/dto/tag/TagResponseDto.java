@@ -4,6 +4,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Author : 정태균
+ * Part : All
+ */
+
 @NoArgsConstructor
 @Data
 public class TagResponseDto {
@@ -15,5 +20,4 @@ public class TagResponseDto {
         this.id = id;
         this.name = name;
     }
-
 }

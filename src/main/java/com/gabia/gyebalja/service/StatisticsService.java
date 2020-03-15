@@ -22,6 +22,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Author : 이현재
+ * Part : Main
+ * Author : 정태균
+ * Part : Education
+ */
 
 @RequiredArgsConstructor
 @Transactional
@@ -208,7 +214,7 @@ public class StatisticsService {
         // 사용자가 속한 부서 ID 조회
         User findUser = userRepository.findById(userId).orElseThrow(() -> new NotExistUserException("존재하지 않는 사용자입니다."));
         Long deptId = findUser.getDepartment().getId();
-        Long totalUserOfDepartment = userRepository.getUserNumberInDepartment(deptId);
+        Long totalUserOfDepartment = userRepository.countByDepartmentId(deptId);
         // 사용자의 시간 조회
         Long userTotalHours = statisticsRepository.getEducationStatisticsWithIndividualTotalHours(userId, currentYear);
         ArrayList<Long> response = statisticsRepository.getEducationStatisticsWithRank(deptId, currentYear);

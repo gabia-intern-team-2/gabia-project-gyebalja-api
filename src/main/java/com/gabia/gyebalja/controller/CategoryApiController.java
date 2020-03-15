@@ -16,6 +16,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * Author : 정태균
+ * Part : All
+ */
+
 @RequiredArgsConstructor
 @RestController
 public class CategoryApiController {

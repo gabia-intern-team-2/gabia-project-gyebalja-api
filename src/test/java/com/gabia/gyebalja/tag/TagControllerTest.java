@@ -26,6 +26,11 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 
+/**
+ * Author : 정태균
+ * Part : All
+ */
+
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class TagControllerTest {
 

@@ -10,12 +10,18 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
+/**
+ * Author : 정태균
+ * Part : All
+ */
 
 @Transactional
 @SpringBootTest
@@ -304,7 +310,5 @@ public class UserRepositoryTest {
         //then
         assertThat(findUserByGabiaUserNo.get().getGabiaUserNo()).isEqualTo(gabiaUserNo);
         assertThat(findUserByGabiaUserNo.get().getId()).isEqualTo(saveUser.getId());
-
     }
-
 }
