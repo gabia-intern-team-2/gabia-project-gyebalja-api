@@ -14,6 +14,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Author : 이현재
@@ -45,32 +47,41 @@ public class CommentService {
 
     /** 조회 - comment 한 건 (어디서 사용할 지 모르지만 일단 구현) */
     @Transactional
-    public CommentResponseDto getOneComment(Long id){
-        Comment comment = commentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 댓글이 없습니다."));
+    public CommentResponseDto getOneComment(Long commentId){
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new IllegalArgumentException("해당 댓글이 없습니다."));
 
         return new CommentResponseDto(comment);
     }
 
     /** 수정 - comment 한 건 */
     @Transactional
-    public Long putOneComment(Long id, CommentRequestDto commentRequestDto){
-        Comment comment = commentRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("해당 댓글이 없습니다."));
+    public Long putOneComment(Long commentId, CommentRequestDto commentRequestDto){
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new IllegalArgumentException("해당 댓글이 없습니다."));
 
         // 더티 체킹
         comment.changeContent(commentRequestDto.getContent());
         em.flush();
         em.clear();
 
-        return id;
+        return commentId;
     }
 
     /** 삭제 - comment 한 건 */
     @Transactional
-    public Long deleteOneComment(Long id){
-        commentRepository.deleteById(id);
+    public Long deleteOneComment(Long commentId){
+        commentRepository.deleteById(commentId);
         em.flush();
         em.clear();
 
-        return id;
+        return commentId;
+    }
+
+    /** 조회 - comment 전체 */
+    @Transactional
+    public List<CommentResponseDto> getAllComment(Long boardId){
+        List<Comment> comments = commentRepository.findByBoardId(boardId);
+        List<CommentResponseDto> commentResponseDtos = comments.stream().map(comment -> new CommentResponseDto(comment)).collect(Collectors.toList());
+
+        return commentResponseDtos;
     }
 }
