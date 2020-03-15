@@ -71,7 +71,7 @@ public class GabiaLoginController {
         Cookie setCookie = cookieBox.createCookie("jwt_token", jwtToken, frontHost, "/", 60*60*3);
         response.addCookie(setCookie);
 
-        return new RedirectView(frontHost+":"+frontPort);
+        return new RedirectView("http://"+frontHost+":"+frontPort);
     }
 
     /**

@@ -8,6 +8,8 @@ logs/
 
 application.properties
 application.yml
+application-test.properties
+application-test.yml
 
 ### STS ###
 .apt_generated
