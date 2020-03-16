@@ -10,7 +10,6 @@ import com.gabia.gyebalja.domain.EducationType;
 import com.gabia.gyebalja.domain.GenderType;
 import com.gabia.gyebalja.domain.User;
 import com.gabia.gyebalja.dto.comment.CommentRequestDto;
-import com.gabia.gyebalja.dto.comment.CommentResponseDto;
 import com.gabia.gyebalja.repository.BoardRepository;
 import com.gabia.gyebalja.repository.CategoryRepository;
 import com.gabia.gyebalja.repository.CommentRepository;
@@ -34,7 +33,6 @@ import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDate;
 import java.util.LinkedHashMap;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

@@ -27,7 +27,6 @@ import java.util.LinkedHashMap;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-
 /**
  * Author : 정태균
  * Part : All

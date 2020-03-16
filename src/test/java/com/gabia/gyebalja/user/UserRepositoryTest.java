@@ -69,7 +69,6 @@ public class UserRepositoryTest {
         assertThat(findUser.getName()).isEqualTo(user.getName());
         assertThat(findUser.getEmail()).isEqualTo(user.getEmail());
         assertThat(findUser).isEqualTo(user); //JPA 엔티티 동일성 보장하는지 검증
-
     }
 
     @Test
@@ -112,7 +111,6 @@ public class UserRepositoryTest {
         assertThat(findUserById.get().getId()).isEqualTo(saveUser.getId());
         assertThat(findUserById.get().getName()).isEqualTo(saveUser.getName());
         assertThat(findUserById.get().getEmail()).isEqualTo(saveUser.getEmail());
-        
     }
 
     @Test
@@ -152,7 +150,6 @@ public class UserRepositoryTest {
 
         //then
         assertThat(userList.size()).isEqualTo(2);
-
     }
 
     @Test
@@ -192,7 +189,6 @@ public class UserRepositoryTest {
 
         //then
         assertThat(count).isEqualTo(3);
-
     }
 
     @Test
@@ -230,7 +226,6 @@ public class UserRepositoryTest {
 
         //then
         assertThat(userRepository.count()).isEqualTo(beforeDeleteNum-1);
-
     }
 
     @Test
