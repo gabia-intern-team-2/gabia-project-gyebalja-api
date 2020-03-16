@@ -41,24 +41,24 @@ public class UserRepositoryTest {
     public void saveTest() throws Exception {
         //given
         Department department = Department.builder()
-                                .name("Team1")
-                                .depth(2)
-                                .parentDepartment(null)
-                                .build();
+                .name("Team1")
+                .depth(2)
+                .parentDepartment(null)
+                .build();
 
         Department saveDepartment = departmentRepository.save(department);
 
         User user = User.builder()
-                    .email("test@gabia.com")
-                    .name("User1")
-                    .gender(GenderType.MALE)
-                    .phone("000-0000-0000")
-                    .tel("111-1111-1111")
-                    .positionId(23L)
-                    .positionName("인턴")
-                    .department(saveDepartment)
-                    .profileImg("src/img")
-                    .build();
+                .email("test@gabia.com")
+                .name("User1")
+                .gender(GenderType.MALE)
+                .phone("000-0000-0000")
+                .tel("111-1111-1111")
+                .positionId(23L)
+                .positionName("인턴")
+                .department(saveDepartment)
+                .profileImg("src/img")
+                .build();
 
         //when
         User saveUser = userRepository.save(user);
@@ -119,8 +119,8 @@ public class UserRepositoryTest {
         //given
         for (int i = 1; i <= 2; i++) {
             Department department = Department.builder()
-                    .name("Team"+i)
-                    .depth(2+i)
+                    .name("Team" + i)
+                    .depth(2 + i)
                     .parentDepartment(null)
                     .build();
 
@@ -129,7 +129,7 @@ public class UserRepositoryTest {
 
             User user = User.builder()
                     .email("test@gabia.com")
-                    .name("User"+i)
+                    .name("User" + i)
                     .gender(GenderType.MALE)
                     .phone("000-0000-0000")
                     .tel("111-1111-1111")

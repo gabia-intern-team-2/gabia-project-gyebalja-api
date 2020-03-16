@@ -29,8 +29,8 @@ public class TagService {
     @Transactional
     public Long postOneTag(TagRequestDto tagRequestDto) {
         Long tagId = tagRepository.save(Tag.builder()
-                                        .name(tagRequestDto.getName())
-                                        .build()).getId();
+                .name(tagRequestDto.getName())
+                .build()).getId();
 
         return tagId;
     }
@@ -73,8 +73,8 @@ public class TagService {
     public List<TagResponseDto> getAllTag() {
         List<Tag> tags = tagRepository.findAll();
         List<TagResponseDto> tagResponseDtos = tags.stream()
-                                                    .map(t -> TagResponseDto.builder().id(t.getId()).name(t.getName()).build())
-                                                    .collect(Collectors.toList());// Entity를 노출 시키지않고 Dto로 변환후 리턴
+                .map(t -> TagResponseDto.builder().id(t.getId()).name(t.getName()).build())
+                .collect(Collectors.toList());// Entity를 노출 시키지않고 Dto로 변환후 리턴
 
         return tagResponseDtos;
     }

@@ -61,16 +61,16 @@ public class EducationService {
             throw new NotExistCategoryException("존재하지 않는 카테고리입니다.");
 
         Education education =  Education.builder()
-                                        .title(educationRequestDto.getTitle())
-                                        .content(educationRequestDto.getContent())
-                                        .startDate(educationRequestDto.getStartDate())
-                                        .endDate(educationRequestDto.getEndDate())
-                                        .totalHours(educationRequestDto.getTotalHours())
-                                        .type(educationRequestDto.getType())
-                                        .place(educationRequestDto.getPlace())
-                                        .user(findUser.get())
-                                        .category(findCategory.get())
-                                        .build();
+                .title(educationRequestDto.getTitle())
+                .content(educationRequestDto.getContent())
+                .startDate(educationRequestDto.getStartDate())
+                .endDate(educationRequestDto.getEndDate())
+                .totalHours(educationRequestDto.getTotalHours())
+                .type(educationRequestDto.getType())
+                .place(educationRequestDto.getPlace())
+                .user(findUser.get())
+                .category(findCategory.get())
+                .build();
 
         Long eduId = educationRepository.save(education).getId();
 
@@ -99,26 +99,26 @@ public class EducationService {
         Education education = educationRepository.findEducationDetail(id).orElseThrow(() -> new NotExistEducationException("존재하지 않는 교육입니다."));
 
         CategoryResponseDto categoryResponseDto = CategoryResponseDto.builder()
-                                                                        .id(education.getCategory().getId())
-                                                                        .name(education.getCategory().getName())
-                                                                        .build();
+                .id(education.getCategory().getId())
+                .name(education.getCategory().getName())
+                .build();
 
 
         List<EduTagResponseDto> tagList = education.getEduTags().stream().map(EduTagResponseDto::new)
-                                                                        .collect(toList());
+                .collect(toList());
 
         return EducationDetailResponseDto.builder()
-                                        .id(education.getId())
-                                        .title(education.getTitle())
-                                        .content(education.getContent())
-                                        .startDate(education.getStartDate())
-                                        .endDate(education.getEndDate())
-                                        .totalHours(education.getTotalHours())
-                                        .type(education.getType())
-                                        .place(education.getPlace())
-                                        .category(categoryResponseDto)
-                                        .eduTag(tagList)
-                                        .build();
+                .id(education.getId())
+                .title(education.getTitle())
+                .content(education.getContent())
+                .startDate(education.getStartDate())
+                .endDate(education.getEndDate())
+                .totalHours(education.getTotalHours())
+                .type(education.getType())
+                .place(education.getPlace())
+                .category(categoryResponseDto)
+                .eduTag(tagList)
+                .build();
     }
 
     /** 수정 - education 한 건 (상세페이지) */
@@ -132,13 +132,13 @@ public class EducationService {
             throw new NotExistCategoryException("존재하지 않는 카테고리입니다.");
 
         findEducation.changeEducation(educationRequestDto.getTitle(),
-                                        educationRequestDto.getContent(),
-                                        educationRequestDto.getStartDate(),
-                                        educationRequestDto.getEndDate(),
-                                        educationRequestDto.getTotalHours(),
-                                        educationRequestDto.getType(),
-                                        educationRequestDto.getPlace(),
-                                        findCategory.get());
+                educationRequestDto.getContent(),
+                educationRequestDto.getStartDate(),
+                educationRequestDto.getEndDate(),
+                educationRequestDto.getTotalHours(),
+                educationRequestDto.getType(),
+                educationRequestDto.getPlace(),
+                findCategory.get());
 
         //태그 업데이트 로직.
         eduTagRepository.deleteByEducationId(id);  //관계테이블의 데이터를 모두 삭제
@@ -184,15 +184,15 @@ public class EducationService {
         List<Education> educationPage = educationRepository.findEducationByUserId(id, pageable);
 
         List<EducationAllResponseDto> educationDtoPage = educationPage.stream().map(e -> new EducationAllResponseDto().builder()
-                                                                                                            .id(e.getId())
-                                                                                                            .title(e.getTitle())
-                                                                                                            .startDate(e.getStartDate())
-                                                                                                            .endDate(e.getEndDate())
-                                                                                                            .totalHours(e.getTotalHours())
-                                                                                                            .type(e.getType())
-                                                                                                            .place(e.getPlace())
-                                                                                                            .category(CategoryResponseDto.builder().id(e.getCategory().getId()).name(e.getCategory().getName()).build())
-                                                                                                            .build()).collect(Collectors.toList());
+                .id(e.getId())
+                .title(e.getTitle())
+                .startDate(e.getStartDate())
+                .endDate(e.getEndDate())
+                .totalHours(e.getTotalHours())
+                .type(e.getType())
+                .place(e.getPlace())
+                .category(CategoryResponseDto.builder().id(e.getCategory().getId()).name(e.getCategory().getName()).build())
+                .build()).collect(Collectors.toList());
         return educationDtoPage;
 
     }

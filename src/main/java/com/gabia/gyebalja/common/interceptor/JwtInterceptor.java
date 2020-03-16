@@ -35,7 +35,7 @@ public class JwtInterceptor implements HandlerInterceptor {
         CookieBox cookieBox = new CookieBox(request);
         String token = null;
         if(cookieBox.exists("jwt_token")) {
-           token = cookieBox.getValue("jwt_token");
+            token = cookieBox.getValue("jwt_token");
         }
 
         if(token != null && jwtService.isUsable(token)){
