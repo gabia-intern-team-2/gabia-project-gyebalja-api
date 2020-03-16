@@ -237,7 +237,7 @@ public class UserRepositoryTest {
     @DisplayName("User 정보 변경 테스트(update)")
     public void updateTest() throws Exception {
         //given
-        String updatePass = "1212";
+        String updateEngName = "EngName";
 
         Department department = Department.builder()
                 .name("Team1")
@@ -250,6 +250,7 @@ public class UserRepositoryTest {
         User user = User.builder()
                 .email("test@gabia.com")
                 .name("User1")
+                .engName("Gabia")
                 .gender(GenderType.MALE)
                 .phone("000-0000-0000")
                 .tel("111-1111-1111")
@@ -262,9 +263,13 @@ public class UserRepositoryTest {
         User saveUser = userRepository.save(user);
 
         //when
-
+        saveUser.changeUser(12345L, "test@gabia.com", "User1", updateEngName, GenderType.MALE, "000-0000-0000", "111-1111-1111", 23L, "인턴", "src/img", saveDepartment);
+        em.flush();
+        em.clear();
+        User findUser = userRepository.findById(saveUser.getId()).orElseThrow(() -> new IllegalArgumentException("해당 데이터가 없습니다."));
         //then
-
+        assertThat(findUser.getId()).isEqualTo(user.getId());
+        assertThat(findUser.getEngName()).isEqualTo(updateEngName);
     }
 
     @Test
