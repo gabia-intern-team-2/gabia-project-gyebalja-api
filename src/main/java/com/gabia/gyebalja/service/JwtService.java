@@ -102,6 +102,7 @@ public class JwtService {
             throw new UnauthorizedException();
         }
     }
+
     // DB에 등록된 사용자인지 검증
     public boolean isRegister(String jwt) {
         Map<String, Object> originData = this.get(jwt);
@@ -113,6 +114,7 @@ public class JwtService {
 
         return flag;
     }
+
     // 토큰 복호 후 VO 반환
     public GabiaUserInfoVo getGabiaProfile(HttpServletRequest request) throws Exception {
         CookieBox cookieBox = new CookieBox(request);
@@ -126,6 +128,7 @@ public class JwtService {
 
         return gabiaUserInfoVo;
     }
+
     // 토큰으로 유저 정보 조회
     public UserResponseDto getUserProfileDetail(HttpServletRequest request) throws Exception {
         CookieBox cookieBox = new CookieBox(request);
