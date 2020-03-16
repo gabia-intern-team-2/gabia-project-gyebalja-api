@@ -96,7 +96,5 @@ public class StatisticsControllerTest {
         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(responseEntity.getBody().getCode()).isEqualTo(StatusCode.OK.getCode());
         assertThat(responseEntity.getBody().getMessage()).isEqualTo(StatusCode.OK.getMessage());
-
     }
-
 }
