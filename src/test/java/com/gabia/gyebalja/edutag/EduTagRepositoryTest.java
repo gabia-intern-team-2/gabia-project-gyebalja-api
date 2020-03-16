@@ -103,9 +103,9 @@ public class EduTagRepositoryTest {
         tagRepository.save(tag);
 
         EduTag eduTag = EduTag.builder()
-                            .tag(tag)
-                            .education(education)
-                            .build();
+                .tag(tag)
+                .education(education)
+                .build();
 
         //when
         eduTagRepository.save(eduTag);

@@ -65,8 +65,8 @@ public class CategoryControllerTest {
         String url = "http://localhost:" + port + "/api/v1/categories";
 
         CategoryRequestDto categoryRequestDto = CategoryRequestDto.builder()
-                                                                    .name("개발")
-                                                                    .build();
+                .name("개발")
+                .build();
 
         //when
         ResponseEntity<CommonJsonFormat> responseEntity = restTemplate.postForEntity(url, categoryRequestDto, CommonJsonFormat.class);
@@ -87,8 +87,8 @@ public class CategoryControllerTest {
     public void getOneCategory() throws Exception {
         //given
         CategoryRequestDto categoryRequestDto = CategoryRequestDto.builder()
-                                                .name("개발")
-                                                .build();
+                .name("개발")
+                .build();
         Long savedId = categoryService.postOneCategory(categoryRequestDto);
         String url = "http://localhost:" + port + "/api/v1/categories/" + savedId;
 
@@ -112,16 +112,16 @@ public class CategoryControllerTest {
     public void putOneCategory() throws Exception {
         //given
         CategoryRequestDto categoryRequestDto = CategoryRequestDto.builder()
-                                                                .name("개발")
-                                                                .build();
+                .name("개발")
+                .build();
         Long savedId = categoryService.postOneCategory(categoryRequestDto);
         String url = "http://localhost:" + port + "/api/v1/categories/" + savedId;
         String updateName = "기획";
 
         //when
         CategoryRequestDto updateRequestDto = CategoryRequestDto.builder()
-                                                                .name(updateName)
-                                                                .build();
+                .name(updateName)
+                .build();
         HttpEntity<CategoryRequestDto> requestEntity = new HttpEntity<>(updateRequestDto);
         ResponseEntity<CommonJsonFormat> responseEntity = restTemplate.exchange(url, HttpMethod.PUT, requestEntity, CommonJsonFormat.class);
         Category findCategory = categoryRepository.findById(savedId).orElseThrow(() -> new IllegalArgumentException("해당 데이터가 없습니다."));
@@ -141,8 +141,8 @@ public class CategoryControllerTest {
     public void deleteOneCategory() throws Exception {
         //given
         CategoryRequestDto categoryRequestDto = CategoryRequestDto.builder()
-                                                                .name("개발")
-                                                                .build();
+                .name("개발")
+                .build();
         Long savedId = categoryService.postOneCategory(categoryRequestDto);
         long beforeDeleteCnt = categoryRepository.count();
 
@@ -165,10 +165,10 @@ public class CategoryControllerTest {
         //given
         int totalNum = 30;
         String url = "http://localhost:" + port + "/api/v1/categories";
-        for(int i =0; i<totalNum; i++) {
+        for (int i = 0; i < totalNum; i++) {
             Category category = Category.builder()
-                                        .name("개발자" + i)
-                                        .build();
+                    .name("개발자" + i)
+                    .build();
             categoryRepository.save(category);
         }
 
