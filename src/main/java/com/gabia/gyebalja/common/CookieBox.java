@@ -29,6 +29,7 @@ public class CookieBox {
             }
         }
     }
+
     /**
      * 쿠키 세팅
      */
@@ -65,6 +66,7 @@ public class CookieBox {
     public boolean exists(String name) {
         return cookieMap.get(name) != null;
     }
+
     /**
      * 쿠키 삭제
      */
@@ -84,5 +86,4 @@ public class CookieBox {
 
         return cookie;
     }
-
 }

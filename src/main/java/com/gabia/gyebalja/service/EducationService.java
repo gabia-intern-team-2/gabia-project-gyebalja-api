@@ -196,5 +196,4 @@ public class EducationService {
         return educationDtoPage;
 
     }
-
 }

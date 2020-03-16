@@ -31,6 +31,7 @@ public class HashTagRegularExpression {
 
         return resultHashtag;
     }
+
     public String sepcialCharacter_replace(String str) {
         str = StringUtils.replace(str, "-_+=!@#$%^&*()[]{}|\\;:'\"<>,.?/~`） ","").toLowerCase();
         if(str.length() < 2) {
@@ -39,6 +40,7 @@ public class HashTagRegularExpression {
 
         return str;
     }
+
     // 문자열 중복 제거 메서드
     public ArrayList<String> removeDuplication(ArrayList<String> extractedHashTag) {
         ArrayList<String> result = new ArrayList<String>();

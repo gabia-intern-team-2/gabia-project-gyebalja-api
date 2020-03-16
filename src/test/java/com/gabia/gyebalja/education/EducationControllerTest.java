@@ -148,7 +148,6 @@ public class EducationControllerTest {
         assertThat(responseEntity.getBody().getCode()).isEqualTo(StatusCode.OK.getCode());
         assertThat(responseEntity.getBody().getMessage()).isEqualTo(StatusCode.OK.getMessage());
         assertThat(responseEntity.getBody().getResponse().toString()).isEqualTo(findEducation.getId().toString());
-
     }
 
     /**

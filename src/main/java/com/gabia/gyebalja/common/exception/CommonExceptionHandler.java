@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
  * Part : All
  * Assistant : 정태균
  * Part : handleEmptyResultDataAccessException()
+ *
+ * 참조 : https://cheese10yun.github.io/spring-guide-exception/
  */
-
-/** 참조 : https://cheese10yun.github.io/spring-guide-exception/ */
 
 @ControllerAdvice
 public class CommonExceptionHandler {
