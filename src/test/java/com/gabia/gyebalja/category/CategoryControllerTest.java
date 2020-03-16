@@ -32,7 +32,6 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
  * Part : All
  */
 
-@ActiveProfiles("test")
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, properties = "spring.config.location=classpath:application-test.yml")
 public class CategoryControllerTest {
 
