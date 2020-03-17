@@ -127,17 +127,17 @@ public class EducationControllerTest {
         String place = "가비아 3층";
 
         EducationRequestDto educationRequestDto = EducationRequestDto.builder()
-                                                    .title(title)
-                                                    .content(content)
-                                                    .startDate(startDate)
-                                                    .endDate(endDate)
-                                                    .totalHours(totalHours)
-                                                    .type(type)
-                                                    .place(place)
-                                                    .userId(user.getId())
-                                                    .categoryId(category.getId())
-                                                    .hashTag(tag.getName().toString())
-                                                    .build();
+                .title(title)
+                .content(content)
+                .startDate(startDate)
+                .endDate(endDate)
+                .totalHours(totalHours)
+                .type(type)
+                .place(place)
+                .userId(user.getId())
+                .categoryId(category.getId())
+                .hashTag(tag.getName().toString())
+                .build();
 
         //when
         ResponseEntity<CommonJsonFormat> responseEntity = restTemplate.postForEntity(url, educationRequestDto, CommonJsonFormat.class);
@@ -148,81 +148,80 @@ public class EducationControllerTest {
         assertThat(responseEntity.getBody().getCode()).isEqualTo(StatusCode.OK.getCode());
         assertThat(responseEntity.getBody().getMessage()).isEqualTo(StatusCode.OK.getMessage());
         assertThat(responseEntity.getBody().getResponse().toString()).isEqualTo(findEducation.getId().toString());
-
     }
 
     /**
      * 조회 - education 한 건 (상세페이지)
      */
-     @Test
-     @DisplayName("EducationApiController.getOneEducation() 테스트 (단건 조회)")
-     public void getOneEducation() throws Exception {
-         //given
-         Category category = Category.builder()
-                 .name("개발자")
-                 .build();
-         categoryRepository.save(category);
+    @Test
+    @DisplayName("EducationApiController.getOneEducation() 테스트 (단건 조회)")
+    public void getOneEducation() throws Exception {
+        //given
+        Category category = Category.builder()
+                .name("개발자")
+                .build();
+        categoryRepository.save(category);
 
-         Tag tag = Tag.builder()
-                 .name("#Srping")
-                 .build();
-         tagRepository.save(tag);
+        Tag tag = Tag.builder()
+                .name("#Srping")
+                .build();
+        tagRepository.save(tag);
 
-         Department department = Department.builder()
-                 .name("테스트팀")
-                 .depth(2)
-                 .parentDepartment(null)
-                 .build();
-         departmentRepository.save(department);
+        Department department = Department.builder()
+                .name("테스트팀")
+                .depth(2)
+                .parentDepartment(null)
+                .build();
+        departmentRepository.save(department);
 
-         User user = User.builder()
-                 .email("test@gabia.com")
-                 .name("User1")
-                 .gender(GenderType.MALE)
-                 .phone("000-000-0000")
-                 .tel("111-111-1111")
-                 .positionId(123L)
-                 .positionName("팀원")
-                 .department(department)
-                 .profileImg("src/img")
-                 .build();
-         userRepository.save(user);
+        User user = User.builder()
+                .email("test@gabia.com")
+                .name("User1")
+                .gender(GenderType.MALE)
+                .phone("000-000-0000")
+                .tel("111-111-1111")
+                .positionId(123L)
+                .positionName("팀원")
+                .department(department)
+                .profileImg("src/img")
+                .build();
+        userRepository.save(user);
 
-         String title = "api test";
-         String content = "내용 테스트";
-         LocalDate startDate = LocalDate.now();
-         LocalDate endDate = LocalDate.now();
-         int totalHours = 3;
-         EducationType type = EducationType.ONLINE;
-         String place = "가비아 3층";
+        String title = "api test";
+        String content = "내용 테스트";
+        LocalDate startDate = LocalDate.now();
+        LocalDate endDate = LocalDate.now();
+        int totalHours = 3;
+        EducationType type = EducationType.ONLINE;
+        String place = "가비아 3층";
 
-         EducationRequestDto educationRequestDto = EducationRequestDto.builder()
-                 .title(title)
-                 .content(content)
-                 .startDate(startDate)
-                 .endDate(endDate)
-                 .totalHours(totalHours)
-                 .type(type)
-                 .place(place)
-                 .userId(user.getId())
-                 .categoryId(category.getId())
-                 .hashTag(tag.getName().toString())
-                 .build();
+        EducationRequestDto educationRequestDto = EducationRequestDto.builder()
+                .title(title)
+                .content(content)
+                .startDate(startDate)
+                .endDate(endDate)
+                .totalHours(totalHours)
+                .type(type)
+                .place(place)
+                .userId(user.getId())
+                .categoryId(category.getId())
+                .hashTag(tag.getName().toString())
+                .build();
 
-         Long saveId = educationService.postOneEducation(educationRequestDto);
-         String url = "http://localhost:" + port + "/api/v1/educations/" + saveId;
+        Long saveId = educationService.postOneEducation(educationRequestDto);
+        String url = "http://localhost:" + port + "/api/v1/educations/" + saveId;
 
-         //when
-         ResponseEntity<CommonJsonFormat> responseEntity = restTemplate.getForEntity(url, CommonJsonFormat.class); //response 부분이 LinkedHashMap -> 제네릭은 런타임에 타입정보가 사라짐
-         LinkedHashMap response = (LinkedHashMap) responseEntity.getBody().getResponse();
+        //when
+        ResponseEntity<CommonJsonFormat> responseEntity = restTemplate.getForEntity(url, CommonJsonFormat.class); //response 부분이 LinkedHashMap -> 제네릭은 런타임에 타입정보가 사라짐
+        LinkedHashMap response = (LinkedHashMap) responseEntity.getBody().getResponse();
 
-         //then
-         assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
-         assertThat(responseEntity.getBody().getCode()).isEqualTo(StatusCode.OK.getCode());
-         assertThat(responseEntity.getBody().getMessage()).isEqualTo(StatusCode.OK.getMessage());
-         assertThat(response.get("id").toString()).isEqualTo(saveId.toString());
-         assertThat(response.get("title")).isEqualTo(title);
-     }
+        //then
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody().getCode()).isEqualTo(StatusCode.OK.getCode());
+        assertThat(responseEntity.getBody().getMessage()).isEqualTo(StatusCode.OK.getMessage());
+        assertThat(response.get("id").toString()).isEqualTo(saveId.toString());
+        assertThat(response.get("title")).isEqualTo(title);
+    }
 
     /**
      * 수정 - education 한 건 (상세페이지)
@@ -442,7 +441,7 @@ public class EducationControllerTest {
                 .hashTag(tag.getName().toString())
                 .build();
 
-        for(int i =0; i<totalNum; i++) {
+        for (int i = 0; i < totalNum; i++) {
             educationService.postOneEducation(educationRequestDto);
         }
         String url = "http://localhost:" + port + "/api/v1/users/" + user.getId() + "/educations";

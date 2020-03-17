@@ -4,9 +4,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-// 참고
-// https://meetup.toast.com/posts/149
-// https://www.sangkon.com/hands-on-springboot-logging/
+/**
+ * 참고
+ * https://meetup.toast.com/posts/149
+ * https://www.sangkon.com/hands-on-springboot-logging/
+ * */
 
 @Service
 public class LogService {

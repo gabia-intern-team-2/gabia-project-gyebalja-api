@@ -29,6 +29,7 @@ public class CookieBox {
             }
         }
     }
+
     /**
      * 쿠키 세팅
      */
@@ -65,24 +66,24 @@ public class CookieBox {
     public boolean exists(String name) {
         return cookieMap.get(name) != null;
     }
+
     /**
      * 쿠키 삭제
      */
     public Cookie deleteCookie(String cookieKey, Cookie cookie){
 
-            cookie = getCookie(cookieKey);
+        cookie = getCookie(cookieKey);
 
-            if(cookie.getPath() != null){
-                cookie.setPath(cookie.getPath());
-            }else{
-                cookie.setPath("/");
-            }
-            if(cookie.getDomain() != null){
-                cookie.setDomain(cookie.getDomain());
-            }
-            cookie.setMaxAge(0);
+        if(cookie.getPath() != null){
+            cookie.setPath(cookie.getPath());
+        }else{
+            cookie.setPath("/");
+        }
+        if(cookie.getDomain() != null){
+            cookie.setDomain(cookie.getDomain());
+        }
+        cookie.setMaxAge(0);
 
         return cookie;
     }
-
 }

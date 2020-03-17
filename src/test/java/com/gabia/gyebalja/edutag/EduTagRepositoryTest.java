@@ -103,9 +103,9 @@ public class EduTagRepositoryTest {
         tagRepository.save(tag);
 
         EduTag eduTag = EduTag.builder()
-                            .tag(tag)
-                            .education(education)
-                            .build();
+                .tag(tag)
+                .education(education)
+                .build();
 
         //when
         eduTagRepository.save(eduTag);
@@ -512,7 +512,6 @@ public class EduTagRepositoryTest {
         assertThat(eduTagRepository.count()).isEqualTo(beforeDeleteCnt-1);
         assertThat(eduTagRepository.findById(savedEducation.getId())).isEqualTo(Optional.empty());
     }
-
 }
 /**
  * given의 반복되는 값 세팅부분 클래스로 만들거나 @Before 사용하기.

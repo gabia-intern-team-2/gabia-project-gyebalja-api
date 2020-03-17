@@ -41,24 +41,24 @@ public class UserRepositoryTest {
     public void saveTest() throws Exception {
         //given
         Department department = Department.builder()
-                                .name("Team1")
-                                .depth(2)
-                                .parentDepartment(null)
-                                .build();
+                .name("Team1")
+                .depth(2)
+                .parentDepartment(null)
+                .build();
 
         Department saveDepartment = departmentRepository.save(department);
 
         User user = User.builder()
-                    .email("test@gabia.com")
-                    .name("User1")
-                    .gender(GenderType.MALE)
-                    .phone("000-0000-0000")
-                    .tel("111-1111-1111")
-                    .positionId(23L)
-                    .positionName("인턴")
-                    .department(saveDepartment)
-                    .profileImg("src/img")
-                    .build();
+                .email("test@gabia.com")
+                .name("User1")
+                .gender(GenderType.MALE)
+                .phone("000-0000-0000")
+                .tel("111-1111-1111")
+                .positionId(23L)
+                .positionName("인턴")
+                .department(saveDepartment)
+                .profileImg("src/img")
+                .build();
 
         //when
         User saveUser = userRepository.save(user);
@@ -69,7 +69,6 @@ public class UserRepositoryTest {
         assertThat(findUser.getName()).isEqualTo(user.getName());
         assertThat(findUser.getEmail()).isEqualTo(user.getEmail());
         assertThat(findUser).isEqualTo(user); //JPA 엔티티 동일성 보장하는지 검증
-
     }
 
     @Test
@@ -112,7 +111,6 @@ public class UserRepositoryTest {
         assertThat(findUserById.get().getId()).isEqualTo(saveUser.getId());
         assertThat(findUserById.get().getName()).isEqualTo(saveUser.getName());
         assertThat(findUserById.get().getEmail()).isEqualTo(saveUser.getEmail());
-        
     }
 
     @Test
@@ -121,8 +119,8 @@ public class UserRepositoryTest {
         //given
         for (int i = 1; i <= 2; i++) {
             Department department = Department.builder()
-                    .name("Team"+i)
-                    .depth(2+i)
+                    .name("Team" + i)
+                    .depth(2 + i)
                     .parentDepartment(null)
                     .build();
 
@@ -131,7 +129,7 @@ public class UserRepositoryTest {
 
             User user = User.builder()
                     .email("test@gabia.com")
-                    .name("User"+i)
+                    .name("User" + i)
                     .gender(GenderType.MALE)
                     .phone("000-0000-0000")
                     .tel("111-1111-1111")
@@ -152,7 +150,6 @@ public class UserRepositoryTest {
 
         //then
         assertThat(userList.size()).isEqualTo(2);
-
     }
 
     @Test
@@ -192,7 +189,6 @@ public class UserRepositoryTest {
 
         //then
         assertThat(count).isEqualTo(3);
-
     }
 
     @Test
@@ -230,14 +226,13 @@ public class UserRepositoryTest {
 
         //then
         assertThat(userRepository.count()).isEqualTo(beforeDeleteNum-1);
-
     }
 
     @Test
     @DisplayName("User 정보 변경 테스트(update)")
     public void updateTest() throws Exception {
         //given
-        String updatePass = "1212";
+        String updateEngName = "EngName";
 
         Department department = Department.builder()
                 .name("Team1")
@@ -250,6 +245,7 @@ public class UserRepositoryTest {
         User user = User.builder()
                 .email("test@gabia.com")
                 .name("User1")
+                .engName("Gabia")
                 .gender(GenderType.MALE)
                 .phone("000-0000-0000")
                 .tel("111-1111-1111")
@@ -262,9 +258,13 @@ public class UserRepositoryTest {
         User saveUser = userRepository.save(user);
 
         //when
-
+        saveUser.changeUser(12345L, "test@gabia.com", "User1", updateEngName, GenderType.MALE, "000-0000-0000", "111-1111-1111", 23L, "인턴", "src/img", saveDepartment);
+        em.flush();
+        em.clear();
+        User findUser = userRepository.findById(saveUser.getId()).orElseThrow(() -> new IllegalArgumentException("해당 데이터가 없습니다."));
         //then
-
+        assertThat(findUser.getId()).isEqualTo(user.getId());
+        assertThat(findUser.getEngName()).isEqualTo(updateEngName);
     }
 
     @Test

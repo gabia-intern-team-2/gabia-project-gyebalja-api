@@ -38,18 +38,18 @@ public class UserService {
         Department findDept = departmentRepository.findById(userRequestDto.getDeptId()).orElseThrow(() -> new NotExistDataException("존재하지 않는 부서입니다."));
 
         User savedUser = userRepository.save(User.builder()
-                                            .gabiaUserNo(userRequestDto.getGabiaUserNo())
-                                            .email(userRequestDto.getEmail())
-                                            .name(userRequestDto.getName())
-                                            .engName(userRequestDto.getEngName())
-                                            .gender(userRequestDto.getGender())
-                                            .phone(userRequestDto.getPhone())
-                                            .tel(userRequestDto.getTel())
-                                            .positionId(userRequestDto.getPositionId())
-                                            .positionName(userRequestDto.getPositionName())
-                                            .profileImg(userRequestDto.getProfileImg())
-                                            .department(findDept)
-                                            .build());
+                .gabiaUserNo(userRequestDto.getGabiaUserNo())
+                .email(userRequestDto.getEmail())
+                .name(userRequestDto.getName())
+                .engName(userRequestDto.getEngName())
+                .gender(userRequestDto.getGender())
+                .phone(userRequestDto.getPhone())
+                .tel(userRequestDto.getTel())
+                .positionId(userRequestDto.getPositionId())
+                .positionName(userRequestDto.getPositionName())
+                .profileImg(userRequestDto.getProfileImg())
+                .department(findDept)
+                .build());
         return savedUser.getId();
     }
 
@@ -61,16 +61,16 @@ public class UserService {
 
         // 하이웍스 Api에서 제공받는 값이 달라질수도있기때문에 password 제외 하고 모두 세팅
         findUser.changeUser(userRequestDto.getGabiaUserNo(),
-                            userRequestDto.getEmail(),
-                            userRequestDto.getName(),
-                            userRequestDto.getEngName(),
-                            userRequestDto.getGender(),
-                            userRequestDto.getPhone(),
-                            userRequestDto.getTel(),
-                            userRequestDto.getPositionId(),
-                            userRequestDto.getPositionName(),
-                            userRequestDto.getProfileImg(),
-                            findDept);
+                userRequestDto.getEmail(),
+                userRequestDto.getName(),
+                userRequestDto.getEngName(),
+                userRequestDto.getGender(),
+                userRequestDto.getPhone(),
+                userRequestDto.getTel(),
+                userRequestDto.getPositionId(),
+                userRequestDto.getPositionName(),
+                userRequestDto.getProfileImg(),
+                findDept);
 
         return id;
     }

@@ -62,7 +62,7 @@ public class CategoryApiController {
     /** 조회 - category 전체 조회 (페이징 x) */
     @GetMapping("/api/v1/categories")
     public CommonJsonFormat getAllCategory() {
-       List<CategoryResponseDto> allCategory = categoryService.getAllCategory();
+        List<CategoryResponseDto> allCategory = categoryService.getAllCategory();
 
         return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), allCategory);
     }

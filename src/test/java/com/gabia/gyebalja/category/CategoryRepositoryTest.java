@@ -154,10 +154,10 @@ public class CategoryRepositoryTest {
     public void updateTest() throws Exception {
         //given
         String updateName = "이름 업데이트";
-        
+
         Category category = Category.builder()
-                                    .name("개발자")
-                                    .build();
+                .name("개발자")
+                .build();
         categoryRepository.save(category);
         long beforeUpdateCnt = categoryRepository.count();
 
@@ -165,7 +165,7 @@ public class CategoryRepositoryTest {
         category.changeCategoryName(updateName);
         em.flush();
         Category findCategory = categoryRepository.findById(category.getId()).get();
-        
+
         //then
         assertThat(findCategory.getId()).isEqualTo(category.getId());
         assertThat(findCategory.getName()).isEqualTo(updateName);
