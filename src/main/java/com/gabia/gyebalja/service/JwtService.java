@@ -149,7 +149,7 @@ public class JwtService {
     // 로그아웃
     public String destroyToken(HttpServletResponse response) {
         CookieBox cookieBox = new CookieBox();
-        Cookie setCookie = cookieBox.createCookie("jwt_token", null, "api.gyeblja.com", "/", 0);
+        Cookie setCookie = cookieBox.createCookie("jwt_token", null, "211.53.209.130", "/", 0);
         response.addCookie(setCookie);
 
         return "success";
