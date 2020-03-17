@@ -32,10 +32,10 @@ public class ImageService {
             fileName = System.currentTimeMillis() + ((int) Math.random() * randomNumberRange) + image.getOriginalFilename();
             file = new File(boardImgDir + fileName);
         }
-        if(tryCount >= tryThreshold) return "http://api.gyeblja.com/images/boards/uploadfailed.jpg";
+        if(tryCount >= tryThreshold) return "http://211.53.209.130/images/boards/uploadfailed.jpg";
 
         image.transferTo(file);
-        String imageUrl = "http://api.gyeblja.com/images/boards/" + fileName;
+        String imageUrl = "http://211.53.209.130/images/boards/" + fileName;
 
         return imageUrl;
     }
@@ -51,10 +51,10 @@ public class ImageService {
             fileName = System.currentTimeMillis() + ((int) Math.random() * randomNumberRange) + image.getOriginalFilename();
             file = new File(userImgDir + fileName);
         }
-        if(tryCount >= tryThreshold) return "http://api.gyeblja.com/images/users/basic.jpg";
+        if(tryCount >= tryThreshold) return "http://211.53.209.130/images/users/basic.jpg";
 
         image.transferTo(file);
-        String imageUrl = "http://api.gyeblja.com/images/users/" + fileName;
+        String imageUrl = "http://211.53.209.130/images/users/" + fileName;
 
         return imageUrl;
     }
