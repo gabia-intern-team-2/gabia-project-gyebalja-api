@@ -37,7 +37,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 
 @Transactional
-@SpringBootTest
+@SpringBootTest(properties = "spring.config.location=classpath:application-test.yml")
 public class LikesServiceTest {
 
     @Autowired private BoardRepository boardRepository;

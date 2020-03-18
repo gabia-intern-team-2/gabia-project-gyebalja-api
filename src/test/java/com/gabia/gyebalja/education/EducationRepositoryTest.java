@@ -39,7 +39,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 
 @Transactional
-@DataJpaTest
+@DataJpaTest(properties = "spring.config.location=classpath:application-test.yml")
 class EducationRepositoryTest {
 
     @PersistenceContext
@@ -113,7 +113,6 @@ class EducationRepositoryTest {
         assertThat(findEducation.getTitle()).isEqualTo("제목테스트");
         assertThat(findEducation.getContent()).isEqualTo("내용테스트");
         assertThat(beforeCnt+1).isEqualTo(educationRepository.count());
-
     }
 
     @Test
@@ -213,7 +212,6 @@ class EducationRepositoryTest {
                     .build();
 
             educationRepository.save(education);
-
         }
 
         em.flush();
@@ -224,7 +222,6 @@ class EducationRepositoryTest {
 
         //then
         assertThat(allEducation.size()).isEqualTo(2);
-
     }
 
     @Test
@@ -273,13 +270,12 @@ class EducationRepositoryTest {
         }
 
         //when
-            //count 함수 호출
-            long count = educationRepository.count();
+        //count 함수 호출
+        long count = educationRepository.count();
 
         //then
-            //데이터를 두개 넣어줬으니 카운트 결과와 2가 같은지 검증
-            assertThat(count).isEqualTo(2);
-
+        //데이터를 두개 넣어줬으니 카운트 결과와 2가 같은지 검증
+        assertThat(count).isEqualTo(2);
     }
 
     @Test
@@ -333,7 +329,6 @@ class EducationRepositoryTest {
         //then
         assertThat(educationRepository.count()).isEqualTo(beforeDeleteNumOfData-1);
         assertThat(educationRepository.findById(education.getId())).isEqualTo(Optional.empty());
-
     }
 
     @Test
@@ -396,7 +391,6 @@ class EducationRepositoryTest {
         assertThat(findUpdateEducation.get().getId()).isEqualTo(savedEducation.getId());
         assertThat(findUpdateEducation.get().getTitle()).isEqualTo(updateTitle);
         assertThat(findUpdateEducation.get().getContent()).isEqualTo(updateContent);
-
     }
 
     @Test
@@ -444,7 +438,6 @@ class EducationRepositoryTest {
                     .build();
 
             educationRepository.save(education);
-
         }
         em.flush();
         em.clear();
@@ -455,7 +448,6 @@ class EducationRepositoryTest {
         //then
         assertThat(educationList.size()).isEqualTo(inputNum);
         assertThat(educationList.get(0).getUser().getId()).isEqualTo(savedUser.getId());
-
     }
 
     @Test

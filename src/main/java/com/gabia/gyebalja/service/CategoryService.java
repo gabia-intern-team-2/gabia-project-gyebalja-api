@@ -30,8 +30,8 @@ public class CategoryService {
     @Transactional
     public Long postOneCategory(CategoryRequestDto categoryRequestDto) {
         Long categoryId = categoryRepository.save(Category.builder()
-                                                    .name(categoryRequestDto.getName())
-                                                    .build()).getId();
+                .name(categoryRequestDto.getName())
+                .build()).getId();
 
         return categoryId;
     }
@@ -44,9 +44,9 @@ public class CategoryService {
             throw new NotExistCategoryException("존재하지 않는 카테고리입니다.");
 
         return CategoryResponseDto.builder()
-                                    .id(findCategory.get().getId())
-                                    .name(findCategory.get().getName())
-                                    .build();
+                .id(findCategory.get().getId())
+                .name(findCategory.get().getName())
+                .build();
     }
 
     /** 수정 - category 한 건 */
@@ -74,8 +74,8 @@ public class CategoryService {
     public List<CategoryResponseDto> getAllCategory() {
         List<Category> categories = categoryRepository.findAll();
         List<CategoryResponseDto> categoryResponseDtos = categories.stream()
-                                                                    .map(c -> CategoryResponseDto.builder().id(c.getId()).name(c.getName()).build())
-                                                                    .collect(Collectors.toList());// Entity를 노출 시키지않고 Dto로 변환후 리턴
+                .map(c -> CategoryResponseDto.builder().id(c.getId()).name(c.getName()).build())
+                .collect(Collectors.toList());// Entity를 노출 시키지않고 Dto로 변환후 리턴
 
         return categoryResponseDtos;
     }

@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -36,7 +37,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 
 @Transactional
-@SpringBootTest
+@SpringBootTest(properties = "spring.config.location=classpath:application-test.yml")
 public class CommentServiceTest {
 
     @Autowired private CommentRepository commentRepository;
@@ -191,5 +192,29 @@ public class CommentServiceTest {
         // then
         assertThat(deleteId).isEqualTo(saveId);
         assertThat(commentRepository.findById(deleteId)).isEqualTo(Optional.empty());
+    }
+
+    @Test
+    @DisplayName("commentService.getAllComment() 테스트 (전체 조회)")
+    public void getAllComment() {
+        // given
+        int originalTotalNumberOfData = (int) commentRepository.count();
+        int targetIndex = originalTotalNumberOfData;
+        int totalNumberOfData = 29;
+        String content = "테스트 - 댓글 본문";
+        CommentRequestDto commentRequestDto = CommentRequestDto.builder().content(content).userId(user.getId()).boardId(board.getId()).build();
+
+        for (int i = 0; i < totalNumberOfData; i++) {
+            commentService.postOneComment(commentRequestDto);
+        }
+        em.clear();
+        em.flush();
+
+        // when
+        List<CommentResponseDto> commentResponseDtos = commentService.getAllComment(board.getId());
+
+        // then
+        assertThat(commentResponseDtos.size()).isEqualTo(totalNumberOfData);
+        assertThat(commentResponseDtos.get(targetIndex).getContent()).isEqualTo(content);
     }
 }

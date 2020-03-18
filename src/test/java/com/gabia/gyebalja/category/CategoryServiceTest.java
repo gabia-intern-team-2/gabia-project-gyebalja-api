@@ -24,7 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 
 @Transactional
-@SpringBootTest
+@SpringBootTest(properties = "spring.config.location=classpath:application-test.yml")
 public class CategoryServiceTest {
 
     @PersistenceContext
@@ -42,8 +42,8 @@ public class CategoryServiceTest {
     public void postOneCateogry() throws Exception {
         //given
         CategoryRequestDto categoryRequestDto = CategoryRequestDto.builder()
-                                                                .name("개발")
-                                                                .build();
+                .name("개발")
+                .build();
         //when
         Long categoryId = categoryService.postOneCategory(categoryRequestDto);
         em.clear();
@@ -62,8 +62,8 @@ public class CategoryServiceTest {
     public void getOneCategory() throws Exception {
         //given
         CategoryRequestDto categoryRequestDto = CategoryRequestDto.builder()
-                                                                .name("개발")
-                                                                .build();
+                .name("개발")
+                .build();
         Long categoryId = categoryService.postOneCategory(categoryRequestDto);
         em.clear();
 

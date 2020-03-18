@@ -41,7 +41,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  * Part : All
  */
 
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, properties = "spring.config.location=classpath:application-test.yml")
 public class CommentControllerTest {
 
     @Autowired private BoardRepository boardRepository;
@@ -233,5 +233,31 @@ public class CommentControllerTest {
         assertThat(responseEntity.getBody().getCode()).isEqualTo(StatusCode.OK.getCode());
         assertThat(responseEntity.getBody().getMessage()).isEqualTo(StatusCode.OK.getMessage());
         assertThat(commentRepository.count()).isEqualTo(totalNumberOfData);
+    }
+
+    /** 조회 - comment 전체 */
+    @Test
+    @DisplayName("CommentController.getAllComment() 테스트 (전체 조회)")
+    public void getAllComment(){
+        // given
+        int originalTotalNumberOfData = (int) commentRepository.count();
+        int targetIndex = originalTotalNumberOfData;
+        int totalNumberOfData = 29;
+        String content = "테스트 - 댓글 본문";
+        CommentRequestDto commentRequestDto = CommentRequestDto.builder().content(content).userId(user.getId()).boardId(board.getId()).build();
+
+        for (int i = 0; i < totalNumberOfData; i++) {
+            commentService.postOneComment(commentRequestDto);
+        }
+
+        String url = "http://localhost:" + port + "/api/v1/boards/" + board.getId() + "/comments";
+
+        // when
+        ResponseEntity<CommonJsonFormat> responseEntity = restTemplate.getForEntity(url, CommonJsonFormat.class);
+
+        //then
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody().getCode()).isEqualTo(StatusCode.OK.getCode());
+        assertThat(responseEntity.getBody().getMessage()).isEqualTo(StatusCode.OK.getMessage());
     }
 }

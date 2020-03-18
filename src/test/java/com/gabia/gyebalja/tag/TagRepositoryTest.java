@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 
 @Transactional
-@DataJpaTest
+@DataJpaTest(properties = "spring.config.location=classpath:application-test.yml")
 public class TagRepositoryTest {
 
     @PersistenceContext
@@ -50,7 +50,6 @@ public class TagRepositoryTest {
         assertThat(findTag.getId()).isEqualTo(tag.getId());
         assertThat(findTag.getName()).isEqualTo(tag.getName());
         assertThat(tagRepository.count()).isEqualTo(beforeCnt + 1);
-
     }
 
     @Test
@@ -75,7 +74,6 @@ public class TagRepositoryTest {
         //then
         assertThat(findTag.getId()).isEqualTo(tag2.getId());
         assertThat(findTag.getName()).isEqualTo(tag2.getName());
-
     }
 
     @Test
@@ -101,7 +99,6 @@ public class TagRepositoryTest {
         assertThat(allTag.size()).isEqualTo(2);
         assertThat(allTag.get(0).getId()).isEqualTo(tag1.getId());
         assertThat(allTag.get(0).getName()).isEqualTo(tag1.getName());
-
     }
 
     @Test
@@ -123,7 +120,6 @@ public class TagRepositoryTest {
 
         //then
         assertThat(count).isEqualTo(2);
-
     }
 
     @Test
@@ -148,7 +144,6 @@ public class TagRepositoryTest {
         //then
         assertThat(tagRepository.count()).isEqualTo(beforeDeleteCnt - 1);
         assertThat(tagRepository.findById(tag1.getId())).isEqualTo(Optional.empty());
-
     }
 
     @Test
@@ -171,7 +166,6 @@ public class TagRepositoryTest {
         assertThat(findTag.getId()).isEqualTo(tag.getId());
         assertThat(findTag.getName()).isEqualTo(updateName);
         assertThat(tagRepository.count()).isEqualTo(beforeUpdateCnt);
-
     }
 
     @Test
