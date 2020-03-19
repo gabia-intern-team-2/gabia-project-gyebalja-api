@@ -6,21 +6,22 @@ import com.gabia.gyebalja.domain.Education;
 import com.gabia.gyebalja.domain.EducationType;
 import com.gabia.gyebalja.domain.GenderType;
 import com.gabia.gyebalja.domain.User;
+import com.gabia.gyebalja.dto.rank.RankResponseDto;
 import com.gabia.gyebalja.repository.CategoryRepository;
 import com.gabia.gyebalja.repository.DepartmentRepository;
 import com.gabia.gyebalja.repository.EducationRepository;
-import com.gabia.gyebalja.repository.RankRepository;
+import com.gabia.gyebalja.repository.TagRepository;
 import com.gabia.gyebalja.repository.UserRepository;
+import com.gabia.gyebalja.service.RankService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,14 +32,13 @@ import static org.assertj.core.api.Assertions.assertThat;
  */
 
 @Transactional
-@DataJpaTest(properties = "spring.config.location=classpath:application-test.yml")
-public class RankRepositoryTest {
+@SpringBootTest(properties = "spring.config.location=classpath:application-test.yml")
+public class RankServiceTest {
 
     @PersistenceContext
     EntityManager em;
-
     @Autowired
-    RankRepository rankRepository;
+    RankService rankService;
     @Autowired
     EducationRepository educationRepository;
     @Autowired
@@ -47,13 +47,15 @@ public class RankRepositoryTest {
     CategoryRepository categoryRepository;
     @Autowired
     DepartmentRepository departmentRepository;
+    @Autowired
+    TagRepository tagRepository;
 
     @Test
-    @DisplayName("부서별 랭크 조회 테스트(Repository)")
+    @DisplayName("부서별 랭크 조회 테스트(Service)")
     public void  getRankByDeptId() throws Exception {
         //given
         String currentYear = Integer.toString(LocalDate.now().getYear());
-
+        String userName = "User1";
         Category category = Category.builder()
                 .name("개발자")
                 .build();
@@ -68,7 +70,7 @@ public class RankRepositoryTest {
 
         User user = User.builder()
                 .email("test@gabia.com")
-                .name("User1")
+                .name(userName)
                 .gender(GenderType.MALE)
                 .phone("000-000-0000")
                 .tel("111-111-1111")
@@ -92,9 +94,11 @@ public class RankRepositoryTest {
                 .build();
 
         //when
-        List<ArrayList<Object>> rankByDeptId = rankRepository.getRankByDeptId(savedDept.getId(), currentYear);
+        List<RankResponseDto> rankByDeptId = rankService.getRankByDeptId(savedDept.getId());
 
         //then
         assertThat(rankByDeptId.size()).isEqualTo(1);
+        assertThat(rankByDeptId.get(0).getUser().getName()).isEqualTo(userName);
+        assertThat(rankByDeptId.get(0).getRank()).isEqualTo(1);
     }
 }
