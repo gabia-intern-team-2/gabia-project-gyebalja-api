@@ -15,10 +15,10 @@ import java.util.List;
 
 public interface RankRepository extends JpaRepository<User, Long> {
     /** 부서별 랭킹 */
-    @Query("select sum(e.totalHours), count(e), u.id as totalHours " +
-            "from User u left join u.educations e " +
+    @Query("select sum(e.totalHours), count(e), u " +
+            "from User u left join Education e on (u.id = e.user.id and substring(e.startDate, 1, 4) = :currentYear) " +
             "where u.department.id = :deptId " +
             "group by u.id " +
-            "order by sum(e.totalHours) desc, count(e) desc, u.name ")
-    List<ArrayList<String>> getRankByDeptId(@Param("deptId") Long deptId);
+            "order by sum(e.totalHours) desc, count(u) desc, u.name asc")
+    List<ArrayList<Object>> getRankByDeptId(@Param("deptId") Long deptId,  @Param("currentYear") String currentYear);
 }

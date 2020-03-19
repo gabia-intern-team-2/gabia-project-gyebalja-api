@@ -18,13 +18,13 @@ public class RankResponseDto {
     private int rank;
     private int totalHour;
     private int totalCount;
-    private UserResponseDto userResponseDto;
+    private UserResponseDto user;
 
     @Builder
     public RankResponseDto(int rank, int totalHour, int totalCount, User user) {
         this.rank = rank;
         this.totalHour = totalHour;
         this.totalCount = totalCount;
-        this.userResponseDto = new UserResponseDto(user);
+        this.user = new UserResponseDto(user);
     }
 }
