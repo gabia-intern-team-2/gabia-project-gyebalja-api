@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -99,8 +100,8 @@ public class GabiaLoginController {
      * 로그아웃 요청
      */
     @GetMapping("/api/v1/logout")
-    public CommonJsonFormat logOut(HttpServletResponse response) {
-        String message = jwtService.destroyToken(response);
+    public CommonJsonFormat logOut(HttpServletRequest request, HttpServletResponse response) {
+        String message = jwtService.destroyToken(request, response);
 
         return new CommonJsonFormat(StatusCode.OK.getCode(), StatusCode.OK.getMessage(), message);
     }
