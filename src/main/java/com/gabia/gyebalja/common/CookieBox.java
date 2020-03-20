@@ -70,18 +70,17 @@ public class CookieBox {
     /**
      * 쿠키 삭제
      */
-    public Cookie deleteCookie(String cookieKey, Cookie cookie){
+    public Cookie deleteCookie(String cookieKey){
+        Cookie cookie = null;
+        if(exists(cookieKey))
+            cookie = getCookie(cookieKey);
 
-        cookie = getCookie(cookieKey);
-
-        if(cookie.getPath() != null){
-            cookie.setPath(cookie.getPath());
-        }else{
+        if(cookie.getPath() == null)
             cookie.setPath("/");
-        }
-        if(cookie.getDomain() != null){
-            cookie.setDomain(cookie.getDomain());
-        }
+
+        if(cookie.getDomain() == null)
+            cookie.setDomain("211.53.209.130");
+
         cookie.setMaxAge(0);
 
         return cookie;
