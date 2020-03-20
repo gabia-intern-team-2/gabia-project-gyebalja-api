@@ -70,9 +70,11 @@ public class CookieBox {
     /**
      * 쿠키 삭제
      */
-    public Cookie deleteCookie(String cookieKey, Cookie cookie){
+    public Cookie deleteCookie(String cookieKey){
 
-        cookie = getCookie(cookieKey);
+        Cookie cookie = null;
+        if(exists(cookieKey))
+            cookie = getCookie(cookieKey);
 
         if(cookie.getPath() != null){
             cookie.setPath(cookie.getPath());
