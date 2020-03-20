@@ -147,8 +147,8 @@ public class JwtService {
     }
 
     // 로그아웃
-    public String destroyToken(HttpServletResponse response) {
-        CookieBox cookieBox = new CookieBox();
+    public String destroyToken(HttpServletRequest request, HttpServletResponse response) {
+        CookieBox cookieBox = new CookieBox(request);
         Cookie deletedCookie = cookieBox.deleteCookie("jwt_token");
         response.addCookie(deletedCookie);
 
