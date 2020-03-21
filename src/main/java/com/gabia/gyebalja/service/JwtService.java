@@ -147,10 +147,10 @@ public class JwtService {
     }
 
     // 로그아웃
-    public String destroyToken(HttpServletResponse response) {
-        CookieBox cookieBox = new CookieBox();
-        Cookie setCookie = cookieBox.createCookie("jwt_token", null, "211.53.209.130", "/", 0);
-        response.addCookie(setCookie);
+    public String destroyToken(HttpServletRequest request, HttpServletResponse response) {
+        CookieBox cookieBox = new CookieBox(request);
+        Cookie deletedCookie = cookieBox.deleteCookie("jwt_token");
+        response.addCookie(deletedCookie);
 
         return "success";
     }
