@@ -11,6 +11,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Enumeration;
 
 /**
  * Author : 정태균
@@ -37,6 +38,9 @@ public class JwtInterceptor implements HandlerInterceptor {
         if(cookieBox.exists("jwt_token")) {
             token = cookieBox.getValue("jwt_token");
         }
+        // Swagger 쿠키인증은 아직 미지원 따라서 헤더에 JWT토큰을 넣어서 보낼 때 인증 처리 하기위함
+        if(request.getHeader("jwt_token") != null)
+            token = request.getHeader("jwt_token");
 
         if(token != null && jwtService.isUsable(token)){
             return true;

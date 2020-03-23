@@ -6,6 +6,10 @@ import com.gabia.gyebalja.dto.education.EducationAllResponseDto;
 import com.gabia.gyebalja.dto.education.EducationDetailResponseDto;
 import com.gabia.gyebalja.dto.education.EducationRequestDto;
 import com.gabia.gyebalja.service.EducationService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -26,6 +30,7 @@ import java.util.List;
  */
 
 @RequiredArgsConstructor  //생성자 주입방식을 사용하기 위해 사용
+@Api(value = "EducationApiController V1")
 @RestController
 public class EducationApiController {
 
@@ -33,6 +38,12 @@ public class EducationApiController {
     private final EducationService educationService;
 
     /** 등록 - education 한 건 (게시글 등록) */
+    @ApiOperation(value = "postOneEducation : 등록 - education 한 건 (게시글 등록)", notes = "교육 한 건 등록")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 400, message = "BAD_REQUEST"),
+            @ApiResponse(code = 500, message = "INTERNAL_SERVER_ERROR")
+    })
     @PostMapping("/api/v1/educations")
     public CommonJsonFormat postOneEducation(@RequestBody EducationRequestDto educationRequestDto) {
         Long eduId = educationService.postOneEducation(educationRequestDto);
@@ -41,6 +52,12 @@ public class EducationApiController {
     }
 
     /** 조회 - education 한 건 (상세페이지) */
+    @ApiOperation(value = "getOneEducation : 조회 - education 한 건 (상세페이지)", notes = "교육 한 건에 대한 데이터 요청")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 400, message = "BAD_REQUEST"),
+            @ApiResponse(code = 500, message = "INTERNAL_SERVER_ERROR")
+    })
     @GetMapping("/api/v1/educations/{id}")
     public CommonJsonFormat getOneEducation(@PathVariable("id") Long id) {
         EducationDetailResponseDto educationResponseDto = educationService.getOneEducation(id);
@@ -49,6 +66,12 @@ public class EducationApiController {
     }
 
     /** 수정 - education 한 건 (상세페이지) */
+    @ApiOperation(value = "putOneEducation : 수정 - education 한 건 (상세페이지)", notes = "교육 한 건에 대한 수정 요청")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 400, message = "BAD_REQUEST"),
+            @ApiResponse(code = 500, message = "INTERNAL_SERVER_ERROR")
+    })
     @PutMapping("/api/v1/educations/{id}")
     public CommonJsonFormat putOneEducation(@PathVariable("id") Long id, @RequestBody EducationRequestDto educationRequestDto) {
         Long eduId = educationService.putOneEducation(id, educationRequestDto);
@@ -57,6 +80,12 @@ public class EducationApiController {
     }
 
     /** 삭제 - education 한 건 (상세페이지) */
+    @ApiOperation(value = "deleteOneEducation : 삭제 - education 한 건 (상세페이지)", notes = "교육 한 건에 대한 삭제 요청")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 400, message = "BAD_REQUEST"),
+            @ApiResponse(code = 500, message = "INTERNAL_SERVER_ERROR")
+    })
     @DeleteMapping("/api/v1/educations/{id}")
     public CommonJsonFormat deleteOneEducation(@PathVariable("id") Long id) {
         Long eduId = educationService.deleteOneEducation(id);
@@ -65,6 +94,12 @@ public class EducationApiController {
     }
 
     /** 조회 - education 전체 (페이징) */
+    @ApiOperation(value = "getAllEducationByUserId : 조회 - education 전체 (페이징)", notes = "사용자에 대한 전체 교육 리스트 요청")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 400, message = "BAD_REQUEST"),
+            @ApiResponse(code = 500, message = "INTERNAL_SERVER_ERROR")
+    })
     @GetMapping("/api/v1/users/{id}/educations")
     public CommonJsonFormat getAllEducationByUserId(@PathVariable("id") Long id, @PageableDefault(size=10, sort = "id", direction = Sort.Direction.DESC) Pageable pageable) {
         List<EducationAllResponseDto> educationDtoPage = educationService.getAllEducationByUserId(id, pageable);
