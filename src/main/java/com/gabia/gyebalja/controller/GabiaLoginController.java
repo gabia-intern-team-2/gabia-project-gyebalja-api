@@ -7,6 +7,10 @@ import com.gabia.gyebalja.service.GabiaService;
 import com.gabia.gyebalja.service.JwtService;
 import com.gabia.gyebalja.vo.GabiaTokenVo;
 import com.gabia.gyebalja.vo.GabiaUserInfoVo;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,6 +31,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 
 @RequiredArgsConstructor  //생성자 주입방식을 사용하기 위해 사용
+@Api(value = "GabiaLoginController V1")
 @RestController
 public class GabiaLoginController {
 
@@ -48,6 +53,12 @@ public class GabiaLoginController {
     /**
      * 하이웍스 로그인 클릭 시
      */
+    @ApiOperation(value = "gabiaLogin : 하이웍스 로그인 클릭 시", notes = "하이웍스 로그인 페이지를 리턴")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 400, message = "BAD_REQUEST"),
+            @ApiResponse(code = 500, message = "INTERNAL_SERVER_ERROR")
+    })
     @GetMapping("/api/v1/login")
     public CommonJsonFormat gabiaLogin() {
         StringBuilder loginUrl = new StringBuilder()
@@ -60,6 +71,12 @@ public class GabiaLoginController {
     /**
      * 하이웍스 콜백
      */
+    @ApiOperation(value = "getAuthCode : 콜백", notes = "하이웍스 로그인 후 콜백 URL (auth_code)")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 400, message = "BAD_REQUEST"),
+            @ApiResponse(code = 500, message = "INTERNAL_SERVER_ERROR")
+    })
     @GetMapping("/auth/callback")
     public RedirectView getAuthCode(@RequestParam("auth_code") String authCode, HttpServletResponse response) {
         GabiaTokenVo accessToken = gabiaService.getAccessToken(authCode);
@@ -79,6 +96,12 @@ public class GabiaLoginController {
      * DB에 등록 된 사용자인지 판별 요청
      * defaltvalue 필요 이유 : null이면 500에러를 반환하기 때문에
      */
+    @ApiOperation(value = "isRegister : 로그인 시 등록된 사용자인지 판별", notes = "DB에 등록 된 사용자인지 판별")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 400, message = "BAD_REQUEST"),
+            @ApiResponse(code = 500, message = "INTERNAL_SERVER_ERROR")
+    })
     @GetMapping("/api/v1/login/isRegister")
     public CommonJsonFormat isRegister(@CookieValue(value = "jwt_token", defaultValue = "no_cookie") String jwtToken) {
         boolean isRegister = jwtService.isRegister(jwtToken);
@@ -89,6 +112,12 @@ public class GabiaLoginController {
     /**
      * 인증 된 사용자인지 판별 요청
      */
+    @ApiOperation(value = "authUserCheck : 인증 된 사용자인지 판별 요청", notes = "인증 된 사용자인지 판별 요청")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 400, message = "BAD_REQUEST"),
+            @ApiResponse(code = 500, message = "INTERNAL_SERVER_ERROR")
+    })
     @GetMapping("/api/v1/auth/user")
     public CommonJsonFormat authUserCheck(@CookieValue(value = "jwt_token", defaultValue = "no_cookie") String jwtToken) {
         boolean authUser = jwtService.isUsable(jwtToken);
@@ -99,6 +128,12 @@ public class GabiaLoginController {
     /**
      * 로그아웃 요청
      */
+    @ApiOperation(value = "logOut : 로그아웃 요청", notes = "로그아웃 요청 - 쿠키 삭제 토큰 삭제")
+    @ApiResponses({
+            @ApiResponse(code = 200, message = "OK"),
+            @ApiResponse(code = 400, message = "BAD_REQUEST"),
+            @ApiResponse(code = 500, message = "INTERNAL_SERVER_ERROR")
+    })
     @GetMapping("/api/v1/logout")
     public CommonJsonFormat logOut(HttpServletRequest request, HttpServletResponse response) {
         String message = jwtService.destroyToken(request, response);

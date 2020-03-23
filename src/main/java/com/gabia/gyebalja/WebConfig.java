@@ -22,7 +22,12 @@ public class WebConfig implements WebMvcConfigurer {
 
     private static final String [] EXCLUDE_PATHS = {
             "/api/v1/login/**",
-            "/auth/callback/**"
+            "/auth/callback/**",
+            "/v2/api-docs",
+            "/swagger-resources/**",
+            "/swagger-ui.html",
+            "/webjars/**",
+            "/swagger/**"
     };
 
     @Autowired
