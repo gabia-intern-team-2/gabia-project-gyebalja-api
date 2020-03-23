@@ -1,6 +1,5 @@
 package com.gabia.gyebalja.config;
 
-
 import com.google.common.collect.Lists;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,6 +24,7 @@ import java.util.List;
  * Author : 정태균
  * Part : All
  */
+
 // /swagger-ui.html#/ 접속
 @Configuration
 @EnableSwagger2
@@ -62,8 +62,6 @@ public class SwaggerConfiguration implements WebMvcConfigurer {
                 .paths(PathSelectors.any())
                 .build();
         return docket;
-
-
     }
 
     private ApiKey apiKey() {
